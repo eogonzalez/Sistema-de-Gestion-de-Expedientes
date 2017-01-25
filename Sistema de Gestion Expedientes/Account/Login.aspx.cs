@@ -58,17 +58,8 @@ namespace Sistema_de_Gestion_Expedientes.Account
                         cnLogin.Seguridad(idUsuario, DateTime.Now, Convert.ToString(Request.ServerVariables["REMOTE_ADDR"]));
 
                         Session["UsuarioID"] = idUsuario;
+                        Session.Add("CorreoUsuarioLogin", txtCorreo.Text);
 
-                        //Application.Lock();
-                        //if (Application["UsuarioID"] == null)
-                        //{
-                        //    Application.Add("UsuarioID", 0);
-                        //}
-                        //else
-                        //{
-                        //    Application["UsuarioID"] = idUsuario;
-                        //}
-                        //System.Web.Security.FormsAuthentication.RedirectFromLoginPage(strCorreo, false);
 
 
                         Response.Redirect("~/");

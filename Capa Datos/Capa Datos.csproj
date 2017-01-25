@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administracion\Menu.cs" />
+    <Compile Include="Administracion\PermisosPerfiles.cs" />
     <Compile Include="Administracion\TipoUsuarios.cs" />
     <Compile Include="General\Conexion.cs" />
     <Compile Include="General\General.cs" />

@@ -59,7 +59,7 @@
 
 
 
-       <%-- <div class="navbar navbar-inverse navbar-default">
+        <%-- <div class="navbar navbar-inverse navbar-default">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -114,22 +114,29 @@
                     </button>
                 </div>
                 <div class="collapse navbar-collapse">
-                    
-                        <asp:Menu runat="server" ID="menuDinamico"
-                            Orientation="Horizontal" RenderingMode="List"
-                            IncludeStyleBlock="false"
-                            StaticMenuStyle-CssClass="nav navbar-nav"
-                            StaticMenuItemStyle-CssClass="StaticMenuItem"
-                            DynamicMenuStyle-CssClass="dropdown-menu">
-                        </asp:Menu>
+
+                    <asp:Menu runat="server" ID="menuDinamico"
+                        Orientation="Horizontal" RenderingMode="List"
+                        IncludeStyleBlock="false"
+                        StaticMenuStyle-CssClass="nav navbar-nav"
+                        StaticMenuItemStyle-CssClass="StaticMenuItem"
+                        DynamicMenuStyle-CssClass="dropdown-menu">
+                    </asp:Menu>
 
                 </div>
             </div>
         </div>
 
         <div class="container body-content">
-            <asp:ContentPlaceHolder ID="MainContent" runat="server">
-            </asp:ContentPlaceHolder>
+            <asp:UpdatePanel runat="server" ID="UPMainContent">
+                <ContentTemplate>
+
+                    <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                    </asp:ContentPlaceHolder>
+
+                </ContentTemplate>
+            </asp:UpdatePanel>
+
             <hr />
             <footer>
                 <p>&copy; <%: DateTime.Now.Year %> - SGEO - Ministerio de Economia</p>

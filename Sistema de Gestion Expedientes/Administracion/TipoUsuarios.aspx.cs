@@ -51,6 +51,27 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             }
         }
 
+        protected void gvTipoUsuario_RowCommand(Object sender, GridViewCommandEventArgs e)
+        {
+            int index = Convert.ToInt32(e.CommandArgument);
+
+            GridViewRow row = gvTipoUsuario.Rows[index];
+            int id_usuario = Convert.ToInt32(row.Cells[0].Text);
+
+            switch (e.CommandName)
+            {
+                case "permisos":
+                    Response.Redirect("~/Administracion/PermisosPerfiles.aspx?id="+id_usuario.ToString());
+                    break;
+                case "modificar":
+                    break;
+                case "eliminar":
+                    break;
+                default:
+                    break;
+            }
+        }
+
         protected Boolean GuardarTipoUsuario()
         {
             bool respuesta = false;

@@ -47,5 +47,20 @@ namespace Capa_Negocio.General
         {
             return objCDLogin.ConsultaUsuarioId(correo);
         }
+
+        public DataTable SelectComboPerfiles()
+        {
+            return objCDLogin.SelectComboPerfiles();
+        }
+
+        public Boolean InsertAutorizacionPermisoUsuario(int id_usuario, int id_tipousuario, int id_usuarioAutoriza)
+        {
+            return objCDLogin.InsertAutorizacionPermisoUsuario(id_usuario, id_tipousuario, id_usuarioAutoriza);
+        }
+
+        public Boolean UpdateRechazoPermisoUsuario(int id_usuarioAutoriza, int id_usuario)
+        {
+            return objCDLogin.UpdateRechazoPermisoUsuario(id_usuarioAutoriza, id_usuario);
+        }
     }
 }

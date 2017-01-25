@@ -304,5 +304,147 @@ namespace Capa_Datos.General
 
             return respuesta;
         }
+
+        public DataTable SelectComboPerfiles()
+        {
+            var respuesta = new DataTable();
+
+            string sql_query = string.Empty;
+
+
+            using (SqlConnection cn = objConexion.Conectar())
+            {
+                try
+                {
+
+                    sql_query = " SELECT [id_tipousuario] " +
+                        " ,[nombre] " +
+                        " FROM [SGEODB].[dbo].[G_TipoUsuario] " +
+                        " where estado = 'A'; ";
+
+                    var command = new SqlCommand(sql_query, cn);
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+
+                    da.Fill(respuesta);
+
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+
+            }
+
+            return respuesta;
+        }
+
+        public Boolean InsertAutorizacionPermisoUsuario(int id_usuario, int id_tipousuario, int id_usuarioAutoriza)
+        {
+            Boolean respuesta = false;
+            string sql_query = string.Empty;
+
+
+            using (SqlConnection cn = objConexion.Conectar())
+            {
+
+                try
+                {
+                    //Query que inserta el usuario a los permisos respectivos
+                    sql_query = " INSERT INTO G_UsuarioPermiso " +
+                        " (id_usuario,id_tipousuario,fecha_creacion " +
+                        " ,fecha_modificacion,estado,id_usuarioAutoriza) " +
+                        " VALUES " +
+                        " (@id_usuario,@id_tipousuario,@fecha_creacion " +
+                        " ,@fecha_modificacion,@estado,@id_usuarioAutoriza) ";
+
+                    var command = new SqlCommand(sql_query, cn);
+                    command.Parameters.AddWithValue("id_usuario", id_usuario);
+                    command.Parameters.AddWithValue("id_tipousuario", id_tipousuario);
+                    command.Parameters.AddWithValue("fecha_creacion", DateTime.Now);
+                    command.Parameters.AddWithValue("fecha_modificacion", DateTime.Now);
+                    command.Parameters.AddWithValue("estado", 'A');
+                    command.Parameters.AddWithValue("id_usuarioAutoriza", id_usuarioAutoriza);
+
+                    cn.Open();
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        respuesta = true;
+                    }
+	
+
+                    //Query que actualiza el estado del usuario en la tabla de usuarios
+                    sql_query = "UPDATE g_usuarios "+
+                        " SET estado = @estado "+
+                        " ,id_usuarioAutoriza = @id_usuarioAutoriza "+
+                        " WHERE id_usuario = @id_usuario ";
+
+                    var command2 = new SqlCommand(sql_query, cn);
+                    command2.Parameters.AddWithValue("estado", 'A');
+                    command2.Parameters.AddWithValue("id_usuarioAutoriza", id_usuarioAutoriza);
+                    command2.Parameters.AddWithValue("id_usuario", id_usuario);
+
+                    if (command2.ExecuteNonQuery() > 0)
+                    {
+                        respuesta = true;
+                    }
+
+
+
+                }
+                catch (Exception)
+                {
+                    
+                    throw;
+                }
+
+
+
+            }
+
+            
+
+
+            return respuesta;
+        }
+
+        public Boolean UpdateRechazoPermisoUsuario(int id_usuarioAutoriza, int id_usuario)
+        {
+            Boolean respuesta = false;
+            string sql_query = string.Empty;
+
+            using (SqlConnection cn = objConexion.Conectar())
+            {
+                try
+                {
+                    //Query que actualiza el estado del usuario en la tabla de usuarios
+                    sql_query = "UPDATE g_usuarios " +
+                        " SET estado = @estado " +
+                        " ,id_usuarioAutoriza = @id_usuarioAutoriza " +
+                        " WHERE id_usuario = @id_usuario ";
+
+                    var command2 = new SqlCommand(sql_query, cn);
+                    command2.Parameters.AddWithValue("estado", 'B');
+                    command2.Parameters.AddWithValue("id_usuarioAutoriza", id_usuarioAutoriza);
+                    command2.Parameters.AddWithValue("id_usuario", id_usuario);
+
+                    cn.Open();
+                    if (command2.ExecuteNonQuery() > 0)
+                    {
+                        respuesta = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    
+                    throw;
+                }
+            }
+
+
+
+
+            return respuesta;
+        }
     }
 }

@@ -65,7 +65,6 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             
         }
 
-
         protected void Llenar_gvMenu()
         {
             var tbl = new DataTable();

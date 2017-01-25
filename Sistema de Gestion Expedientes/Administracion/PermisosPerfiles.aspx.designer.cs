@@ -7,64 +7,37 @@
 // </generado automáticamente>
 //------------------------------------------------------------------------------
 
-namespace Sistema_de_Gestion_Expedientes.Account {
+namespace Sistema_de_Gestion_Expedientes.Administracion {
     
     
-    public partial class SolicitudRegistro {
+    public partial class PermisosPerfiles {
         
         /// <summary>
-        /// Control ErrorMessage.
+        /// Control lkBtn_nuevo.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ErrorMessage;
+        protected global::System.Web.UI.WebControls.LinkButton lkBtn_nuevo;
         
         /// <summary>
-        /// Control lkBtn_Hidden_Autorizar.
+        /// Control lkBtn_nuevo_ModalPopupExtender.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lkBtn_Hidden_Autorizar;
+        protected global::AjaxControlToolkit.ModalPopupExtender lkBtn_nuevo_ModalPopupExtender;
         
         /// <summary>
-        /// Control lkBtn_Autorizar_ModalPopupExtender.
+        /// Control gvPermisosPerfiles.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::AjaxControlToolkit.ModalPopupExtender lkBtn_Autorizar_ModalPopupExtender;
-        
-        /// <summary>
-        /// Control lkBtn_Hidden_Motivo.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lkBtn_Hidden_Motivo;
-        
-        /// <summary>
-        /// Control lkBtn_Motivo_ModalPopupExtender.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::AjaxControlToolkit.ModalPopupExtender lkBtn_Motivo_ModalPopupExtender;
-        
-        /// <summary>
-        /// Control gvSolicitudRegistro.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvSolicitudRegistro;
+        protected global::System.Web.UI.WebControls.GridView gvPermisosPerfiles;
         
         /// <summary>
         /// Control pnl_nuevo.
@@ -76,40 +49,94 @@ namespace Sistema_de_Gestion_Expedientes.Account {
         protected global::System.Web.UI.WebControls.Panel pnl_nuevo;
         
         /// <summary>
-        /// Control ErrorMessagePanel.
+        /// Control ErrorMessage.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ErrorMessagePanel;
+        protected global::System.Web.UI.WebControls.Literal ErrorMessage;
         
         /// <summary>
-        /// Control UsuarioMesage.
+        /// Control cboPerfil.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal UsuarioMesage;
+        protected global::System.Web.UI.WebControls.DropDownList cboPerfil;
         
         /// <summary>
-        /// Control ddlTipoPermiso.
+        /// Control cboMenu.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlTipoPermiso;
+        protected global::System.Web.UI.WebControls.DropDownList cboMenu;
         
         /// <summary>
-        /// Control btnAutorizar.
+        /// Control cb_acceder.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnAutorizar;
+        protected global::System.Web.UI.WebControls.CheckBox cb_acceder;
+        
+        /// <summary>
+        /// Control cb_insertar.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox cb_insertar;
+        
+        /// <summary>
+        /// Control cb_editar.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox cb_editar;
+        
+        /// <summary>
+        /// Control cb_borrar.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox cb_borrar;
+        
+        /// <summary>
+        /// Control cb_aprobar.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox cb_aprobar;
+        
+        /// <summary>
+        /// Control cb_rechazar.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox cb_rechazar;
+        
+        /// <summary>
+        /// Control btnGuardar.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGuardar;
         
         /// <summary>
         /// Control btnSalir.
@@ -119,50 +146,5 @@ namespace Sistema_de_Gestion_Expedientes.Account {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSalir;
-        
-        /// <summary>
-        /// Control pnl_motivo.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnl_motivo;
-        
-        /// <summary>
-        /// Control Literal1.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal Literal1;
-        
-        /// <summary>
-        /// Control txtMotivo.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtMotivo;
-        
-        /// <summary>
-        /// Control btnEnviar.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnEnviar;
-        
-        /// <summary>
-        /// Control btnSalirMotivo.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSalirMotivo;
     }
 }

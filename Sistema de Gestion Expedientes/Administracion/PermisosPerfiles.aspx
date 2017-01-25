@@ -1,7 +1,7 @@
-﻿<%@ Page Title="Perfiles de Usuarios" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TipoUsuarios.aspx.cs" Inherits="Sistema_de_Gestion_Expedientes.Administracion.TipoUsuarios" %>
-
+﻿<%@ Page Title="Permisos Perfiles" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PermisosPerfiles.aspx.cs" Inherits="Sistema_de_Gestion_Expedientes.Administracion.PermisosPerfiles" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+
     <div class="panel panel-primary">
         <div class="panel-heading"><%: Title %></div>
 
@@ -17,26 +17,30 @@
             </div>
             <br />
             <div>
-                <asp:GridView runat="server" ID="gvTipoUsuario"
+                <asp:GridView runat="server" ID="gvPermisosPerfiles"
                     CssClass="table table-hover table-striped"
                     GridLines="None"
-                    EmptyDataText="No existen registros."
-                    OnRowCommand="gvTipoUsuario_RowCommand"
+                    EmptyDataText="No existen registros."                   
                     AutoGenerateColumns="false">
 
                     <Columns>
-                        <asp:BoundField DataField="id_tipousuario" SortExpression="id_tipousuario">
+                        <asp:BoundField DataField="corrPermisoTipoUsuario" SortExpression="corrPermisoTipoUsuario">
                             <HeaderStyle CssClass="display:none" />
                             <ItemStyle CssClass="display:none" />
                         </asp:BoundField>
 
-                        <asp:BoundField DataField="nombre" HeaderText="Nombre" />
-                        <asp:BoundField DataField="tipo_permiso" HeaderText="Tipo Permiso" />
-                        <asp:BoundField DataField="fecha_creacion" HeaderText="Fecha Registro" />
+                        <asp:BoundField DataField="nombrePerfil" HeaderText="Perfil" />
+                        <asp:BoundField DataField="nombreMenu" HeaderText="Menu Opcion" />
+                        <asp:BoundField DataField="acceder" HeaderText="Acceder" />
+                        <asp:BoundField DataField="insertar" HeaderText="Insertar" />
+                        <asp:BoundField DataField="editar" HeaderText="Editar" />
+                        <asp:BoundField DataField="borrar" HeaderText="Borrar" />
+                        <asp:BoundField DataField="aprobar" HeaderText="Aprobar" />
+                        <asp:BoundField DataField="rechazar" HeaderText="Rechazar" />
 
                         <asp:ButtonField  ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />
                         <asp:ButtonField  ButtonType="Button" Text="Eliminar" HeaderText="Eliminar" CommandName="eliminar" ControlStyle-CssClass="btn btn-danger" />
-                        <asp:ButtonField  ButtonType="Button" Text="Permisos" HeaderText="Permisos" CommandName="permisos" ControlStyle-CssClass="btn btn-primary" />
+                        
 
                     </Columns>
 
@@ -44,6 +48,7 @@
             </div>
         </div>
     </div>
+
 
     <div>
         <asp:Panel runat="server" ID="pnl_nuevo" CssClass="panel panel-primary" BorderColor="Black" BackColor="White"
@@ -55,32 +60,51 @@
             <div class="panel-body form-horizontal">
 
                 <div class="form-group">
-                    <asp:Label runat="server" AssociatedControlID="txtNombre" CssClass="control-label col-xs-2" Text="Nombre: "></asp:Label>
+                    <asp:Label runat="server" AssociatedControlID="cboPerfil" CssClass="control-label col-xs-2" Text="Perfil: "></asp:Label>
                     <div class="col-xs-10">
-                        <asp:TextBox runat="server" ID="txtNombre" CssClass="form-control"></asp:TextBox>
-                        <asp:RequiredFieldValidator runat="server" ControlToValidate="txtNombre"
-                            CssClass="text-danger" ErrorMessage="El campo no puede quedar vacio." />  
+                        <asp:DropDownList runat="server" ID="cboPerfil" CssClass="form-control">                            
+                        </asp:DropDownList>                                                
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <asp:Label AssociatedControlID="txtDescripcion" CssClass="control-label col-xs-2" runat="server" Text="Descripción:"></asp:Label>
+                    <asp:Label AssociatedControlID="cboMenu" CssClass="control-label col-xs-2" runat="server" Text="Menu Opcion:"></asp:Label>
                     <div class="col-xs-10">
-                        <asp:TextBox ID="txtDescripcion" type="text" CssClass="form-control" runat="server" TextMode="MultiLine"></asp:TextBox>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <asp:Label runat="server" AssociatedControlID="ddlTipoPermiso" CssClass="control-label col-xs-2" Text="Permiso: "></asp:Label>
-                    <div class="col-xs-10">
-                        <asp:DropDownList runat="server" ID="ddlTipoPermiso" CssClass="form-control">
-                            <asp:ListItem Value="A">Administrador</asp:ListItem>
-                            <asp:ListItem Value="F">Funcionario</asp:ListItem>
-                            <asp:ListItem Value="I">Insitucion</asp:ListItem>
+                        <asp:DropDownList runat="server" ID="cboMenu" CssClass="form-control">                            
                         </asp:DropDownList>
                     </div>
                 </div>
 
+                <h4><span class="label label-primary">Permisos</span></h4>
+
+                <div class="form-group">
+                    <%--<asp:Label Text="Insertar" runat="server"  CssClass="control-label col-xs-2"/>--%>
+
+                    <div class="col-xs-2">
+                        <asp:CheckBox Text="Acceder" runat="server"  ID="cb_acceder"/>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <asp:CheckBox Text="Insertar" runat="server"  ID="cb_insertar"/>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <asp:CheckBox Text="Editar" runat="server" id="cb_editar"/>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <asp:CheckBox Text="Borrar" runat="server" id="cb_borrar"/>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <asp:CheckBox Text="Aprobar" runat="server" id="cb_aprobar"/>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <asp:CheckBox Text="Rechazar" runat="server" id="cb_rechazar"/>
+                    </div>
+                        
+                </div>
 
                 <div class="panel-footer">
                     <asp:Button runat="server" ID="btnGuardar" CssClass="btn btn-primary" Text="Guardar" OnClick="btnGuardar_Click" />
@@ -89,4 +113,5 @@
             </div>
         </asp:Panel>
     </div>
+
 </asp:Content>

@@ -49,6 +49,15 @@ namespace Sistema_de_Gestion_Expedientes {
         protected global::System.Web.UI.WebControls.Menu menuDinamico;
         
         /// <summary>
+        /// Control UPMainContent.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UPMainContent;
+        
+        /// <summary>
         /// Control MainContent.
         /// </summary>
         /// <remarks>
