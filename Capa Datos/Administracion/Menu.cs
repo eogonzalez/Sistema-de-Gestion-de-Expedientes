@@ -80,20 +80,20 @@ namespace Capa_Datos.Administracion
             if (objCEMenu.Id_Padre == 0)
             {
                 sql_query += " , [url], [orden] " +
-                    " ,[visible],[obligatorio],[login]) " +
+                    " ,[visible],[obligatorio],[login],[id_usuarioAutoriza], [estado]) " +
                     " VALUES " +
                     " (@nombre, @descripcion " +
                     " ,@url, @orden " +
-                    " ,@visible, @obligatorio, @login) ";
+                    " ,@visible, @obligatorio, @login, @id_usuarioAutoriza, @estado) ";
             }
             else
             {
                 sql_query += " , [url], [id_padre], [orden] " +
-                    " ,[visible],[obligatorio],[login]) " +
+                    " ,[visible],[obligatorio],[login],[id_usuarioAutoriza], [estado]) " +
                     " VALUES " +
                     " (@nombre, @descripcion " +
                     " ,@url, @id_padre, @orden " +
-                    " ,@visible, @obligatorio, @login) ";
+                    " ,@visible, @obligatorio, @login, @id_usuarioAutoriza, @estado) ";
             }
 
             using (SqlConnection cn = objConexion.Conectar())
@@ -112,6 +112,8 @@ namespace Capa_Datos.Administracion
                 command.Parameters.AddWithValue("visible", objCEMenu.Visible);
                 command.Parameters.AddWithValue("obligatorio", objCEMenu.Obligatorio);
                 command.Parameters.AddWithValue("login", objCEMenu.Login);
+                command.Parameters.AddWithValue("id_usuarioAutoriza", objCEMenu.ID_UsuarioAutoriza);
+                command.Parameters.AddWithValue("estado", 'A');
                 
                 cn.Open();
                 command.ExecuteScalar();
@@ -139,12 +141,19 @@ namespace Capa_Datos.Administracion
                 }
                 else
                 {//Si usuario esta registrado
-                    sql_query = " SELECT id_opcion " +
-                        " ,nombre ,descripcion " +
-                        " ,url ,id_padre " +
-                        " FROM dbo.g_menu_opcion " +
-                        " where obligatorio = 1 Or visible = 1 and login = 1 " +
-                        " order by orden ";
+                    sql_query = "  select  "+
+                        " gmo.id_opcion, gmo.nombre, gmo.descripcion, gmo.url, gmo.id_padre, gmo.obligatorio , gmo.visible, gmo.login, "+
+                        " gptu.id_tipousuario, gptu.acceder, gptu.insertar, gptu.editar, gptu.borrar, gptu.aprobar, gptu.rechazar "+
+                        " FROM  "+                        
+                        " G_Menu_Opcion gmo, "+
+                        " G_PermisoTipoUsuario gptu, "+
+                        " G_UsuarioPermiso gup "+
+                        " where "+
+                        " gmo.id_opcion = gptu.id_opcion "+
+                        " and gmo.estado = 'A' "+
+                        " and gptu.estado = 'A' "+
+                        " and gup.id_tipousuario = gptu.id_tipousuario "+
+                        " and gup.id_usuario = @id_usuario ";
                 }
 
 
@@ -152,6 +161,12 @@ namespace Capa_Datos.Administracion
                 using (var cn = objConexion.Conectar())
                 {
                     var command = new SqlCommand(sql_query, cn);
+
+                    if (idUsuario != 0)
+                    {
+                        command.Parameters.AddWithValue("id_usuario", idUsuario);
+                    }
+
                     var da = new SqlDataAdapter(command);
                     da.Fill(ds);
                     cn.Close();

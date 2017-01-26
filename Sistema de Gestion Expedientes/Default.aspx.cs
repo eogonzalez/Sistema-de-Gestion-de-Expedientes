@@ -11,7 +11,7 @@ namespace Sistema_de_Gestion_Expedientes
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+  
         }
         
     }

@@ -24,6 +24,8 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                 if (Request.QueryString["id"] != null)
                 {
                     id_usuarioPermiso = Convert.ToInt32(Request.QueryString["id"].ToString());
+                    cboPerfil.SelectedValue = id_usuarioPermiso.ToString();
+                    cboPerfil.Enabled = false;
                     Llenar_gvPermisosPerfiles(id_usuarioPermiso);                    
                 }
                 else
@@ -72,7 +74,19 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
         {
             if (GuardarPermisoPerfil())
             {
-                Llenar_gvPermisosPerfiles();
+                int id_usuarioPermiso = 0;
+
+                if (Request.QueryString["id"] != null)
+                {
+                    id_usuarioPermiso = Convert.ToInt32(Request.QueryString["id"].ToString());                    
+                    Llenar_gvPermisosPerfiles(id_usuarioPermiso);
+                }
+                else
+                {
+                    Llenar_gvPermisosPerfiles();
+                }
+
+                
             }
             else
             {

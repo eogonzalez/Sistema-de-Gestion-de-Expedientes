@@ -40,6 +40,24 @@ namespace Sistema_de_Gestion_Expedientes {
         protected global::System.Web.UI.WebControls.Label txtFecha;
         
         /// <summary>
+        /// Control lblUsuarioLogin.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUsuarioLogin;
+        
+        /// <summary>
+        /// Control UPMenuDinamico.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UPMenuDinamico;
+        
+        /// <summary>
         /// Control menuDinamico.
         /// </summary>
         /// <remarks>

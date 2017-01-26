@@ -18,5 +18,6 @@ namespace Capa_Entidad.Administracion
         public Boolean Login { get; set; }
 
         public int Id_Padre { get; set; }
+        public int ID_UsuarioAutoriza { get; set; }
     }
 }

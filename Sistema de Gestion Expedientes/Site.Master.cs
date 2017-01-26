@@ -8,6 +8,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
 using Capa_Negocio.Administracion;
+using System.Threading;
 
 
 namespace Sistema_de_Gestion_Expedientes
@@ -82,21 +83,13 @@ namespace Sistema_de_Gestion_Expedientes
 
                 if (idUsuario >= 1)
                 {//Si usuario esta logeado
-                    //Genero menu con permisos
-                    //menuDinamico.Items.Add(new MenuItem("Inicio", "Inicio", "~/"));
+                    //Genero menu con permisos                                        
                     LlenarMenu(idUsuario);
+                    lblUsuarioLogin.Text = string.Format("Bienvenido al sistema: {0} ", Thread.CurrentPrincipal.Identity.Name);                    
                 }
                 else
                 {// Genero Menu sin permisos
-                    //menuDinamico.Items.Add(new MenuItem("Inicio", "Inicio", "~/"));
-
-                    //var catalogos = new MenuItem("Catalogos") { Selectable = false };
-                    //catalogos.ChildItems.Add(new MenuItem("Catalogouno", "CatalogoUNO", "~/"));
-
-                    //menuDinamico.Items.Add(catalogos);
-
-
-                    //menuDinamico.Items.Add(new MenuItem("Registrarse", "Registrarse", "~/Account/Register"));
+                    FormsAuthentication.SignOut();
                     LlenarMenu();
                 }                
             }
@@ -117,46 +110,100 @@ namespace Sistema_de_Gestion_Expedientes
             {
                 var Item = new MenuItem();
 
-                if (Convert.ToString(enc["id_padre"]) == null || Convert.ToString(enc["id_padre"]) == string.Empty)
+                if (idUsuario == 0)
                 {
-                    Item.Value = Convert.ToString(enc["id_opcion"]);
-                    Item.Text = Convert.ToString(enc["nombre"]);
-                    Item.ToolTip = Convert.ToString(enc["descripcion"]);
-                    Item.NavigateUrl = Convert.ToString(enc["url"]);
-
-                    menuDinamico.Items.Add(Item);
-
-                    //Funcion para llenar submenu
-                    LlenarSubMenu(Item, tbl);
-                }
-            }
-        }
-
-        protected void LlenarSubMenu(MenuItem Menu, DataTable Datos)
-        {
-            foreach (DataRow enc in Datos.Rows)
-            {
-                var Item = new MenuItem();
-                var idPadre = Convert.ToString(enc["id_padre"]);
-
-                //if (idPadre != null || idPadre != string.Empty || idPadre.Length > 0)
-                if (idPadre.Length > 0)
-                {
-                    int menuValue = Convert.ToInt32(Menu.Value);
-                    int idPadreInt = Convert.ToInt32(enc["id_padre"]);
-
-                    if (menuValue == idPadreInt)
+                    if (Convert.ToString(enc["id_padre"]) == null || Convert.ToString(enc["id_padre"]) == string.Empty)
                     {
                         Item.Value = Convert.ToString(enc["id_opcion"]);
                         Item.Text = Convert.ToString(enc["nombre"]);
                         Item.ToolTip = Convert.ToString(enc["descripcion"]);
                         Item.NavigateUrl = Convert.ToString(enc["url"]);
 
-                        Menu.ChildItems.Add(Item);
+                        menuDinamico.Items.Add(Item);
 
-                        LlenarSubMenu(Item, Datos);
+                        //Funcion para llenar submenu
+                        LlenarSubMenu(Item, tbl);
                     }
                 }
+                else
+                {
+                    Session.Add("tblPermisos", tbl);
+
+                    if ((Boolean)enc["acceder"] && (Boolean)enc["login"]  || (Boolean)enc["obligatorio"])
+                    {
+                        if (Convert.ToString(enc["id_padre"]) == null || Convert.ToString(enc["id_padre"]) == string.Empty)
+                        {
+                            Item.Value = Convert.ToString(enc["id_opcion"]);
+                            Item.Text = Convert.ToString(enc["nombre"]);
+                            Item.ToolTip = Convert.ToString(enc["descripcion"]);
+                            Item.NavigateUrl = Convert.ToString(enc["url"]);
+
+                            menuDinamico.Items.Add(Item);
+
+                            //Funcion para llenar submenu
+                            LlenarSubMenu(Item, tbl, idUsuario);
+
+                        }
+                    }
+                }
+            }
+        }
+
+        protected void LlenarSubMenu(MenuItem Menu, DataTable Datos, int idUsuario = 0)
+        {
+            foreach (DataRow enc in Datos.Rows)
+            {
+                var Item = new MenuItem();
+                var idPadre = Convert.ToString(enc["id_padre"]);
+
+                if (idUsuario == 0)
+                {
+                    if (idPadre.Length > 0)
+                    {
+                        int menuValue = Convert.ToInt32(Menu.Value);
+                        int idPadreInt = Convert.ToInt32(enc["id_padre"]);
+
+                        if (menuValue == idPadreInt)
+                        {
+                            Item.Value = Convert.ToString(enc["id_opcion"]);
+                            Item.Text = Convert.ToString(enc["nombre"]);
+                            Item.ToolTip = Convert.ToString(enc["descripcion"]);
+                            Item.NavigateUrl = Convert.ToString(enc["url"]);
+
+
+                            Menu.ChildItems.Add(Item);
+
+                            LlenarSubMenu(Item, Datos);
+                        }
+                    }
+                }
+                else
+                {
+                    if (idPadre.Length > 0)
+                    {
+                        if ((Boolean)enc["acceder"])
+                        {
+                            int menuValue = Convert.ToInt32(Menu.Value);
+                            int idPadreInt = Convert.ToInt32(enc["id_padre"]);
+
+                            if (menuValue == idPadreInt)
+                            {
+                                Item.Value = Convert.ToString(enc["id_opcion"]);
+                                Item.Text = Convert.ToString(enc["nombre"]);
+                                Item.ToolTip = Convert.ToString(enc["descripcion"]);
+                                Item.NavigateUrl = Convert.ToString(enc["url"]);
+
+                                Menu.ChildItems.Add(Item);
+
+                                LlenarSubMenu(Item, Datos);
+
+                            }
+                        }
+                    }
+                }
+
+                
+
             }
         }
     }

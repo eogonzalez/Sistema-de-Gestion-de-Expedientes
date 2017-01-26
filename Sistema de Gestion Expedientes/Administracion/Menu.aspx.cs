@@ -85,6 +85,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             objCEMenu.Visible = getVisible();
             objCEMenu.Login = getConLogin();
             objCEMenu.Id_Padre = 0;
+            objCEMenu.ID_UsuarioAutoriza = Convert.ToInt32(Session["UsuarioID"].ToString());
 
             return objCNMenu.SaveMenu(objCEMenu);
         }

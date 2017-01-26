@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.UI;
 using Sistema_de_Gestion_Expedientes.Models;
 using Capa_Negocio.General;
+using System.Web.Security;
 
 namespace Sistema_de_Gestion_Expedientes.Account
 {
@@ -61,8 +62,7 @@ namespace Sistema_de_Gestion_Expedientes.Account
                         Session.Add("CorreoUsuarioLogin", txtCorreo.Text);
 
 
-
-                        Response.Redirect("~/");
+                        FormsAuthentication.RedirectFromLoginPage(strCorreo, RememberMe.Checked);                        
                     }
                     else
                     {//Si las credenciales son incorrectas
