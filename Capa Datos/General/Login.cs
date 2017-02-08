@@ -120,10 +120,17 @@ namespace Capa_Datos.General
             using (SqlConnection cn = objConexion.Conectar())
             {
                 //Query para insertar
-                sql_query = "INSERT INTO g_usuarios "+
-	                " VALUES "+
-	                " (@nombres,@apellidos,@cui "+
-                    " ,@correo,@password,@fecha_registro,'R') ";
+                sql_query = " INSERT INTO g_usuarios "+
+                    " (nombres,apellidos,cui,telefono "+
+                    " ,idDepartamento,direccion,correo "+
+                    " ,password,fecha_registro,estado " +
+                    " ,id_usuarioAutoriza) "+
+                    " VALUES "+
+                    " (@nombres,@apellidos,@cui,@telefono "+
+                    " ,@idDepartamento,@direccion,@correo "+
+                    " ,@password,@fecha_registro,@estado "+
+                    " ,@id_usuarioAutoriza) ";
+
 
                 try
                 {
@@ -134,8 +141,15 @@ namespace Capa_Datos.General
                     command.Parameters.AddWithValue("@apellidos", objCEUsuario.CE_Apellidos);
 
                     command.Parameters.AddWithValue("@cui", objCEUsuario.CE_CUI);
+
+                    command.Parameters.AddWithValue("@telefono", objCEUsuario.CE_Telefono);
+                    command.Parameters.AddWithValue("@idDepartamento", objCEUsuario.CE_IDDepto);
+                    command.Parameters.AddWithValue("@direccion", objCEUsuario.CE_Direccion);
+
                     command.Parameters.AddWithValue("@correo", objCEUsuario.CE_Correo);
                     command.Parameters.AddWithValue("@fecha_registro", DateTime.Now);
+                    command.Parameters.AddWithValue("@estado", 'R');
+                    command.Parameters.AddWithValue("@id_usuarioAutoriza", '0');
                     
 
                     //Encriptamos la contrasenia
@@ -445,6 +459,32 @@ namespace Capa_Datos.General
 
 
             return respuesta;
+        }
+
+        public DataTable SelectComboDepartamentos()
+        {
+            var dt_respuesta = new DataTable();
+            string sql_query = string.Empty;
+
+            using (var cn = objConexion.Conectar())
+            {
+                sql_query = " SELECT idDepartamento "+
+                    " ,nombre,descripcion "+
+                    " FROM G_Departamento "+
+                    " where estado = 'A' ";
+                try
+                {
+                    var command = new SqlCommand(sql_query, cn);
+                    var da = new SqlDataAdapter(command);
+                    da.Fill(dt_respuesta);
+                }
+                catch (Exception)
+                {
+                    
+                    throw;
+                }
+            }
+            return dt_respuesta;
         }
     }
 }

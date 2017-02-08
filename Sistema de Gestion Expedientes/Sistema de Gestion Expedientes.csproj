@@ -158,6 +158,7 @@
     <Content Include="Account\RegisterDone.aspx" />
     <Content Include="Account\RegisterExternalLogin.aspx" />
     <Content Include="Account\SolicitudRegistro.aspx" />
+    <Content Include="Administracion\Departamentos.aspx" />
     <Content Include="Administracion\Menu.aspx" />
     <Content Include="Administracion\MenuOpcion.aspx" />
     <Content Include="Administracion\PermisosPerfiles.aspx" />
@@ -175,6 +176,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Account\Web.config" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Requisitos\OpinionTecnica.aspx" />
+    <Content Include="Requisitos\Verificacion.aspx" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -279,6 +282,13 @@
     <Compile Include="Account\SolicitudRegistro.aspx.designer.cs">
       <DependentUpon>SolicitudRegistro.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Administracion\Departamentos.aspx.cs">
+      <DependentUpon>Departamentos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Administracion\Departamentos.aspx.designer.cs">
+      <DependentUpon>Departamentos.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Administracion\Menu.aspx.cs">
       <DependentUpon>Menu.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -343,6 +353,20 @@
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Requisitos\OpinionTecnica.aspx.cs">
+      <DependentUpon>OpinionTecnica.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Requisitos\OpinionTecnica.aspx.designer.cs">
+      <DependentUpon>OpinionTecnica.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Requisitos\Verificacion.aspx.cs">
+      <DependentUpon>Verificacion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Requisitos\Verificacion.aspx.designer.cs">
+      <DependentUpon>Verificacion.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

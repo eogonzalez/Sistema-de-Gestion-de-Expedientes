@@ -15,7 +15,7 @@
             <div class="col-md-10">
                 <asp:TextBox runat="server" ID="NombreUsuario" CssClass="form-control"></asp:TextBox>
                 <asp:RequiredFieldValidator runat="server" ControlToValidate="NombreUsuario"
-                    CssClass="text-danger" ErrorMessage="El campo de Nombre es obligatorio."/>
+                    CssClass="text-danger" ErrorMessage="El campo de Nombre es obligatorio." />
             </div>
         </div>
         <div class="form-group">
@@ -23,21 +23,46 @@
             <div class="col-md-10">
                 <asp:TextBox runat="server" ID="ApellidoUsuario" CssClass="form-control"></asp:TextBox>
                 <asp:RequiredFieldValidator runat="server" ControlToValidate="ApellidoUsuario"
-                    CssClass="text-danger" ErrorMessage="El campo Apellido es obligatorio."/>
+                    CssClass="text-danger" ErrorMessage="El campo Apellido es obligatorio." />
             </div>
         </div>
         <div class="form-group">
             <asp:Label runat="server" AssociatedControlID="CuiUsuario" CssClass="col-md-2 control-label">CUI</asp:Label>
             <div class="col-md-10">
-                <asp:TextBox runat="server" ID="CuiUsuario" CssClass="form-control" TextMode="Number"/>
+                <asp:TextBox runat="server" ID="CuiUsuario" CssClass="form-control" TextMode="Number" />
                 <asp:RequiredFieldValidator runat="server" ControlToValidate="CuiUsuario"
                     CssClass="text-danger" ErrorMessage="El campo de CUI de usuario es obligatorio y debe de ser numerico." />
             </div>
         </div>
         <div class="form-group">
+            <asp:Label runat="server" AssociatedControlID="txtNumero" CssClass="col-md-2 control-label">Telefono</asp:Label>
+            <div class="col-md-10">
+                <asp:TextBox runat="server" ID="txtNumero" CssClass="form-control" TextMode="Number" />
+                <asp:RequiredFieldValidator runat="server" ControlToValidate="CuiUsuario"
+                    CssClass="text-danger" ErrorMessage="El campo Telefono es obligatorio y debe de ser numerico." />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <asp:Label runat="server" AssociatedControlID="cboDepto" CssClass="col-md-2 control-label">Departamento</asp:Label>
+            <div class="col-md-10">
+                <asp:DropDownList runat="server" ID="cboDepto" CssClass="form-control">
+                </asp:DropDownList>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <asp:Label runat="server" AssociatedControlID="txtDireccion" CssClass="col-md-2 control-label">Direccion</asp:Label>
+            <div class="col-md-10">
+                <asp:TextBox runat="server" ID="txtDireccion" CssClass="form-control" />
+                <asp:RequiredFieldValidator ErrorMessage="El campo Direccion es obligatorio." ControlToValidate="txtDireccion" runat="server" CssClass="text-danger"/>
+            </div>
+        </div>
+
+        <div class="form-group">
             <asp:Label runat="server" AssociatedControlID="Correo" CssClass="col-md-2 control-label">Correo Electronico</asp:Label>
             <div class="col-md-10">
-                <asp:TextBox runat="server" ID="Correo" CssClass="form-control" TextMode="Email"/>
+                <asp:TextBox runat="server" ID="Correo" CssClass="form-control" TextMode="Email" />
                 <asp:RequiredFieldValidator runat="server" ControlToValidate="Correo"
                     CssClass="text-danger" ErrorMessage="El campo de correo de usuario es obligatorio." />
             </div>

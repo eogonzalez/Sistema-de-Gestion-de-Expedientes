@@ -62,5 +62,10 @@ namespace Capa_Negocio.General
         {
             return objCDLogin.UpdateRechazoPermisoUsuario(id_usuarioAutoriza, id_usuario);
         }
+
+        public DataTable SelectComboDepartamentos()
+        {
+            return objCDLogin.SelectComboDepartamentos();
+        }
     }
 }

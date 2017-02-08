@@ -9,6 +9,7 @@ using Sistema_de_Gestion_Expedientes.Models;
 using Capa_Negocio.General;
 using Capa_Entidad.General;
 using System.Net.Mail;
+using System.Data;
 
 namespace Sistema_de_Gestion_Expedientes.Account
 {
@@ -17,12 +18,23 @@ namespace Sistema_de_Gestion_Expedientes.Account
         CNLogin objCNLogin = new CNLogin();
         CEUsuario objCEUsuario = new CEUsuario();
 
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                Llenar_cbDepartamento();
+            }
+        }
+
         protected void CreateUser_Click(object sender, EventArgs e)
         {            
             //Obtengo datos del usuario para creacion
             objCEUsuario.CE_Nombres = NombreUsuario.Text;
             objCEUsuario.CE_Apellidos = ApellidoUsuario.Text;
             objCEUsuario.CE_CUI = CuiUsuario.Text;
+            objCEUsuario.CE_Telefono = txtNumero.Text;
+            objCEUsuario.CE_IDDepto = Convert.ToInt32(cboDepto.SelectedValue);
+            objCEUsuario.CE_Direccion = txtDireccion.Text;
             objCEUsuario.CE_Correo = Correo.Text;
             objCEUsuario.CE_Password = Password.Text;
             string contraseñaConfirma = ConfirmPassword.Text;
@@ -44,8 +56,8 @@ namespace Sistema_de_Gestion_Expedientes.Account
                         //Muestra a usuario pantalla que ha sido registrado y que revise su correo
                         if (EnvioMensajeRegistro(objCEUsuario.CE_Nombres, objCEUsuario.CE_Apellidos, objCEUsuario.CE_Correo))
                         {                            
-                            //Response.Redirect("RegisterDone.aspx");
-                            Server.Transfer("RegisterDone.aspx");
+                            Response.Redirect("RegisterDone.aspx");
+                            //Server.Transfer("RegisterDone.aspx", false);
                         }
                         else
                         {
@@ -110,6 +122,22 @@ namespace Sistema_de_Gestion_Expedientes.Account
             }
 
             return Enviado;
+        }
+
+        protected void Llenar_cbDepartamento()
+        {
+            var dt = new DataTable();
+
+            dt = objCNLogin.SelectComboDepartamentos();
+
+            if (dt.Rows.Count > 0)
+            {
+
+                cboDepto.DataTextField = dt.Columns["nombre"].ToString();
+                cboDepto.DataValueField = dt.Columns["idDepartamento"].ToString();
+                cboDepto.DataSource = dt;
+                cboDepto.DataBind();
+            }
         }
     }
 }

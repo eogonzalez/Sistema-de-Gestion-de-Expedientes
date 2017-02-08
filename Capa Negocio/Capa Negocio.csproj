@@ -39,12 +39,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Administracion\CNDepartamentos.cs" />
     <Compile Include="Administracion\CNMenu.cs" />
     <Compile Include="Administracion\CNPermisosPerfiles.cs" />
     <Compile Include="Administracion\CNTipoUsuarios.cs" />
     <Compile Include="General\Correo.cs" />
     <Compile Include="General\CNLogin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Requisitos\CNOpinionTecnica.cs" />
+    <Compile Include="Requisitos\CNVerificacion.cs" />
+    <Compile Include="Solicitudes\CNVerificacionOrigen.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
