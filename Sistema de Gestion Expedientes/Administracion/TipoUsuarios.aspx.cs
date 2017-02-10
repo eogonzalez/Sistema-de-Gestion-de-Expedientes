@@ -19,9 +19,10 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
         {
             if (!IsPostBack)
             {
-                btnGuardar.Enabled = false;
+                //btnGuardar.Enabled = false;
                 //gvTipoUsuario.Columns[1].Visible = false ;
                 LLenar_gvTipoUsuario();
+                btnGuardar.Attributes.Add("onclick", "this.value='Procesando Espere...';this.disabled=true;" + ClientScript.GetPostBackEventReference(btnGuardar, ""));
             }
         }
 
@@ -64,6 +65,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                     Response.Redirect("~/Administracion/PermisosPerfiles.aspx?id="+id_usuario.ToString());
                     break;
                 case "modificar":
+                    Mostrardatos(id_usuario);
                     break;
                 case "eliminar":
                     break;
@@ -93,5 +95,10 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             txtDescripcion.Text = string.Empty;
         }
 
+        protected void Mostrardatos(int id_usuario)
+        {
+            btnGuardar.Text = "Editar";
+            
+        }
     }
 }
