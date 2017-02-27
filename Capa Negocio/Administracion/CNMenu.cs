@@ -27,5 +27,20 @@ namespace Capa_Negocio.Administracion
         {
             return objCDMenu.MenuPrincipal(idUsuario);
         }
+
+        public DataTable SelectOpcionMenu(int id_opcion)
+        {
+            return objCDMenu.SelectOpcionMenu(id_opcion);
+        }
+
+        public Boolean UpdateMenuOpcion(CEMenu objCEMenu)
+        {
+            return objCDMenu.UpdateMenuOpcion(objCEMenu);
+        }
+
+        public Boolean DeleteMenuOpcion(CEMenu objCEMenu)
+        {
+            return objCDMenu.DeleteMenuOpcion(objCEMenu);
+        }
     }
 }

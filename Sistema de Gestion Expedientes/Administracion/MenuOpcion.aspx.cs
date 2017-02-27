@@ -23,6 +23,12 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                 Session.Add("id_menu", id_menu);
 
                 Llenar_gvMenu(id_menu);
+                
+                //Valores por defecto si es nuevo
+                txtOrden.Text = "0";
+                cb_obligatorio.Checked = false;
+                cb_obligatorio.Visible = true;
+                btnGuardar.Attributes.Add("onclick", "this.value='Procesando Espere...';this.disabled=true;" + ClientScript.GetPostBackEventReference(btnGuardar, ""));
             }
         }
 
@@ -38,21 +44,54 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
-            if (GuardarMenu())
+            int id_menuOpcion = 0;
+
+            if (Session["IDMenuOpcion"] != null)
             {
-                Llenar_gvMenu(Convert.ToInt32(Session["id_menu"].ToString()));
+                id_menuOpcion = (Int32)Session["IDMenuOpcion"];
             }
-            else
+
+            switch (btnGuardar.CommandName)
             {
-                ErrorMessage.Text = "Ha Ocurrido un Error al guardar Opcion";
+                case "Editar":
+                    if (ActualizarMenuOpcion(id_menuOpcion))
+                    {
+                        Llenar_gvMenu(Convert.ToInt32(Session["id_menu"].ToString()));
+                        LimpiarPanel();
+                    }
+                    else
+                    {
+                        this.lkBtn_viewPanel_ModalPopupExtender.Show();
+                        ErrorMessage.Text = "Ha Ocurrido un Error al actualizar Opcion";
+                    }
+                    break;
+                case "Guardar":
+
+                    if (GuardarMenu())
+                    {
+                        Llenar_gvMenu(Convert.ToInt32(Session["id_menu"].ToString()));
+                        LimpiarPanel();
+                    }
+                    else
+                    {
+                        this.lkBtn_viewPanel_ModalPopupExtender.Show();
+                        ErrorMessage.Text = "Ha Ocurrido un Error al guardar Opcion";
+                    }
+
+                    break;
+                default:
+                    break;
             }
+
+
         }
 
         protected Boolean GuardarMenu()
         {
             objCEMenu.Nombre = txtNombreOpcion.Text;
-            objCEMenu.Descripcion = getNombre();
+            objCEMenu.Descripcion = getDescripcion();
             objCEMenu.URL = getURL();
+            objCEMenu.Comando = getComando();
             objCEMenu.Orden = getOrden();
             objCEMenu.Obligatorio = getObligatorio();
             objCEMenu.Visible = getVisible();
@@ -78,6 +117,11 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             return txtURL.Text;
         }
 
+        protected string getComando()
+        {
+            return txtComando.Text;
+        }
+
         protected int getOrden()
         {
             return Convert.ToInt32(txtOrden.Text);
@@ -96,6 +140,98 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
         protected Boolean getConLogin()
         {
             return cb_login.Checked;
+        }
+
+        protected void gvMenu_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            int index = Convert.ToInt32(e.CommandArgument);
+
+            GridViewRow row = gvMenu.Rows[index];
+            int id_menuOpcion = Convert.ToInt32(row.Cells[0].Text);
+
+            /*
+             * Agrego a la variable de sesion el id de menu seleccionado
+             * para las acciones de editar o eliminar
+             */
+
+            Session.Add("IDMenuOpcion", id_menuOpcion);
+
+            switch (e.CommandName)
+            {
+                //case "submenu":
+                //    Response.Redirect("~/Administracion/MenuOpcion.aspx?id_om=" + id_menu.ToString());
+                //    break;
+
+                case "modificar":
+                    MostrarDatos(id_menuOpcion);
+                    this.lkBtn_viewPanel_ModalPopupExtender.Show();
+                    break;
+
+                case "eliminar":
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        protected Boolean ActualizarMenuOpcion(int id_opcion)
+        {
+            var respuesta = false;
+
+            objCEMenu.ID_MenuOpcion = id_opcion;
+            objCEMenu.Nombre = txtNombreOpcion.Text;
+            objCEMenu.Descripcion = getDescripcion();
+            objCEMenu.URL = getURL();
+            objCEMenu.Comando = getComando();
+            objCEMenu.Orden = getOrden();
+            objCEMenu.Obligatorio = getObligatorio();
+            objCEMenu.Visible = getVisible();
+            objCEMenu.Login = getConLogin();
+            objCEMenu.Id_Padre = Convert.ToInt32(Session["id_menu"].ToString()); ;
+            objCEMenu.ID_UsuarioAutoriza = Convert.ToInt32(Session["UsuarioID"].ToString());
+
+            respuesta = objCNMenu.UpdateMenuOpcion(objCEMenu);
+
+            return respuesta;
+        }
+
+        protected void MostrarDatos(int id_menuOpcion)
+        {
+            btnGuardar.Text = "Editar";
+            btnGuardar.CommandName = "Editar";
+
+            var tbl = new DataTable();
+            tbl = objCNMenu.SelectOpcionMenu(id_menuOpcion);
+            var row = tbl.Rows[0];
+
+            txtNombreOpcion.Text = row["nombre"].ToString();
+            txtDescripcionOpcion.Text = row["descripcion"].ToString();
+            txtURL.Text = row["url"].ToString();
+            txtComando.Text = row["comando"].ToString();
+            txtOrden.Text = row["orden"].ToString();
+            cb_visible.Checked = (Boolean)row["visible"];
+            cb_obligatorio.Checked = (Boolean)row["obligatorio"];
+            cb_login.Checked = (Boolean)row["login"];
+        }
+
+        protected void LimpiarPanel()
+        {
+            txtNombreOpcion.Text = "";
+            txtDescripcionOpcion.Text = "";
+            txtURL.Text = "";
+            txtComando.Text = "";
+            txtOrden.Text = "";
+            cb_visible.Checked = false;
+            cb_obligatorio.Checked = false;
+            cb_login.Checked = false;
+        }
+
+        protected void btnSalir_Click(object sender, EventArgs e)
+        {
+            LimpiarPanel();
+            btnGuardar.Text = "Guardar";
+            btnGuardar.CommandName = "Guardar";
         }
     }
 }

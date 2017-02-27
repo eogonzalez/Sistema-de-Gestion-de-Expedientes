@@ -21,5 +21,20 @@ namespace Capa_Negocio.Administracion
         {
             return objCDTipoUsuarios.InsertTipoUsuarios(objetoEntidad);
         }
+
+        public DataTable SelectTipoUsuario(int id_tipousuario)
+        {
+            return objCDTipoUsuarios.SelectTipoUsuario(id_tipousuario);
+        }
+
+        public Boolean UpdateTipoUsuario(CETipoUsuarios objTipoUsuario)
+        {
+            return objCDTipoUsuarios.UpdateTipoUsuario(objTipoUsuario);
+        }
+
+        public Boolean DeleteTipoUsuario(CETipoUsuarios objTipoUsuario)
+        {
+            return objCDTipoUsuarios.DeleteTipoUsuario(objTipoUsuario);
+        }
     }
 }

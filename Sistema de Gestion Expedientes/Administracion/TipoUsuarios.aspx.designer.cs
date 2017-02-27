@@ -22,6 +22,15 @@ namespace Sistema_de_Gestion_Expedientes.Administracion {
         protected global::System.Web.UI.WebControls.LinkButton lkBtn_nuevo;
         
         /// <summary>
+        /// Control lkBtn_test.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lkBtn_test;
+        
+        /// <summary>
         /// Control lkBtn_nuevo_ModalPopupExtender.
         /// </summary>
         /// <remarks>
@@ -29,6 +38,15 @@ namespace Sistema_de_Gestion_Expedientes.Administracion {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::AjaxControlToolkit.ModalPopupExtender lkBtn_nuevo_ModalPopupExtender;
+        
+        /// <summary>
+        /// Control lkBtn_testModalPopupExtender.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender lkBtn_testModalPopupExtender;
         
         /// <summary>
         /// Control gvTipoUsuario.
@@ -74,15 +92,6 @@ namespace Sistema_de_Gestion_Expedientes.Administracion {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDescripcion;
-        
-        /// <summary>
-        /// Control ddlTipoPermiso.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlTipoPermiso;
         
         /// <summary>
         /// Control btnGuardar.

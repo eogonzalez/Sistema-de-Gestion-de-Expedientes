@@ -4,37 +4,38 @@
 
     <div class="jumbotron">
         <h1>Unidad de Origen</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
-        <p><a href="http://www.asp.net" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+        <p class="lead">Fue creada a través del surgimiento de la administración de los Acuerdos Comerciales Internacionales, para dar cumplimiento en lo referente a lo que se establece en los capítulos de Reglas de Origen y Procedimientos Aduaneros de cada tratado o acuerdo comercial.</p>
+        <p><a href="http://www.asp.net" class="btn btn-primary btn-large">Más acerca de Origen &raquo;</a></p>
     </div>
 
     <div class="row">
         <div class="col-md-4">
             <h2>Verificaciones de Origen</h2>
             <p>
-                ASP.NET Web Forms lets you build dynamic websites using a familiar drag-and-drop, event-driven model.
-            A design surface and hundreds of controls and components let you rapidly build sophisticated, powerful UI-driven sites with data access.
+                Es el procedimiento realizado por la autoridad competente, para verificar que las mercancías que se importaron aplicando una preferencia arancelaria, 
+                de conformidad con los diversos tratados comerciales firmados por Guatemala, cumplan con los requisitos (Reglas de Origen) específicos establecidos en dichos acuerdos.
             </p>
             <p>
-                <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301948">Learn more &raquo;</a>
+                <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301948">Más información.. &raquo;</a>
             </p>
         </div>
         <div class="col-md-4">
-            <h2>Opiniones Tecnicas</h2>
+            <h2>Opiniones Técnicas</h2>
             <p>
-                NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.
+                Informe legal acerca de una situación dada en el proceso de aplicación de las preferencias arancelarias a las mercancías que otorgan los tratados de libre Comercio.
             </p>
             <p>
-                <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301949">Learn more &raquo;</a>
+                <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301949">Más información.. &raquo;</a>
             </p>
         </div>
         <div class="col-md-4">
             <h2>Otros Servicios</h2>
             <p>
-                You can easily find a web hosting company that offers the right mix of features and price for your applications.
+                Usted podra tambien, generar solicitudes electronicas de Certificados de Origen tales como (Taiwan, Union Europea).
+                Solicitudes de Resoluciones anticipadas.
             </p>
             <p>
-                <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301950">Learn more &raquo;</a>
+                <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301950">Más información..&raquo;</a>
             </p>
         </div>
     </div>

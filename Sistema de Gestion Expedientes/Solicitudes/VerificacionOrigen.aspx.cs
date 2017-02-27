@@ -21,10 +21,13 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             {
                 Llenar_cbDepartamento();
 
+                
 
                 if (Session["UsuarioID"].ToString() != null)
                 {
-                    LlenoDatosSolicitante(Convert.ToInt32(Session["UsuarioID"].ToString()));    
+                    LlenoDatosSolicitante(Convert.ToInt32(Session["UsuarioID"].ToString()));
+                    BloqueoControlesIniciales();
+                    
                 }
 
                 
@@ -73,6 +76,71 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             txtTelefono.Enabled = false;
             txtCorreo.Enabled = false;
             cboDepartamento.Enabled = false;
+        }
+
+        protected void BloqueoControlesIniciales()
+        {
+            //Pestania de motivos
+            txtObsMotivo.Enabled = false;
+            txtOtrosMotivos.Enabled = false;
+
+            //Panel de anexos
+            cb_CorrelativoSAT.Enabled = false;
+            txtNumeroOficioSAT.Enabled = false;
+            cb_AnioOficioSAT.Enabled = false;
+        }
+        protected void btnSalir_Click(object sender, EventArgs e)
+        {
+            //tbAnexos.Attributes.Remove("class");
+            //tbAnexos.Attributes.Add("class","tab-pane active");
+
+            //tbMotivo.Attributes.Remove("class");
+            //tbMotivo.Attributes.Add("class", "tab-pane");
+
+            //tbProductos.Attributes.Remove("class");
+            //tbProductos.Attributes.Add("class", "tab-pane");
+        }
+
+        protected void cb_ObsMotivo_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cb_ObsMotivo.Checked)
+            {
+                
+                txtObsMotivo.Enabled = true;
+            }
+            else
+            {
+                //cb_ObsMotivo.Checked = true;
+                txtObsMotivo.Enabled = false;
+            }
+        }
+
+        protected void cb_ocho_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cb_ocho.Checked)
+            {
+                txtOtrosMotivos.Enabled = true;
+            }
+            else
+            {
+                txtOtrosMotivos.Enabled = false;
+            }
+        }
+
+        protected void cbOficioSAT_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbOficioSAT.Checked)
+            {
+                cb_CorrelativoSAT.Enabled = true;
+                txtNumeroOficioSAT.Enabled = true;
+                cb_AnioOficioSAT.Enabled = true;
+            }
+            else
+            {
+                cb_CorrelativoSAT.Enabled = false;
+                txtNumeroOficioSAT.Enabled = false;
+                cb_AnioOficioSAT.Enabled = false;
+            }
         }
     }
 }

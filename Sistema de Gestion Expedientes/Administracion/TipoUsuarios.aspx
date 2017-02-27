@@ -9,38 +9,59 @@
         <div class="panel-body form-vertical">
             <div class="btn-group" role="group">
                 <asp:LinkButton runat="server" ID="lkBtn_nuevo" CssClass="btn btn-primary"><i aria-hidden="true" class="glyphicon glyphicon-pencil"></i> Nuevo </asp:LinkButton>
-                <%--<asp:LinkButton runat="server" ID="lkBtn_Hidden_nuevo" Style="display: hidden"></asp:LinkButton>--%>
+                <asp:LinkButton runat="server" ID="lkBtn_test"></asp:LinkButton>
 
                 <cc1:ModalPopupExtender ID="lkBtn_nuevo_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackground"
                     BehaviorID="lkBtn_nuevo_ModalPopupExtender" PopupControlID="pnl_nuevo" TargetControlID="lkBtn_nuevo" CancelControlID="btnHide">
                 </cc1:ModalPopupExtender>
+
+                <cc1:ModalPopupExtender ID="lkBtn_testModalPopupExtender" runat="server" DropShadow="false"
+                    PopupControlID="pnl_nuevo" TargetControlID="lkBtn_test"
+                    BackgroundCssClass="modalBackground">
+                </cc1:ModalPopupExtender>
+
             </div>
             <br />
             <div>
-                <asp:GridView runat="server" ID="gvTipoUsuario"
-                    CssClass="table table-hover table-striped"
-                    GridLines="None"
-                    EmptyDataText="No existen registros."
-                    OnRowCommand="gvTipoUsuario_RowCommand"
-                    AutoGenerateColumns="false">
 
-                    <Columns>
-                        <asp:BoundField DataField="id_tipousuario" SortExpression="id_tipousuario">
-                            <HeaderStyle CssClass="display:none" />
-                            <ItemStyle CssClass="display:none" />
-                        </asp:BoundField>
+                <asp:UpdatePanel runat="server">
+                    <ContentTemplate>
 
-                        <asp:BoundField DataField="nombre" HeaderText="Nombre" />
-                        <asp:BoundField DataField="tipo_permiso" HeaderText="Tipo Permiso" />
-                        <asp:BoundField DataField="fecha_creacion" HeaderText="Fecha Registro" />
 
-                        <asp:ButtonField  ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />
-                        <asp:ButtonField  ButtonType="Button" Text="Eliminar" HeaderText="Eliminar" CommandName="eliminar" ControlStyle-CssClass="btn btn-danger" />
-                        <asp:ButtonField  ButtonType="Button" Text="Permisos" HeaderText="Permisos" CommandName="permisos" ControlStyle-CssClass="btn btn-primary" />
+                        <asp:GridView runat="server" ID="gvTipoUsuario"
+                            CssClass="table table-hover table-striped"
+                            GridLines="None"
+                            EmptyDataText="No existen registros."
+                            OnRowCommand="gvTipoUsuario_RowCommand"
+                            AutoGenerateColumns="false">
 
-                    </Columns>
+                            <Columns>
+                                <asp:BoundField DataField="id_tipousuario" SortExpression="id_tipousuario">
+                                    <HeaderStyle CssClass="display:none" />
+                                    <ItemStyle CssClass="display:none" />
+                                </asp:BoundField>
 
-                </asp:GridView>
+                                <asp:BoundField DataField="nombre" HeaderText="Nombre" />
+                                <%--<asp:BoundField DataField="tipo_permiso" HeaderText="Tipo Permiso" />--%>
+                                <asp:BoundField DataField="fecha_creacion" HeaderText="Fecha Registro" />
+
+                                <asp:ButtonField ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />
+                                
+                                <asp:TemplateField HeaderText="Eliminar">
+                                    <ItemTemplate>
+                                        <asp:Button runat="server" ID="btnEliminar" CausesValidation="false" CommandName="eliminar" CommandArgument="<%# Container.DataItemIndex %>" Text="Eliminar" CssClass="btn btn-danger" OnClientClick="return confirm(&quot;¿Esta seguro de borrar el perfil seleccionado?&quot;)"/>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+
+                                <asp:ButtonField ButtonType="Button" Text="Permisos" HeaderText="Permisos" CommandName="permisos" ControlStyle-CssClass="btn btn-primary" />
+
+                            </Columns>
+
+                        </asp:GridView>
+
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+
             </div>
         </div>
     </div>
@@ -48,6 +69,7 @@
     <div>
         <asp:Panel runat="server" ID="pnl_nuevo" CssClass="panel panel-primary" BorderColor="Black" BackColor="White"
             BorderStyle="Inset" BorderWidth="1px" heigth="600" Width="35%">
+
             <div class="panel-heading">Mantenimiento de <%:Title%>.</div>
             <p class="text-danger">
                 <asp:Literal runat="server" ID="ErrorMessage" />
@@ -59,7 +81,7 @@
                     <div class="col-xs-10">
                         <asp:TextBox runat="server" ID="txtNombre" CssClass="form-control"></asp:TextBox>
                         <asp:RequiredFieldValidator runat="server" ControlToValidate="txtNombre"
-                            CssClass="text-danger" ErrorMessage="El campo no puede quedar vacio." />  
+                            CssClass="text-danger" ErrorMessage="El campo no puede quedar vacio." />
                     </div>
                 </div>
 
@@ -70,7 +92,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <%--<div class="form-group">
                     <asp:Label runat="server" AssociatedControlID="ddlTipoPermiso" CssClass="control-label col-xs-2" Text="Permiso: "></asp:Label>
                     <div class="col-xs-10">
                         <asp:DropDownList runat="server" ID="ddlTipoPermiso" CssClass="form-control">
@@ -79,12 +101,12 @@
                             <asp:ListItem Value="I">Insitucion</asp:ListItem>
                         </asp:DropDownList>
                     </div>
-                </div>
+                </div>--%>
 
 
                 <div class="panel-footer">
-                    <asp:Button runat="server" ID="btnGuardar" CssClass="btn btn-primary" Text="Guardar" OnClick="btnGuardar_Click" />
-                    <asp:Button runat="server" ID="btnSalir" CssClass="btn btn-default" Text="Salir" CausesValidation="false" />
+                    <asp:Button runat="server" ID="btnGuardar" CssClass="btn btn-primary" Text="Guardar" OnClick="btnGuardar_Click" CommandName="Guardar" />
+                    <asp:Button runat="server" ID="btnSalir" CssClass="btn btn-default" Text="Salir" CausesValidation="false" OnClick="btnSalir_Click" />
                 </div>
             </div>
         </asp:Panel>

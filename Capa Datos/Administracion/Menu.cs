@@ -24,11 +24,13 @@ namespace Capa_Datos.Administracion
                     " ,[nombre] " +
                     " ,[descripcion] " +
                     " ,[url] " +
+                    " ,comando "+
                     " ,obligatorio " +
                     " ,visible " +
                     " ,login " +
                     " FROM [g_menu_opcion] " +
                     " where id_padre = @id_padre " +
+                    " and estado = 'A' "+
                     " order by orden ";
             }
             else
@@ -37,11 +39,13 @@ namespace Capa_Datos.Administracion
                     " ,[nombre] " +
                     " ,[descripcion] " +
                     " ,[url] " +
+                    " ,comando " +
                     " ,obligatorio " +
                     " ,visible " +
                     " ,login " +
                     " FROM [g_menu_opcion] " +
                     " where id_padre is null " +
+                    " and estado = 'A' " +
                     " order by orden ";
             }
 
@@ -79,20 +83,20 @@ namespace Capa_Datos.Administracion
 
             if (objCEMenu.Id_Padre == 0)
             {
-                sql_query += " , [url], [orden] " +
+                sql_query += " , [url], [comando], [orden] " +
                     " ,[visible],[obligatorio],[login],[id_usuarioAutoriza], [estado]) " +
                     " VALUES " +
                     " (@nombre, @descripcion " +
-                    " ,@url, @orden " +
+                    " ,@url, @comando, @orden " +
                     " ,@visible, @obligatorio, @login, @id_usuarioAutoriza, @estado) ";
             }
             else
             {
-                sql_query += " , [url], [id_padre], [orden] " +
+                sql_query += " , [url], [comando], [id_padre], [orden] " +
                     " ,[visible],[obligatorio],[login],[id_usuarioAutoriza], [estado]) " +
                     " VALUES " +
                     " (@nombre, @descripcion " +
-                    " ,@url, @id_padre, @orden " +
+                    " ,@url, @comando, @id_padre, @orden " +
                     " ,@visible, @obligatorio, @login, @id_usuarioAutoriza, @estado) ";
             }
 
@@ -102,6 +106,7 @@ namespace Capa_Datos.Administracion
                 command.Parameters.AddWithValue("nombre", objCEMenu.Nombre);
                 command.Parameters.AddWithValue("descripcion", objCEMenu.Descripcion);
                 command.Parameters.AddWithValue("url", objCEMenu.URL);
+                command.Parameters.AddWithValue("comando", objCEMenu.Comando);
 
                 if (objCEMenu.Id_Padre > 0)
                 {
@@ -178,6 +183,116 @@ namespace Capa_Datos.Administracion
                 throw;
             }
             return ds;
+        }
+
+        public DataTable SelectOpcionMenu(int id_opcion)
+        {
+            var dt_respuesta = new DataTable();
+            var sql_query = string.Empty;
+
+            sql_query = " SELECT [nombre] "+
+                " ,[descripcion],[url] "+
+                " ,[comando],[id_padre] "+
+                " ,[orden],[visible] "+
+                " ,[obligatorio],[login] "+
+                " FROM [G_Menu_Opcion] "+
+                " where estado = 'A' and id_opcion = @id_opcion ";
+
+            using (var cn = objConexion.Conectar())
+            {
+                var command = new SqlCommand(sql_query, cn);
+                command.Parameters.AddWithValue("id_opcion", id_opcion);
+
+                try
+                {
+                    var da = new SqlDataAdapter(command);
+                    da.Fill(dt_respuesta);
+                }
+                catch (Exception)
+                {
+                    
+                    throw;
+                }
+            }
+
+
+            return dt_respuesta;
+        }
+
+        public Boolean UpdateMenuOpcion(CEMenu objCEMenu)
+        {
+            Boolean respuesta = false;
+            string sql_query = string.Empty;
+
+            sql_query = "UPDATE [SGEODB].[dbo].[G_Menu_Opcion] " +
+                " SET [nombre] = @nombre " +
+                " ,[descripcion] = @descripcion " +
+                " ,[url] = @url " +
+                " ,[comando] = @comando ";
+
+            if (objCEMenu.Id_Padre > 0)
+            {
+                sql_query += " ,[id_padre] = @id_padre ";
+            }
+                
+            sql_query += " ,[orden] = @orden "+
+                " ,[visible] = @visible "+
+                " ,[obligatorio] = @obligatorio "+
+                " ,[login] = @login "+
+                " ,[id_usuarioAutoriza] = @id_usuarioAutoriza "+
+                " WHERE id_opcion = @id_opcion" ;
+
+
+
+            using (SqlConnection cn = objConexion.Conectar())
+            {
+                SqlCommand command = new SqlCommand(sql_query, cn);
+                command.Parameters.AddWithValue("nombre", objCEMenu.Nombre);
+                command.Parameters.AddWithValue("descripcion", objCEMenu.Descripcion);
+                command.Parameters.AddWithValue("url", objCEMenu.URL);
+                command.Parameters.AddWithValue("comando", objCEMenu.Comando);
+
+                if (objCEMenu.Id_Padre > 0)
+                {
+                    command.Parameters.AddWithValue("id_padre", objCEMenu.Id_Padre);
+                }
+
+                command.Parameters.AddWithValue("orden", objCEMenu.Orden);
+                command.Parameters.AddWithValue("visible", objCEMenu.Visible);
+                command.Parameters.AddWithValue("obligatorio", objCEMenu.Obligatorio);
+                command.Parameters.AddWithValue("login", objCEMenu.Login);
+                command.Parameters.AddWithValue("id_usuarioAutoriza", objCEMenu.ID_UsuarioAutoriza);
+                command.Parameters.AddWithValue("id_opcion", objCEMenu.ID_MenuOpcion);
+
+                cn.Open();
+                command.ExecuteScalar();
+                respuesta = true;
+            }
+            return respuesta;
+        }
+
+        public Boolean DeleteMenuOpcion(CEMenu objCEMenu)
+        {
+            Boolean respuesta = false;
+            string sql_query = string.Empty;
+
+            sql_query = "UPDATE [SGEODB].[dbo].[G_Menu_Opcion] " +
+                " SET [estado] = @estado " +
+                " ,[id_usuarioAutoriza] = @id_usuarioAutoriza " +
+                " WHERE id_opcion = @id_opcion";
+
+            using (SqlConnection cn = objConexion.Conectar())
+            {
+                SqlCommand command = new SqlCommand(sql_query, cn);
+                command.Parameters.AddWithValue("estado", 'B');
+                command.Parameters.AddWithValue("id_opcion", objCEMenu.ID_MenuOpcion);
+                command.Parameters.AddWithValue("id_usuarioAutoriza", objCEMenu.ID_UsuarioAutoriza);
+                
+                cn.Open();
+                command.ExecuteScalar();
+                respuesta = true;
+            }
+            return respuesta;
         }
     }
 }

@@ -12,8 +12,8 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 {
     public partial class TipoUsuarios : System.Web.UI.Page
     {
-        CNTipoUsuarios objCapaNegocio;
-        CETipoUsuarios objetoEntidad;
+        CNTipoUsuarios objCapaNegocio = new CNTipoUsuarios();
+        CETipoUsuarios objetoEntidad = new CETipoUsuarios();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -29,7 +29,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
         protected void LLenar_gvTipoUsuario()
         {
             DataTable tbl = new DataTable();
-            objCapaNegocio = new CNTipoUsuarios();
+            //objCapaNegocio = new CNTipoUsuarios();
 
             tbl = objCapaNegocio.SelectTipoUsuarios().Tables[0];
 
@@ -39,35 +39,83 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
-            if (GuardarTipoUsuario())
+            /*
+             * Declaro la variable que obtiene 
+             * el tipo de perfil seleccionado de las variables de session
+            */
+
+            int id_tipousuario = 0;
+
+            if (Session["IDTipoUsuario"] != null)
             {
-                //Mensaje Se Guardo con exito
-                LLenar_gvTipoUsuario();
-                LimpiarTipoUsuario();
+                id_tipousuario = Convert.ToInt32(Session["IDTipoUsuario"].ToString());
             }
-            else
+            
+
+            switch (btnGuardar.CommandName)
             {
-                //Mensaje Error al Guardar
-                lkBtn_nuevo_ModalPopupExtender.Show();
+                case    "Editar":
+
+                    if (UpdateTipoUsuario(id_tipousuario))
+                    {
+                        LLenar_gvTipoUsuario();
+                        LimpiarTipoUsuario();
+                    }
+                    else
+                    {
+                        ErrorMessage.Text = "Ha ocurrido un error al Editar Perfil.";
+                        lkBtn_testModalPopupExtender.Show();
+                    }
+                    
+                    break;
+                case "Guardar":
+
+                    if (GuardarTipoUsuario())
+                    {
+                        //Mensaje Se Guardo con exito
+                        LLenar_gvTipoUsuario();
+                        LimpiarTipoUsuario();
+                    }
+                    else
+                    {
+                        
+                        ErrorMessage.Text = "Ha ocurrido un error al Guardar Perfil.";
+                        lkBtn_testModalPopupExtender.Show();
+                    }
+
+                    break;
+                default:
+                    break;
             }
+
         }
 
         protected void gvTipoUsuario_RowCommand(Object sender, GridViewCommandEventArgs e)
         {
+            
             int index = Convert.ToInt32(e.CommandArgument);
 
             GridViewRow row = gvTipoUsuario.Rows[index];
-            int id_usuario = Convert.ToInt32(row.Cells[0].Text);
+            int id_tipousuario = Convert.ToInt32(row.Cells[0].Text);
+
+            /*
+             * Agrego a la variable de sesion el perfil seleccionado
+             * para las acciones de editar o eliminar
+             */
+
+            Session.Add("IDTipoUsuario", id_tipousuario);
 
             switch (e.CommandName)
             {
                 case "permisos":
-                    Response.Redirect("~/Administracion/PermisosPerfiles.aspx?id="+id_usuario.ToString());
+                    Response.Redirect("~/Administracion/PermisosPerfiles.aspx?id=" + id_tipousuario.ToString());
                     break;
                 case "modificar":
-                    Mostrardatos(id_usuario);
+                    Mostrardatos(id_tipousuario);
                     break;
                 case "eliminar":
+                    EliminaTipoUsuario(id_tipousuario);
+                    LLenar_gvTipoUsuario();
                     break;
                 default:
                     break;
@@ -82,11 +130,41 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
             objetoEntidad.Nombre = txtNombre.Text;
             objetoEntidad.Descripcion = txtDescripcion.Text;
-            objetoEntidad.TipoPermiso = ddlTipoPermiso.SelectedValue;
+            //objetoEntidad.TipoPermiso = ddlTipoPermiso.SelectedValue;
+            objetoEntidad.ID_UsuarioAutoriza = Convert.ToInt32(Session["UsuarioID"].ToString());
 
             respuesta = objCapaNegocio.InsertTipoUsuarios(objetoEntidad);
             
             return respuesta;
+        }
+
+        protected Boolean UpdateTipoUsuario(int id_tipousuario)
+        {
+            Boolean respuesta = false;
+            objetoEntidad = new CETipoUsuarios();
+            objCapaNegocio = new CNTipoUsuarios();
+
+            objetoEntidad.Nombre = txtNombre.Text;
+            objetoEntidad.Descripcion = txtDescripcion.Text;
+            //objetoEntidad.TipoPermiso = ddlTipoPermiso.SelectedValue;
+            objetoEntidad.ID_TipoUsuario = id_tipousuario;
+            objetoEntidad.ID_UsuarioAutoriza = Convert.ToInt32(Session["UsuarioID"].ToString());
+
+            respuesta = objCapaNegocio.UpdateTipoUsuario(objetoEntidad);
+
+            return respuesta;
+        }
+
+        protected Boolean EliminaTipoUsuario(int id_tipousuario)
+        {
+            var respuesta = false;
+            objetoEntidad = new CETipoUsuarios();
+            objetoEntidad.ID_TipoUsuario = id_tipousuario;
+            objetoEntidad.ID_UsuarioAutoriza = Convert.ToInt32(Session["UsuarioID"].ToString());
+
+            respuesta = objCapaNegocio.DeleteTipoUsuario(objetoEntidad);
+
+            return respuesta;   
         }
 
         protected void LimpiarTipoUsuario()
@@ -95,10 +173,31 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             txtDescripcion.Text = string.Empty;
         }
 
-        protected void Mostrardatos(int id_usuario)
+        protected void Mostrardatos(int id_tipousuario)
         {
+            
             btnGuardar.Text = "Editar";
+            btnGuardar.CommandName = "Editar";
+
+            var tbl = new DataTable();
+            tbl = objCapaNegocio.SelectTipoUsuario(id_tipousuario);
+            var row = tbl.Rows[0];
+
+            txtNombre.Text = row["nombre"].ToString();
+            txtDescripcion.Text = row["descripcion"].ToString();
+            //ddlTipoPermiso.SelectedValue = row["tipo_permiso"].ToString();
+
+            //lkBtn_nuevo_ModalPopupExtender.Show();
+            this.lkBtn_testModalPopupExtender.Show();
             
         }
+
+        protected void btnSalir_Click(object sender, EventArgs e)
+        {
+            LimpiarTipoUsuario();
+            btnGuardar.CommandName = "Guardar";
+            btnGuardar.Text = "Guardar";
+        }
+
     }
 }
