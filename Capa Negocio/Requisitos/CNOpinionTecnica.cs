@@ -22,5 +22,20 @@ namespace Capa_Negocio.Requisitos
         {
             return objCDOpinion.SaveRequisito(objCEOpinion);
         }
+
+        public DataTable SelectRequisito(int id_requisito)
+        {
+            return objCDOpinion.SelectRequisito(id_requisito);
+        }
+
+        public Boolean DeleteRequisito(int id_requisito)
+        {
+            return objCDOpinion.DeleteRequisito(id_requisito);
+        }
+
+        public Boolean UpdateRequisito(CEOpinionTecnica objCEOpinion)
+        {
+            return objCDOpinion.UpdateRequisito(objCEOpinion);
+        }
     }
 }

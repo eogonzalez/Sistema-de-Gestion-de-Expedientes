@@ -17,5 +17,19 @@ namespace Capa_Negocio.Solicitudes
             return objCDVerificacionOrigen.SelectDatosSolicitante(idUsuario);
         }
 
+        public DataTable SelectComboPaises()
+        {
+            return objCDVerificacionOrigen.SelectComboPaises();
+        }
+
+        public DataTable SelectRequisitosVerificacion()
+        {
+            return objCDVerificacionOrigen.SelectRequisitosVerificacion();
+        }
+
+        public DataTable SelectRequisitosOpinion()
+        {
+            return objCDVerificacionOrigen.SelectRequisitosOpinion();
+        }
     }
 }

@@ -22,6 +22,15 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos {
         protected global::System.Web.UI.WebControls.LinkButton lkBtn_nuevo;
         
         /// <summary>
+        /// Control lkBtn_viewPanel.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lkBtn_viewPanel;
+        
+        /// <summary>
         /// Control lkBtn_nuevo_ModalPopupExtender.
         /// </summary>
         /// <remarks>
@@ -29,6 +38,15 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::AjaxControlToolkit.ModalPopupExtender lkBtn_nuevo_ModalPopupExtender;
+        
+        /// <summary>
+        /// Control lkBtn_viewPanel_ModalPopupExtender.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender lkBtn_viewPanel_ModalPopupExtender;
         
         /// <summary>
         /// Control gvRequisitosVerificacion.

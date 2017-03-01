@@ -142,12 +142,13 @@ namespace Capa_Datos.Administracion
                         " ,url ,id_padre " +
                         " FROM dbo.g_menu_opcion " +
                         " where obligatorio = 1 Or visible = 1 and login = 0 " +
+                        " and estado = 'A' " +
                         " order by orden ";
                 }
                 else
                 {//Si usuario esta registrado
                     sql_query = "  select  "+
-                        " gmo.id_opcion, gmo.nombre, gmo.descripcion, gmo.url, gmo.id_padre, gmo.obligatorio , gmo.visible, gmo.login, "+
+                        " gmo.id_opcion, gmo.nombre, gmo.descripcion, gmo.url, gmo.comando, gmo.id_padre, gmo.obligatorio , gmo.visible, gmo.login, " +
                         " gptu.id_tipousuario, gptu.acceder, gptu.insertar, gptu.editar, gptu.borrar, gptu.aprobar, gptu.rechazar "+
                         " FROM  "+                        
                         " G_Menu_Opcion gmo, "+
@@ -158,7 +159,8 @@ namespace Capa_Datos.Administracion
                         " and gmo.estado = 'A' "+
                         " and gptu.estado = 'A' "+
                         " and gup.id_tipousuario = gptu.id_tipousuario "+
-                        " and gup.id_usuario = @id_usuario ";
+                        " and gup.id_usuario = @id_usuario "+
+                        " order by gmo.id_padre, gmo.orden ";
                 }
 
 

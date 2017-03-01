@@ -138,6 +138,18 @@ namespace Sistema_de_Gestion_Expedientes
                             Item.ToolTip = Convert.ToString(enc["descripcion"]);
                             Item.NavigateUrl = Convert.ToString(enc["url"]);
 
+                            if (enc["comando"] != null)                            
+                            {
+                                int len = 0;
+                                len = enc["comando"].ToString().Length;
+
+                                if (len > 0)
+                                {
+                                    Item.NavigateUrl += "?cmd=" + Convert.ToString(enc["comando"]);
+                                }
+                                
+                            }
+
                             menuDinamico.Items.Add(Item);
 
                             //Funcion para llenar submenu
@@ -170,6 +182,16 @@ namespace Sistema_de_Gestion_Expedientes
                             Item.ToolTip = Convert.ToString(enc["descripcion"]);
                             Item.NavigateUrl = Convert.ToString(enc["url"]);
 
+                            if (enc["comando"] != null)
+                            {
+                                int len = 0;
+                                len = enc["comando"].ToString().Length;
+
+                                if (len > 0)
+                                {
+                                    Item.NavigateUrl += "?cmd=" + Convert.ToString(enc["comando"]);
+                                }
+                            }
 
                             Menu.ChildItems.Add(Item);
 
@@ -192,6 +214,17 @@ namespace Sistema_de_Gestion_Expedientes
                                 Item.Text = Convert.ToString(enc["nombre"]);
                                 Item.ToolTip = Convert.ToString(enc["descripcion"]);
                                 Item.NavigateUrl = Convert.ToString(enc["url"]);
+
+                                if (enc["comando"] != null)
+                                {
+                                    int len = 0;
+                                    len = enc["comando"].ToString().Length;
+
+                                    if (len > 0)
+                                    {
+                                        Item.NavigateUrl += "?cmd=" + Convert.ToString(enc["comando"]);
+                                    }
+                                }
 
                                 Menu.ChildItems.Add(Item);
 

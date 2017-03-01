@@ -391,13 +391,13 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes {
         protected global::System.Web.UI.WebControls.TextBox txtNumeroOficioSAT;
         
         /// <summary>
-        /// Control cb_AnioOficioSAT.
+        /// Control txtAnioOficioSAT.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList cb_AnioOficioSAT;
+        protected global::System.Web.UI.WebControls.TextBox txtAnioOficioSAT;
         
         /// <summary>
         /// Control txtNoReferencia.

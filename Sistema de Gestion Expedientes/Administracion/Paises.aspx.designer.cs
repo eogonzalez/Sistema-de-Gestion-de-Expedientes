@@ -10,7 +10,7 @@
 namespace Sistema_de_Gestion_Expedientes.Administracion {
     
     
-    public partial class Departamentos {
+    public partial class Paises {
         
         /// <summary>
         /// Control lkBtn_nuevo.
@@ -49,13 +49,13 @@ namespace Sistema_de_Gestion_Expedientes.Administracion {
         protected global::AjaxControlToolkit.ModalPopupExtender lkBtn_viewPanel_ModalPopupExtender;
         
         /// <summary>
-        /// Control gvDepartamento.
+        /// Control gvPaises.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvDepartamento;
+        protected global::System.Web.UI.WebControls.GridView gvPaises;
         
         /// <summary>
         /// Control pnl_nuevo.
@@ -76,15 +76,6 @@ namespace Sistema_de_Gestion_Expedientes.Administracion {
         protected global::System.Web.UI.WebControls.Literal ErrorMessage;
         
         /// <summary>
-        /// Control txtCodigo.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCodigo;
-        
-        /// <summary>
         /// Control txtNombre.
         /// </summary>
         /// <remarks>
@@ -94,13 +85,13 @@ namespace Sistema_de_Gestion_Expedientes.Administracion {
         protected global::System.Web.UI.WebControls.TextBox txtNombre;
         
         /// <summary>
-        /// Control txtDescripcionOpcion.
+        /// Control txtISO.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDescripcionOpcion;
+        protected global::System.Web.UI.WebControls.TextBox txtISO;
         
         /// <summary>
         /// Control btnGuardar.

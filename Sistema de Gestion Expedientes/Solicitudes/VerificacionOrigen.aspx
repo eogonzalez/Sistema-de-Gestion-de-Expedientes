@@ -119,7 +119,7 @@
                         <asp:TextBox runat="server" ID="txtDireccionExpo" CssClass="form-control input-sm" />
                     </div>
 
-                    <asp:Label Text="Departamento" runat="server" AssociatedControlID="cboPaisExpo" CssClass="control-label col-xs-2" />
+                    <asp:Label Text="Pais" runat="server" AssociatedControlID="cboPaisExpo" CssClass="control-label col-xs-2" />
                     <div class="col-xs-4">
                         <asp:DropDownList runat="server" ID="cboPaisExpo" CssClass="form-control input-sm">
                         </asp:DropDownList>
@@ -145,9 +145,9 @@
             <div class="panel-footer">
                 <div class="text-center">
                     <div class="btn-group">
-                        <asp:Button Text="Guardar Datos de Identificacion " ID="btnGuardar" runat="server" CssClass="btn btn-primary" />
-                        <asp:Button Text="Enviar Solicitud" ID="btnEnviar" runat="server" CssClass="btn btn-success" />
-                        <asp:Button Text="Cancelar" ID="btnCancelar" runat="server" CssClass="btn btn-danger" />
+                        <asp:Button Text="Guardar Datos de Identificacion " ID="btnGuardar" runat="server" CssClass="btn btn-primary" OnClick="btnGuardar_Click" />
+                        <asp:Button Text="Enviar Solicitud" ID="btnEnviar" runat="server" CssClass="btn btn-success" OnClick="btnEnviar_Click" />
+                        <asp:Button Text="Cancelar" ID="btnCancelar" runat="server" CssClass="btn btn-danger" OnClick="btnCancelar_Click" />
                     </div>
                 </div>
             </div>
@@ -255,7 +255,7 @@
                                     CssClass="table table-hover table-striped"
                                     GridLines="None"
                                     EmptyDataText="No se han agregado documentos."
-                                    AutoGenerateColumns="false">
+                                    AutoGenerateColumns="false" OnRowCommand="gvAnexos_RowCommand">
 
                                     <Columns>
                                         <asp:BoundField DataField="id_Anexo" SortExpression="id_Anexo">
@@ -312,10 +312,7 @@
                                 </div>
 
                                 <div class="col-xs-2">
-                                    <asp:DropDownList runat="server" ID="cb_AnioOficioSAT" CssClass="form-control input-sm">
-                                        <asp:ListItem Text="2017" />
-                                        <asp:ListItem Text="text2" />
-                                    </asp:DropDownList>
+                                    <asp:TextBox runat="server" id="txtAnioOficioSAT" CssClass="form-control input-sm" TextMode="Number"/>                                              
                                 </div>
                             </div>
 

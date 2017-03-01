@@ -8,6 +8,7 @@ namespace Capa_Entidad.Requisitos
 {
     public class CEOpinionTecnica
     {
+        public int ID_Requisito { get; set; }
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
         public Boolean Obligatorio { get; set; }

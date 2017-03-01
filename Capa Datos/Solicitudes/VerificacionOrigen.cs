@@ -48,5 +48,89 @@ namespace Capa_Datos.Solicitudes
 
             return dt_respuesta;
         }
+
+        public DataTable SelectComboPaises()
+        {
+            var dt_respuesta = new DataTable();
+
+            string sql_query = string.Empty;
+
+            using (var cn = objConexion.Conectar())
+            {
+                sql_query = " SELECT idPais " +
+                    " ,nombre " +
+                    " FROM G_Paises " +
+                    " where estado = 'A' ";
+                try
+                {
+                    var command = new SqlCommand(sql_query, cn);
+                    var da = new SqlDataAdapter(command);
+                    da.Fill(dt_respuesta);
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+
+            return dt_respuesta;
+        }
+
+        public DataTable SelectRequisitosVerificacion()
+        {
+            var dt_respuesta = new DataTable();
+
+            string sql_query = string.Empty;
+
+            using (var cn = objConexion.Conectar())
+            {
+                sql_query = " SELECT idRequisito " +
+                    " ,nombre, obligatorio " +
+                    " FROM VO_RequisitosVerificacion " +
+                    " where estado = 'A' ";
+                try
+                {
+                    var command = new SqlCommand(sql_query, cn);
+                    var da = new SqlDataAdapter(command);
+                    da.Fill(dt_respuesta);
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+
+            return dt_respuesta;
+        }
+
+        public DataTable SelectRequisitosOpinion()
+        {
+            var dt_respuesta = new DataTable();
+
+            string sql_query = string.Empty;
+
+            using (var cn = objConexion.Conectar())
+            {
+                sql_query = " SELECT idRequisito " +
+                    " ,nombre, obligatorio " +
+                    " FROM OP_RequisitosOpinionTecnica " +
+                    " where estado = 'A' ";
+                try
+                {
+                    var command = new SqlCommand(sql_query, cn);
+                    var da = new SqlDataAdapter(command);
+                    da.Fill(dt_respuesta);
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+
+            return dt_respuesta;
+        }
     }
 }

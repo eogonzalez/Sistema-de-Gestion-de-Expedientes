@@ -19,18 +19,28 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
         {
             if (!IsPostBack)
             {
-                Llenar_cbDepartamento();
-
-                
 
                 if (Session["UsuarioID"].ToString() != null)
                 {
                     LlenoDatosSolicitante(Convert.ToInt32(Session["UsuarioID"].ToString()));
                     BloqueoControlesIniciales();
-                    
-                }
 
-                
+                    Llenar_cbDepartamento();
+                    Llenar_cbPais();
+
+                    
+
+                    txtAnioOficioSAT.Text = DateTime.Now.Year.ToString();
+
+
+                    var cmd = string.Empty;
+                    cmd = Request.QueryString["cmd"].ToString();
+                    /*Session.Add("id_menu", id_menu);*/
+                    Llenar_cboTipoRequisito(cmd);
+
+                    Llenar_gvAnexos(cmd);
+                    
+                }                
             }
         }
 
@@ -52,6 +62,69 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                 cboDeptoImpo.DataSource = dt;
                 cboDeptoImpo.DataBind();
 
+                
+
+            }
+        }
+
+        protected void Llenar_cbPais()
+        {
+            var dt = new DataTable();
+
+            dt = objCNVerificacion.SelectComboPaises();
+
+            if (dt.Rows.Count > 0)
+            {
+                cboPaisExpo.DataTextField = dt.Columns["nombre"].ToString();
+                cboPaisExpo.DataValueField = dt.Columns["idPais"].ToString();
+                cboPaisExpo.DataSource = dt;
+                cboPaisExpo.DataBind();                
+            }
+        }
+
+        protected void Llenar_cboTipoRequisito(string cmd)
+        {
+            var dt = new DataTable();
+
+            switch (cmd)
+            {   case "VO":
+                    dt = objCNVerificacion.SelectRequisitosVerificacion();
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        cboTipoRequisito.DataTextField = dt.Columns["nombre"].ToString();
+                        cboTipoRequisito.DataValueField = dt.Columns["idRequisito"].ToString();
+                        cboTipoRequisito.DataSource = dt;
+                        cboTipoRequisito.DataBind();
+                    }
+                    break;
+                case "OT":
+                    dt = objCNVerificacion.SelectRequisitosOpinion();
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        cboTipoRequisito.DataTextField = dt.Columns["nombre"].ToString();
+                        cboTipoRequisito.DataValueField = dt.Columns["idRequisito"].ToString();
+                        cboTipoRequisito.DataSource = dt;
+                        cboTipoRequisito.DataBind();
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+        protected void Llenar_gvAnexos(string cmd)
+        {
+            switch (cmd)
+            {
+                case "VO":
+                    break;
+                case "OP":
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -87,8 +160,9 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             //Panel de anexos
             cb_CorrelativoSAT.Enabled = false;
             txtNumeroOficioSAT.Enabled = false;
-            cb_AnioOficioSAT.Enabled = false;
+            txtAnioOficioSAT.Enabled = false;
         }
+
         protected void btnSalir_Click(object sender, EventArgs e)
         {
             //tbAnexos.Attributes.Remove("class");
@@ -104,8 +178,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
         protected void cb_ObsMotivo_CheckedChanged(object sender, EventArgs e)
         {
             if (cb_ObsMotivo.Checked)
-            {
-                
+            {                
                 txtObsMotivo.Enabled = true;
             }
             else
@@ -133,14 +206,35 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             {
                 cb_CorrelativoSAT.Enabled = true;
                 txtNumeroOficioSAT.Enabled = true;
-                cb_AnioOficioSAT.Enabled = true;
+                txtAnioOficioSAT.Enabled = true;                
             }
             else
             {
                 cb_CorrelativoSAT.Enabled = false;
                 txtNumeroOficioSAT.Enabled = false;
-                cb_AnioOficioSAT.Enabled = false;
+                txtAnioOficioSAT.Enabled = false;
+                
             }
+        }
+
+        protected void gvAnexos_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+
+        }
+
+        protected void btnGuardar_Click(object sender, EventArgs e)
+        {
+            //Guarda datos primarios
+        }
+
+        protected void btnEnviar_Click(object sender, EventArgs e)
+        {
+            //Envia solicitud
+        }
+
+        protected void btnCancelar_Click(object sender, EventArgs e)
+        {
+            //Cancela solicitud y regresa a menu principal
         }
     }
 }

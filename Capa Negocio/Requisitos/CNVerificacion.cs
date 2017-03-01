@@ -22,5 +22,20 @@ namespace Capa_Negocio.Requisitos
         {
             return objCDVerificacion.SaveRequisito(objCEVerificacion);
         }
+
+        public DataTable SelectRequisito(int id_requisito)
+        {
+            return objCDVerificacion.SelectRequisito(id_requisito);
+        }
+
+        public Boolean DeleteRequisito(int id_requisito)
+        {
+            return objCDVerificacion.DeleteRequisito(id_requisito);
+        }
+
+        public Boolean UpdateRequisito(CEVerificacion objCEVerificacion)
+        {
+            return objCDVerificacion.UpdateRequisito(objCEVerificacion);
+        }
     }
 }

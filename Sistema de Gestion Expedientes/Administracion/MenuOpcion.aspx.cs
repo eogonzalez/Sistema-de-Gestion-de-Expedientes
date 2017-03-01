@@ -156,6 +156,10 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
             Session.Add("IDMenuOpcion", id_menuOpcion);
 
+            int id_menu = 0;
+            id_menu = Convert.ToInt32(Request.QueryString["id_om"].ToString());
+            Session.Add("id_menu", id_menu);
+
             switch (e.CommandName)
             {
                 //case "submenu":
@@ -168,6 +172,8 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                     break;
 
                 case "eliminar":
+                    EliminaMenuOpcion(id_menuOpcion);
+                    Llenar_gvMenu(id_menu);
                     break;
 
                 default:
@@ -213,6 +219,18 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             cb_visible.Checked = (Boolean)row["visible"];
             cb_obligatorio.Checked = (Boolean)row["obligatorio"];
             cb_login.Checked = (Boolean)row["login"];
+        }
+
+        protected Boolean EliminaMenuOpcion(int id_opcion)
+        {
+            var respuesta = false;
+
+            objCEMenu = new CEMenu();
+            objCEMenu.ID_MenuOpcion = id_opcion;
+            objCEMenu.ID_UsuarioAutoriza = Convert.ToInt32(Session["UsuarioID"].ToString());
+
+            respuesta = objCNMenu.DeleteMenuOpcion(objCEMenu);
+            return respuesta;
         }
 
         protected void LimpiarPanel()

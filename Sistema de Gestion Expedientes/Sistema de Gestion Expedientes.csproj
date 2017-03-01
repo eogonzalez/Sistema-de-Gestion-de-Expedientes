@@ -161,6 +161,7 @@
     <Content Include="Administracion\Departamentos.aspx" />
     <Content Include="Administracion\Menu.aspx" />
     <Content Include="Administracion\MenuOpcion.aspx" />
+    <Content Include="Administracion\Paises.aspx" />
     <Content Include="Administracion\PermisosPerfiles.aspx" />
     <Content Include="Administracion\TipoUsuarios.aspx" />
     <Content Include="Administracion\Usuarios.aspx" />
@@ -302,6 +303,13 @@
     </Compile>
     <Compile Include="Administracion\MenuOpcion.aspx.designer.cs">
       <DependentUpon>MenuOpcion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Administracion\Paises.aspx.cs">
+      <DependentUpon>Paises.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Administracion\Paises.aspx.designer.cs">
+      <DependentUpon>Paises.aspx</DependentUpon>
     </Compile>
     <Compile Include="Administracion\PermisosPerfiles.aspx.cs">
       <DependentUpon>PermisosPerfiles.aspx</DependentUpon>

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Requisitos de Verificacion" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Verificacion.aspx.cs" Inherits="Sistema_de_Gestion_Expedientes.Requisitos.Verificacion" %>
+﻿<%@ Page Title="Paises" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Paises.aspx.cs" Inherits="Sistema_de_Gestion_Expedientes.Administracion.Paises" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
@@ -6,37 +6,37 @@
         <div class="panel-heading"><%: Title %></div>
         <br />
         <div class="panel-body form-vertical">
-            <div class="btn-group" role="group">
+            <div class="btn">
                 <asp:LinkButton runat="server" ID="lkBtn_nuevo" CssClass="btn btn-primary"><i aria-hidden="true" class="glyphicon glyphicon-pencil"></i> Nuevo </asp:LinkButton>
                 <asp:LinkButton runat="server" ID="lkBtn_viewPanel"></asp:LinkButton>
 
-                <cc1:ModalPopupExtender ID="lkBtn_nuevo_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackground"
-                    BehaviorID="lkBtn_nuevo_ModalPopupExtender" PopupControlID="pnl_nuevo" TargetControlID="lkBtn_nuevo" CancelControlID="btnHide">
-                </cc1:ModalPopupExtender>
+                <cc1:modalpopupextender id="lkBtn_nuevo_ModalPopupExtender" runat="server" backgroundcssclass="modalBackground"
+                    behaviorid="lkBtn_nuevo_ModalPopupExtender" popupcontrolid="pnl_nuevo" targetcontrolid="lkBtn_nuevo" cancelcontrolid="btnHide">
+                </cc1:modalpopupextender>
 
-                <cc1:ModalPopupExtender ID="lkBtn_viewPanel_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackground"
-                    BehaviorID="lkBtn_viewPanel_ModalPopupExtender" PopupControlID="pnl_nuevo" TargetControlID="lkBtn_viewPanel">
-                </cc1:ModalPopupExtender>
+
+                <cc1:modalpopupextender id="lkBtn_viewPanel_ModalPopupExtender" runat="server" backgroundcssclass="modalBackground"
+                    behaviorid="lkBtn_viewPanel_ModalPopupExtender" popupcontrolid="pnl_nuevo" targetcontrolid="lkBtn_viewPanel">
+                </cc1:modalpopupextender>
 
             </div>
             <br />
             <div>
-                <asp:GridView runat="server" ID="gvRequisitosVerificacion"
+                <asp:GridView runat="server" ID="gvPaises"
                     CssClass="table table-hover table-striped"
                     GridLines="None"
                     EmptyDataText="No existen registros."
-                    AutoGenerateColumns="false"
-                    OnRowCommand="gvRequisitosVerificacion_RowCommand">
+                    AutoGenerateColumns="false" OnRowCommand="gvPaises_RowCommand">
 
                     <Columns>
-                        <asp:BoundField DataField="idRequisito" SortExpression="idDepartamento">
+                        <asp:BoundField DataField="idPais" SortExpression="idPais">
                             <HeaderStyle CssClass="display:none" />
                             <ItemStyle CssClass="display:none" />
                         </asp:BoundField>
 
+                        <asp:BoundField DataField="nombre" HeaderText="Pais" />
+                        <asp:BoundField DataField="iso2" HeaderText="ISO2" />
 
-                        <asp:BoundField DataField="nombre" HeaderText="Departamento" />
-                        <asp:BoundField DataField="descripcion" HeaderText="Descripcion" />
 
                         <asp:ButtonField ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />
 
@@ -62,9 +62,8 @@
             </p>
             <div class="panel-body form-horizontal">
 
-
                 <div class="form-group">
-                    <asp:Label AssociatedControlID="txtNombre" CssClass="control-label col-xs-2" runat="server" Text="Requisito: "></asp:Label>
+                    <asp:Label AssociatedControlID="txtNombre" CssClass="control-label col-xs-2" runat="server" Text="Pais: "></asp:Label>
                     <div class="col-xs-10">
                         <asp:TextBox ID="txtNombre" type="text" CssClass="form-control" runat="server"></asp:TextBox>
                         <asp:RequiredFieldValidator runat="server" ControlToValidate="txtNombre"
@@ -73,22 +72,18 @@
                 </div>
 
                 <div class="form-group">
-                    <asp:Label AssociatedControlID="txtDescripcionOpcion" CssClass="control-label col-xs-2" runat="server" Text="Descripcion:"></asp:Label>
+                    <asp:Label AssociatedControlID="txtISO" CssClass="control-label col-xs-2" runat="server" Text="Codigo ISO: "></asp:Label>
                     <div class="col-xs-10">
-                        <asp:TextBox ID="txtDescripcionOpcion" type="text" CssClass="form-control" runat="server" TextMode="MultiLine"></asp:TextBox>
+                        <asp:TextBox ID="txtISO" type="text" CssClass="form-control" runat="server"></asp:TextBox>
+                        <asp:RequiredFieldValidator runat="server" ControlToValidate="txtISO"
+                            CssClass="text-danger" ErrorMessage="El campo no puede quedar vacio." />
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <asp:Label ID="Label3" CssClass="control-label col-xs-2" runat="server" Text="Obligatorio:"></asp:Label>
-                    <div class="col-xs-10">
-                        <asp:CheckBox ID="cb_obligatorio" runat="server" />
-                    </div>
-                </div>
 
                 <div class="panel-footer">
-                    <asp:Button runat="server" ID="btnGuardar" CssClass="btn btn-primary" Text="Guardar" CommandName="Guardar" OnClick="btnGuardar_Click" />
-                    <asp:Button runat="server" ID="btnSalir" CssClass="btn btn-default" Text="Salir" CausesValidation="false" OnClick="btnSalir_Click" />
+                    <asp:Button runat="server" ID="btnGuardar" CssClass="btn btn-primary" Text="Guardar"  CommandName="Guardar" OnClick="btnGuardar_Click" />
+                    <asp:Button runat="server" ID="btnSalir" CssClass="btn btn-default" Text="Salir" CausesValidation="false" OnClick="btnSalir_Click"  />
                 </div>
             </div>
         </asp:Panel>

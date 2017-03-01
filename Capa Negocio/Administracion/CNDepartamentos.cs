@@ -21,5 +21,20 @@ namespace Capa_Negocio.Administracion
         {
             return objCDDepartamentos.SaveDepartamento(objCEDeptos);
         }
+
+        public DataTable SelectDepartamento(int idDepartamento)
+        {
+            return objCDDepartamentos.SelectDepartamento(idDepartamento);
+        }
+
+        public Boolean UpdateDepartamento(CEDepartamentos objCEDepartamento)
+        {
+            return objCDDepartamentos.UpdateDepartamento(objCEDepartamento);
+        }
+
+        public Boolean DeleteDepartamento(int idDepartamento)
+        {
+            return objCDDepartamentos.DeleteDepartamento(idDepartamento);
+        }
     }
 }

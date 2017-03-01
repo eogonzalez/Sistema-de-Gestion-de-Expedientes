@@ -20,6 +20,7 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos
             if (!IsPostBack)
             {
                 Llenar_gvRequisitosOpinion();
+                btnGuardar.Attributes.Add("onclick", "this.value='Procesando Espere...';this.disabled=true;" + ClientScript.GetPostBackEventReference(btnGuardar, ""));
             }
         }
 
@@ -35,14 +36,59 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
-            if (GuardarRequisito())
+            int id_requisito = 0;
+            if (Session["IDRequisitoOT"] != null)
             {
-                Llenar_gvRequisitosOpinion();
+                id_requisito = (Int32)Session["IDRequisitoOT"];
             }
-            else
+
+            switch (btnGuardar.CommandName)
             {
-                ErrorMessage.Text = "Ha ocurrido un error al guardar requisito.";
+                case "Editar":
+                    if (ActualizarRequisito(id_requisito))
+                    {
+                        Llenar_gvRequisitosOpinion();
+                        LimpiarPanel();
+                    }
+                    else
+                    {
+                        lkBtn_viewPanel_ModalPopupExtender.Show();
+                        ErrorMessage.Text = "Ha ocurrido un error al actualizar requisito.";
+                    }
+                    break;
+                case "Guardar":
+
+                    if (GuardarRequisito())
+                    {
+                        Llenar_gvRequisitosOpinion();
+                        LimpiarPanel();
+                    }
+                    else
+                    {
+                        lkBtn_viewPanel_ModalPopupExtender.Show();
+                        ErrorMessage.Text = "Ha ocurrido un error al guardar requisito.";
+                    }
+
+                    break;
+                default:
+                    break;
             }
+
+
+        }
+
+        protected Boolean ActualizarRequisito(int id_requisito)
+        {
+            var respuesta = false;
+
+            objCEOpinion.ID_Requisito = id_requisito;
+            objCEOpinion.Nombre = txtNombre.Text;
+            objCEOpinion.Descripcion = txtDescripcionOpcion.Text;
+            objCEOpinion.Obligatorio = cb_obligatorio.Checked;
+
+            respuesta = objCNOpinion.UpdateRequisito(objCEOpinion);
+
+            return respuesta;
         }
 
         protected Boolean GuardarRequisito()
@@ -52,6 +98,63 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos
             objCEOpinion.Obligatorio = cb_obligatorio.Checked;
 
             return objCNOpinion.SaveRequisito(objCEOpinion);
+        }
+
+        protected void gvRequisitosOpinion_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            int index = Convert.ToInt32(e.CommandArgument);
+
+            GridViewRow row = gvRequisitosOpinion.Rows[index];
+            int id_requisito = Convert.ToInt32(row.Cells[0].Text);
+
+            Session.Add("IDRequisitoOT", id_requisito);
+
+            switch (e.CommandName)
+            {
+                case "modificar":
+                    MostrarDatos(id_requisito);
+                    lkBtn_viewPanel_ModalPopupExtender.Show();
+                    break;
+                case "eliminar":
+                    EliminarRequisito(id_requisito);
+                    Llenar_gvRequisitosOpinion();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        protected void MostrarDatos(int id_requisito)
+        {
+            btnGuardar.Text = "Editar";
+            btnGuardar.CommandName = "Editar";
+
+            var tbl = new DataTable();
+            tbl = objCNOpinion.SelectRequisito(id_requisito);
+            var row = tbl.Rows[0];
+
+            txtNombre.Text = row["nombre"].ToString();
+            txtDescripcionOpcion.Text = row["descripcion"].ToString();
+            cb_obligatorio.Checked = (Boolean)row["obligatorio"];
+        }
+
+        protected void EliminarRequisito(int id_requisito)
+        {
+            objCNOpinion.DeleteRequisito(id_requisito);
+        }
+
+        protected void LimpiarPanel()
+        {
+            txtNombre.Text = string.Empty;
+            txtDescripcionOpcion.Text = string.Empty;
+            cb_obligatorio.Checked = false;
+        }
+
+        protected void btnSalir_Click(object sender, EventArgs e)
+        {
+            LimpiarPanel();
+            btnGuardar.Text = "Guardar";
+            btnGuardar.CommandName = "Guardar";
         }
     }
 }
