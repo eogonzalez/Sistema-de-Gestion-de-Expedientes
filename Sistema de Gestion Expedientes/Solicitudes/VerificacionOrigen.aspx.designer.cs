@@ -175,6 +175,24 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes {
         protected global::System.Web.UI.WebControls.TextBox txtTelExpo;
         
         /// <summary>
+        /// Control MensajeCorrectoPrincipal.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal MensajeCorrectoPrincipal;
+        
+        /// <summary>
+        /// Control ErrorMessagePrincipal.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ErrorMessagePrincipal;
+        
+        /// <summary>
         /// Control btnGuardar.
         /// </summary>
         /// <remarks>
@@ -301,6 +319,24 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes {
         protected global::System.Web.UI.WebControls.TextBox txtOtrosMotivos;
         
         /// <summary>
+        /// Control MensajeMotivo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal MensajeMotivo;
+        
+        /// <summary>
+        /// Control ErrorMotivo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ErrorMotivo;
+        
+        /// <summary>
         /// Control btnGuardarMotivo.
         /// </summary>
         /// <remarks>
@@ -319,6 +355,15 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes {
         protected global::System.Web.UI.WebControls.LinkButton lkBtn_AgregarAdjunto;
         
         /// <summary>
+        /// Control lkBtn_viewPanel.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lkBtn_viewPanel;
+        
+        /// <summary>
         /// Control lkBtn_AgregarAdjunto_ModalPopupExtender.
         /// </summary>
         /// <remarks>
@@ -326,6 +371,15 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::AjaxControlToolkit.ModalPopupExtender lkBtn_AgregarAdjunto_ModalPopupExtender;
+        
+        /// <summary>
+        /// Control lkBtn_viewPanel_ModalPopupExtender.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender lkBtn_viewPanel_ModalPopupExtender;
         
         /// <summary>
         /// Control up_Anexos.
@@ -418,13 +472,13 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes {
         protected global::System.Web.UI.WebControls.DropDownList cboTipoRequisito;
         
         /// <summary>
-        /// Control fuAnexo.
+        /// Control FileUpload_Anexo.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.FileUpload fuAnexo;
+        protected global::System.Web.UI.WebControls.FileUpload FileUpload_Anexo;
         
         /// <summary>
         /// Control txtObservaciones.

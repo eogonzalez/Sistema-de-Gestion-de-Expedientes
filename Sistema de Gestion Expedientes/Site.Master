@@ -14,7 +14,11 @@
     </asp:PlaceHolder>
     <webopt:BundleReference runat="server" Path="~/Content/css" Visible="True" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-
+    <style type="text/css">
+        .hiddencol {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <form runat="server">

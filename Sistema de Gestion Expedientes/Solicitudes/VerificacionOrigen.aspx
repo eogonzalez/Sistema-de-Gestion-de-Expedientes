@@ -6,6 +6,7 @@
 
     <div class="panel panel-primary">
         <div class="panel-heading">Formulario <%:Title %> </div>
+
         <div class="panel-body form-horizontal">
 
             <h3><span class="label label-primary">Datos de Identificacion del Solicitante</span></h3>
@@ -143,6 +144,12 @@
             </div>
 
             <div class="panel-footer">
+                <p class="text-success">
+                    <asp:Literal runat="server" ID="MensajeCorrectoPrincipal" />
+                </p>
+                <p class="text-danger">
+                    <asp:Literal runat="server" ID="ErrorMessagePrincipal" />
+                </p>
                 <div class="text-center">
                     <div class="btn-group">
                         <asp:Button Text="Guardar Datos de Identificacion " ID="btnGuardar" runat="server" CssClass="btn btn-primary" OnClick="btnGuardar_Click" />
@@ -165,6 +172,7 @@
                 <div class="tab-content">
                     <%--Panel de Motivo--%>
                     <div role="tabpanel" class="tab-pane active" id="tbMotivo">
+
                         <div class="panel-body form-horizontal">
                             <div class="form-group input-sm">
                                 <asp:Label runat="server" CssClass="control-label col-xs-5 " Text="1. Inclumplimiento de la Regla de Origen:" AssociatedControlID="cb_Uno"></asp:Label>
@@ -234,7 +242,13 @@
                             </div>
 
                             <div class="panel-footer">
-                                <asp:Button Text="Guardar Motivo" ID="btnGuardarMotivo" runat="server" CssClass="btn btn-primary" />
+                                <p class="text-success">
+                                    <asp:Literal runat="server" ID="MensajeMotivo" />
+                                </p>
+                                <p class="text-danger">
+                                    <asp:Literal runat="server" ID="ErrorMotivo" />
+                                </p>
+                                <asp:Button Text="Guardar Motivo" ID="btnGuardarMotivo" runat="server" CssClass="btn btn-primary" OnClick="btnGuardarMotivo_Click" />
                             </div>
                         </div>
                     </div>
@@ -243,9 +257,14 @@
                     <div role="tabpanel" class="tab-pane" id="tbAnexos">
                         <div class="panel-body form-horizontal">
                             <asp:LinkButton runat="server" ID="lkBtn_AgregarAdjunto" CssClass="btn btn-primary"><i aria-hidden="true" class="glyphicon glyphicon-pencil"></i>Adjuntar Requisito</asp:LinkButton>
+                            <asp:LinkButton runat="server" ID="lkBtn_viewPanel"></asp:LinkButton>
 
                             <cc1:ModalPopupExtender ID="lkBtn_AgregarAdjunto_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackground"
                                 BehaviorID="lkBtn_AgregarAdjunto_ModalPopupExtender" PopupControlID="pnl_Anexo" TargetControlID="lkBtn_AgregarAdjunto" CancelControlID="btnHide">
+                            </cc1:ModalPopupExtender>
+
+                            <cc1:ModalPopupExtender ID="lkBtn_viewPanel_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackground"
+                                BehaviorID="lkBtn_viewPanel_ModalPopupExtender" PopupControlID="pnl_nuevo" TargetControlID="lkBtn_viewPanel">
                             </cc1:ModalPopupExtender>
                         </div>
 
@@ -258,18 +277,18 @@
                                     AutoGenerateColumns="false" OnRowCommand="gvAnexos_RowCommand">
 
                                     <Columns>
-                                        <asp:BoundField DataField="id_Anexo" SortExpression="id_Anexo">
-                                            <HeaderStyle CssClass="display:none" />
-                                            <ItemStyle CssClass="display:none" />
-                                        </asp:BoundField>
-
-                                        <asp:BoundField DataField="tipoRequisito" HeaderText="Tipo Requisito" />
-                                        <asp:BoundField DataField="no_Referencia" HeaderText="No. Referencia" />
-                                        <asp:ButtonField ButtonType="Button" Text="Ver Documento" HeaderText="Ver Documento" ControlStyle-CssClass="btn btn-default" />
-                                        <asp:ButtonField ButtonType="Button" Text="Modificar" HeaderText="Modificar" ControlStyle-CssClass="btn btn-success" />
+                                        <asp:BoundField DataField="corr_BorradorAnexo" SortExpression="corr_BorradorAnexo" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
+                                        <asp:BoundField DataField="path" HeaderText="Direccion" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
+                                        <asp:BoundField DataField="idRequisito" HeaderText="Requisito" />                                        
+                                        <asp:BoundField DataField="numeroReferencia" HeaderText="No. Referencia" />
+                                        <asp:ButtonField ButtonType="Button" Text="Ver Documento" HeaderText="Ver Documento" CommandName="mostrar" ControlStyle-CssClass="btn btn-primary" />
+                                        <asp:ButtonField ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />
                                     </Columns>
                                 </asp:GridView>
                             </ContentTemplate>
+                            <Triggers>
+                                <asp:PostBackTrigger ControlID="btnGuardarAnexo" />
+                            </Triggers>
                         </asp:UpdatePanel>
                     </div>
 
@@ -289,6 +308,8 @@
                         <p class="text-danger">
                             <asp:Literal runat="server" ID="ErrorMessage" />
                         </p>
+
+
                         <div class="panel-body form-horizontal">
                             <div class="form-group">
                                 <asp:Label runat="server" AssociatedControlID="cbOficioSAT" CssClass="control-label col-xs-2" Text="1. Solicitud de SAT "></asp:Label>
@@ -302,8 +323,7 @@
                                 <%--<asp:Label runat="server" AssociatedControlID="cb_CorrelativoSAT" CssClass="control-label col-xs-2" Text=" de numero  "></asp:Label>--%>
                                 <div class="col-xs-3">
                                     <asp:DropDownList runat="server" ID="cb_CorrelativoSAT" CssClass="form-control input-sm">
-                                        <asp:ListItem Text="OFI-SAT-IAD-DOP-UTO" />
-                                        <asp:ListItem Text="text2" />
+                                        <asp:ListItem Value="1" >OFI-SAT-IAD-DOP-UTO</asp:ListItem>                                        
                                     </asp:DropDownList>
                                 </div>
 
@@ -312,7 +332,7 @@
                                 </div>
 
                                 <div class="col-xs-2">
-                                    <asp:TextBox runat="server" id="txtAnioOficioSAT" CssClass="form-control input-sm" TextMode="Number"/>                                              
+                                    <asp:TextBox runat="server" ID="txtAnioOficioSAT" CssClass="form-control input-sm" TextMode="Number" />
                                 </div>
                             </div>
 
@@ -333,9 +353,9 @@
                             </div>
 
                             <div class="form-group">
-                                <asp:Label runat="server" AssociatedControlID="fuAnexo" CssClass="control-label col-xs-2" Text="4. Subir Documento"></asp:Label>
+                                <asp:Label runat="server" AssociatedControlID="FileUpload_Anexo" CssClass="control-label col-xs-2" Text="4. Subir Documento"></asp:Label>
                                 <div class="col-xs-10">
-                                    <asp:FileUpload ID="fuAnexo" runat="server" />
+                                    <asp:FileUpload ID="FileUpload_Anexo" runat="server" />
                                 </div>
                             </div>
 
@@ -349,10 +369,13 @@
 
 
                             <div class="panel-footer">
-                                <asp:Button runat="server" ID="btnGuardarAnexo" CssClass="btn btn-primary" Text="Guardar Documento" CommandName="GuardarAnexo" />
+                                <asp:Button runat="server" ID="btnGuardarAnexo" CssClass="btn btn-primary" Text="Guardar Documento" CommandName="GuardarAnexo" OnClick="btnGuardarAnexo_Click" />
                                 <asp:Button runat="server" ID="btnSalir" CssClass="btn btn-default" Text="Salir" CausesValidation="false" OnClick="btnSalir_Click" />
                             </div>
                         </div>
+
+
+
                     </asp:Panel>
                 </div>
 

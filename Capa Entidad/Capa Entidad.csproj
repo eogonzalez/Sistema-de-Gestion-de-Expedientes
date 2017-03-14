@@ -48,6 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requisitos\CEOpinionTecnica.cs" />
     <Compile Include="Requisitos\CEVerificacion.cs" />
+    <Compile Include="Solicitudes\CEVerificacionOrigen.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

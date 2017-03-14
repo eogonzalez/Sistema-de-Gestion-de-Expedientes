@@ -212,6 +212,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Site.Master" />
+    <Content Include="Solicitudes\BandejaBorradores.aspx" />
     <Content Include="Solicitudes\VerificacionOrigen.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
@@ -389,6 +390,13 @@
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
+    <Compile Include="Solicitudes\BandejaBorradores.aspx.cs">
+      <DependentUpon>BandejaBorradores.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Solicitudes\BandejaBorradores.aspx.designer.cs">
+      <DependentUpon>BandejaBorradores.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Solicitudes\VerificacionOrigen.aspx.cs">
       <DependentUpon>VerificacionOrigen.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -407,6 +415,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="doctos\" />
     <Folder Include="Inicio\" />
   </ItemGroup>
   <ItemGroup>
