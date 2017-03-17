@@ -159,6 +159,7 @@
     <Content Include="Account\RegisterExternalLogin.aspx" />
     <Content Include="Account\SolicitudRegistro.aspx" />
     <Content Include="Administracion\Departamentos.aspx" />
+    <Content Include="Administracion\Instrumentos.aspx" />
     <Content Include="Administracion\Menu.aspx" />
     <Content Include="Administracion\MenuOpcion.aspx" />
     <Content Include="Administracion\Paises.aspx" />
@@ -214,6 +215,7 @@
     <Content Include="Site.Master" />
     <Content Include="Solicitudes\BandejaBorradores.aspx" />
     <Content Include="Solicitudes\BandejaExpedientes.aspx" />
+    <Content Include="Solicitudes\BandejaExpedientesEnProceso.aspx" />
     <Content Include="Solicitudes\VerificacionOrigen.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
@@ -291,6 +293,13 @@
     </Compile>
     <Compile Include="Administracion\Departamentos.aspx.designer.cs">
       <DependentUpon>Departamentos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Administracion\Instrumentos.aspx.cs">
+      <DependentUpon>Instrumentos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Administracion\Instrumentos.aspx.designer.cs">
+      <DependentUpon>Instrumentos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Administracion\Menu.aspx.cs">
       <DependentUpon>Menu.aspx</DependentUpon>
@@ -404,6 +413,13 @@
     </Compile>
     <Compile Include="Solicitudes\BandejaExpedientes.aspx.designer.cs">
       <DependentUpon>BandejaExpedientes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Solicitudes\BandejaExpedientesEnProceso.aspx.cs">
+      <DependentUpon>BandejaExpedientesEnProceso.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Solicitudes\BandejaExpedientesEnProceso.aspx.designer.cs">
+      <DependentUpon>BandejaExpedientesEnProceso.aspx</DependentUpon>
     </Compile>
     <Compile Include="Solicitudes\VerificacionOrigen.aspx.cs">
       <DependentUpon>VerificacionOrigen.aspx</DependentUpon>

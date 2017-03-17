@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administracion\Departamentos.cs" />
+    <Compile Include="Administracion\Instrumentos.cs" />
     <Compile Include="Administracion\Menu.cs" />
     <Compile Include="Administracion\Paises.cs" />
     <Compile Include="Administracion\PermisosPerfiles.cs" />

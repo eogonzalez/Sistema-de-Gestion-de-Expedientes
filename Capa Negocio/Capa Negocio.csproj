@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administracion\CNDepartamentos.cs" />
+    <Compile Include="Administracion\CNInstrumentos.cs" />
     <Compile Include="Administracion\CNMenu.cs" />
     <Compile Include="Administracion\CNPaises.cs" />
     <Compile Include="Administracion\CNPermisosPerfiles.cs" />
