@@ -15,6 +15,8 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
         CNPaises objCNPaises = new CNPaises();
         CEPaises objCEPaises = new CEPaises();
 
+        #region Eventos del formulario
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -23,17 +25,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                 btnGuardar.Attributes.Add("onclick", "this.value='Procesando Espere...';this.disabled=true;" + ClientScript.GetPostBackEventReference(btnGuardar, ""));
             }
         }
-
-        protected void Llenar_gvPaises()
-        {
-            var tbl = new DataTable();
-
-            tbl = objCNPaises.SelectPaises();
-
-            gvPaises.DataSource = tbl;
-            gvPaises.DataBind();
-        }
-
+     
         protected void gvPaises_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             int index = Convert.ToInt32(e.CommandArgument);
@@ -49,7 +41,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                     MostrarDatos(id_pais);
                     lkBtn_viewPanel_ModalPopupExtender.Show();
                     break;
-                    
+
                 case "eliminar":
                     EliminarPais(id_pais);
                     Llenar_gvPaises();
@@ -58,25 +50,6 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                 default:
                     break;
             }
-        }
-
-        protected void EliminarPais(int id_pais)
-        {
-            objCNPaises.DeletePais(id_pais);
-        }
-
-        protected void MostrarDatos(int id_pais)
-        {
-            btnGuardar.Text = "Editar";
-            btnGuardar.CommandName = "Editar";
-
-            var tbl = new DataTable();
-            tbl = objCNPaises.SelectPais(id_pais);
-            var row = tbl.Rows[0];
-
-            txtISO.Text = row["ISO2"].ToString();
-            txtNombre.Text = row["nombre"].ToString();
-
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)
@@ -94,6 +67,8 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                     {
                         Llenar_gvPaises();
                         LimpiarPanel();
+                        btnGuardar.Text = "Guardar";
+                        btnGuardar.CommandName = "Guardar";
                     }
                     else
                     {
@@ -115,6 +90,46 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                 default:
                     break;
             }
+        }
+
+        protected void btnSalir_Click(object sender, EventArgs e)
+        {
+            LimpiarPanel();
+            btnGuardar.Text = "Guardar";
+            btnGuardar.CommandName = "Guardar";
+        }
+
+        #endregion
+
+        #region Funciones
+
+        protected void Llenar_gvPaises()
+        {
+            var tbl = new DataTable();
+
+            tbl = objCNPaises.SelectPaises();
+
+            gvPaises.DataSource = tbl;
+            gvPaises.DataBind();
+        }
+
+        protected void EliminarPais(int id_pais)
+        {
+            objCNPaises.DeletePais(id_pais);
+        }
+
+        protected void MostrarDatos(int id_pais)
+        {
+            btnGuardar.Text = "Editar";
+            btnGuardar.CommandName = "Editar";
+
+            var tbl = new DataTable();
+            tbl = objCNPaises.SelectPais(id_pais);
+            var row = tbl.Rows[0];
+
+            txtISO.Text = row["ISO2"].ToString();
+            txtNombre.Text = row["nombre"].ToString();
+
         }
 
         protected Boolean ActualizarPais(int id_pais)
@@ -144,13 +159,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             txtNombre.Text = string.Empty;
         }
 
-        protected void btnSalir_Click(object sender, EventArgs e)
-        {
-            LimpiarPanel();
-            btnGuardar.Text = "Guardar";
-            btnGuardar.CommandName = "Guardar";
-        }
-
+        #endregion
 
     }
 }

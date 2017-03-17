@@ -27,5 +27,20 @@ namespace Capa_Negocio.Administracion
         {
             return objCDPermisosPerfiles.InsertPermisosPerfiles(objCEPermisosPerfiles);
         }
+
+        public DataTable SelectPermisoPerfil(int id_permisoPerfil)
+        {
+            return objCDPermisosPerfiles.SelectPermisoPerfil(id_permisoPerfil);
+        }
+
+        public Boolean DeletePermisoPerfil(CEPermisosPerfiles objCEPermisosPerfiles)
+        {
+            return objCDPermisosPerfiles.DeletePermisoPerfil(objCEPermisosPerfiles);
+        }
+
+        public Boolean UpdatePermisoPerfil(CEPermisosPerfiles objCEPermisosPerfiles)
+        {
+            return objCDPermisosPerfiles.UpdatePermisoPerfil(objCEPermisosPerfiles);
+        }
     }
 }

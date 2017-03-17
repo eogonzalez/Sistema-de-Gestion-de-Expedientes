@@ -15,6 +15,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
         CNMenu objCNMenu = new CNMenu();
         CEMenu objCEMenu = new CEMenu();
 
+        #region Eventos del formulario
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -40,11 +41,13 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
             switch (btnGuardar.CommandName)
             {
-                case  "Editar":
+                case "Editar":
                     if (ActualizarMenuOpcion(id_menuOpcion))
                     {
                         Llenar_gvMenu();
                         LimpiarPanel();
+                        btnGuardar.Text = "Guardar";
+                        btnGuardar.CommandName = "Guardar";
                     }
                     else
                     {
@@ -71,7 +74,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
         }
 
-        protected void gvMenu_RowCommand(Object sender, GridViewCommandEventArgs e) 
+        protected void gvMenu_RowCommand(Object sender, GridViewCommandEventArgs e)
         {
             int index = Convert.ToInt32(e.CommandArgument);
 
@@ -86,27 +89,37 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             Session.Add("IDMenuOpcion", id_menu);
 
             switch (e.CommandName)
-	        {
+            {
                 case "submenu":
                     Response.Redirect("~/Administracion/MenuOpcion.aspx?id_om=" + id_menu.ToString());
-                    break;     
+                    break;
 
                 case "modificar":
                     MostrarDatos(id_menu);
                     this.lkBtn_viewPanel_ModalPopupExtender.Show();
-                        break;
+                    break;
 
                 case "eliminar":
-                        EliminaMenuOpcion(id_menu);
-                        Llenar_gvMenu();
+                    EliminaMenuOpcion(id_menu);
+                    Llenar_gvMenu();
                     break;
-   
+
                 default:
                     break;
-	        }
-            
+            }
+
         }
 
+        protected void btnSalir_Click(object sender, EventArgs e)
+        {
+            LimpiarPanel();
+            btnGuardar.Text = "Guardar";
+            btnGuardar.CommandName = "Guardar";
+        }
+
+        #endregion
+
+        #region Funciones
         protected void Llenar_gvMenu()
         {
             var tbl = new DataTable();
@@ -196,7 +209,9 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             cb_obligatorio.Checked = false;
             cb_login.Checked = false;
         }
+        #endregion
 
+        #region Funiones para obtener valores del formulario
         protected string getNombre()
         {
             return txtNombreOpcion.Text;
@@ -236,12 +251,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
         {
             return cb_login.Checked;
         }
-
-        protected void btnSalir_Click(object sender, EventArgs e)
-        {
-            LimpiarPanel();
-            btnGuardar.Text = "Guardar";
-            btnGuardar.CommandName = "Guardar";
-        }
+        #endregion
+        
     }
 }

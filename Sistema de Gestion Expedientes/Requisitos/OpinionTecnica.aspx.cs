@@ -15,6 +15,8 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos
         CNOpinionTecnica objCNOpinion = new CNOpinionTecnica();
         CEOpinionTecnica objCEOpinion = new CEOpinionTecnica();
 
+        #region Eventos del Formulario
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -22,16 +24,6 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos
                 Llenar_gvRequisitosOpinion();
                 btnGuardar.Attributes.Add("onclick", "this.value='Procesando Espere...';this.disabled=true;" + ClientScript.GetPostBackEventReference(btnGuardar, ""));
             }
-        }
-
-        protected void Llenar_gvRequisitosOpinion()
-        {
-            var tbl = new DataTable();
-
-            tbl = objCNOpinion.SelectRequisitos();
-
-            gvRequisitosOpinion.DataSource = tbl;
-            gvRequisitosOpinion.DataBind();
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)
@@ -49,6 +41,8 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos
                     {
                         Llenar_gvRequisitosOpinion();
                         LimpiarPanel();
+                        btnGuardar.Text = "Guardar";
+                        btnGuardar.CommandName = "Guardar";
                     }
                     else
                     {
@@ -77,29 +71,6 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos
 
         }
 
-        protected Boolean ActualizarRequisito(int id_requisito)
-        {
-            var respuesta = false;
-
-            objCEOpinion.ID_Requisito = id_requisito;
-            objCEOpinion.Nombre = txtNombre.Text;
-            objCEOpinion.Descripcion = txtDescripcionOpcion.Text;
-            objCEOpinion.Obligatorio = cb_obligatorio.Checked;
-
-            respuesta = objCNOpinion.UpdateRequisito(objCEOpinion);
-
-            return respuesta;
-        }
-
-        protected Boolean GuardarRequisito()
-        {
-            objCEOpinion.Nombre = txtNombre.Text;
-            objCEOpinion.Descripcion = txtDescripcionOpcion.Text;
-            objCEOpinion.Obligatorio = cb_obligatorio.Checked;
-
-            return objCNOpinion.SaveRequisito(objCEOpinion);
-        }
-
         protected void gvRequisitosOpinion_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             int index = Convert.ToInt32(e.CommandArgument);
@@ -122,6 +93,50 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos
                 default:
                     break;
             }
+        }
+
+        protected void btnSalir_Click(object sender, EventArgs e)
+        {
+            LimpiarPanel();
+            btnGuardar.Text = "Guardar";
+            btnGuardar.CommandName = "Guardar";
+        }
+
+        #endregion
+
+        #region Funciones
+
+        protected void Llenar_gvRequisitosOpinion()
+        {
+            var tbl = new DataTable();
+
+            tbl = objCNOpinion.SelectRequisitos();
+
+            gvRequisitosOpinion.DataSource = tbl;
+            gvRequisitosOpinion.DataBind();
+        }
+
+        protected Boolean ActualizarRequisito(int id_requisito)
+        {
+            var respuesta = false;
+
+            objCEOpinion.ID_Requisito = id_requisito;
+            objCEOpinion.Nombre = txtNombre.Text;
+            objCEOpinion.Descripcion = txtDescripcionOpcion.Text;
+            objCEOpinion.Obligatorio = cb_obligatorio.Checked;
+
+            respuesta = objCNOpinion.UpdateRequisito(objCEOpinion);
+
+            return respuesta;
+        }
+
+        protected Boolean GuardarRequisito()
+        {
+            objCEOpinion.Nombre = txtNombre.Text;
+            objCEOpinion.Descripcion = txtDescripcionOpcion.Text;
+            objCEOpinion.Obligatorio = cb_obligatorio.Checked;
+
+            return objCNOpinion.SaveRequisito(objCEOpinion);
         }
 
         protected void MostrarDatos(int id_requisito)
@@ -150,11 +165,7 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos
             cb_obligatorio.Checked = false;
         }
 
-        protected void btnSalir_Click(object sender, EventArgs e)
-        {
-            LimpiarPanel();
-            btnGuardar.Text = "Guardar";
-            btnGuardar.CommandName = "Guardar";
-        }
+        #endregion
+        
     }
 }

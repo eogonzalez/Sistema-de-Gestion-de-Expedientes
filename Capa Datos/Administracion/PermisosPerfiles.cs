@@ -14,7 +14,6 @@ namespace Capa_Datos.Administracion
     {
         General.Conexion objConexion = new General.Conexion();
         
-
         public DataSet SelectPermisosPerfiles(int id_usuarioPermiso = 0)
         {
             var respuesta = new DataSet();
@@ -156,6 +155,104 @@ namespace Capa_Datos.Administracion
                 cn.Open();
                 command.ExecuteScalar();
                 respuesta = true;
+            }
+
+            return respuesta;
+        }
+
+        public DataTable SelectPermisoPerfil(int id_permisoPerfil)
+        {
+            var dt_respuesta = new DataTable();
+            var sql_query = string.Empty;
+
+            sql_query = " SELECT [id_tipousuario],[id_opcion] "+
+                " ,[insertar],[acceder],[editar] "+
+                " ,[borrar],[aprobar],[rechazar] "+
+                " FROM [SGEODB].[dbo].[G_PermisoTipoUsuario] "+
+                " where corrPermisoTipoUsuario = @id_permisoPerfil ";
+
+            using (var con = objConexion.Conectar())
+            {
+                var command = new SqlCommand(sql_query, con);
+                command.Parameters.AddWithValue("id_permisoPerfil", id_permisoPerfil);
+                var da = new SqlDataAdapter(command);
+                da.Fill(dt_respuesta);
+            }
+
+            return dt_respuesta;
+        }
+
+        public Boolean DeletePermisoPerfil(CEPermisosPerfiles objCEPermisosPerfiles)
+        {
+            var respuesta = false;
+            var sql_query = string.Empty;
+            
+            sql_query = " UPDATE G_PermisoTipoUsuario "+
+                " SET [fecha_modificacion] = @fecha_modificacion "+
+                " ,[estado] = @estado "+
+                " ,[id_usuarioAutoriza] = @id_usuarioAutoriza "+
+                " WHERE corrPermisoTipoUsuario = @id_permisoPerfil" ;
+            using (var con = objConexion.Conectar())
+            {
+                var command = new SqlCommand(sql_query, con);
+                command.Parameters.AddWithValue("fecha_modificacion", DateTime.Now);
+                command.Parameters.AddWithValue("estado", "B");
+                command.Parameters.AddWithValue("id_usuarioAutoriza", objCEPermisosPerfiles.ID_UsuarioAutoriza);
+                command.Parameters.AddWithValue("id_permisoPerfil", objCEPermisosPerfiles.ID_PermisoPerfil);
+
+                con.Open();
+                try
+                {
+                    command.ExecuteNonQuery();
+                    respuesta = true;
+                }
+                catch (Exception)
+                {
+                    
+                    throw;
+                }
+            }
+
+            return respuesta;
+        }
+
+        public Boolean UpdatePermisoPerfil(CEPermisosPerfiles objCEPermisosPerfiles)
+        {
+            var respuesta = false;
+            var sql_query = string.Empty;
+
+            sql_query = " UPDATE G_PermisoTipoUsuario "+
+                " SET  "+
+                " [insertar] = @insertar,[acceder] = @acceder "+
+                " ,[editar] = @editar,[borrar] = @borrar "+
+                " ,[aprobar] = @aprobar,[rechazar] = @rechazar "+
+                " ,[fecha_modificacion] = @fecha_modificacion "+
+                " WHERE corrPermisoTipoUsuario = @id_permisoPerfil ";
+
+            using (var con = objConexion.Conectar())
+            {
+                var command = new SqlCommand(sql_query, con);
+                command.Parameters.AddWithValue("insertar", objCEPermisosPerfiles.Insertar);
+                command.Parameters.AddWithValue("acceder", objCEPermisosPerfiles.Acceder);
+                command.Parameters.AddWithValue("editar", objCEPermisosPerfiles.Editar);
+                command.Parameters.AddWithValue("borrar", objCEPermisosPerfiles.Borrar);
+                command.Parameters.AddWithValue("aprobar", objCEPermisosPerfiles.Aprobar);
+                command.Parameters.AddWithValue("rechazar", objCEPermisosPerfiles.Rechazar);
+
+                command.Parameters.AddWithValue("fecha_modificacion", DateTime.Now);                               
+                command.Parameters.AddWithValue("id_permisoPerfil", objCEPermisosPerfiles.ID_PermisoPerfil);
+
+                con.Open();
+                try
+                {
+                    command.ExecuteNonQuery();
+                    respuesta = true;
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
             }
 
             return respuesta;

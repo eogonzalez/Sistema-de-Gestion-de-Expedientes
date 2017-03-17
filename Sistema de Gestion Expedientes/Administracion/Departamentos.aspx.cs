@@ -15,6 +15,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
         CNDepartamentos objCNDepartamentos = new CNDepartamentos();
         CEDepartamentos objCEDEpartamentos = new CEDepartamentos();
 
+        #region Eventos del Formulario
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -40,6 +41,8 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                     {
                         Llenar_gvDepartamento();
                         LimpiarPanel();
+                        btnGuardar.Text = "Guardar";
+                        btnGuardar.CommandName = "Guardar";
                     }
                     else
                     {
@@ -89,6 +92,17 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                     break;
             }
         }
+
+        protected void btnSalir_Click(object sender, EventArgs e)
+        {
+            LimpiarPanel();
+            btnGuardar.Text = "Guardar";
+            btnGuardar.CommandName = "Guardar";
+        }
+
+        #endregion
+
+        #region Funciones                
 
         protected Boolean ActualizarDepartamento(int id_departamento)
         {
@@ -150,13 +164,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             txtNombre.Text = string.Empty;
         }
 
-        protected void btnSalir_Click(object sender, EventArgs e)
-        {
-            LimpiarPanel();
-            btnGuardar.Text = "Guardar";
-            btnGuardar.CommandName = "Guardar";
-        }
+        #endregion
 
-        
     }
 }

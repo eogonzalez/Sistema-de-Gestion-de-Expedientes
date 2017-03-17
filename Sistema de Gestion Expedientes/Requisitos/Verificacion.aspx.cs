@@ -14,6 +14,9 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos
     {
         CNVerificacion objCNVerificacion = new CNVerificacion();
         CEVerificacion objCEVerificacion = new CEVerificacion();
+
+        #region Eventos del Formulario
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -21,16 +24,6 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos
                 Llenar_gvRequisitosVerificacion();
                 btnGuardar.Attributes.Add("onclick", "this.value='Procesando Espere...';this.disabled=true;" + ClientScript.GetPostBackEventReference(btnGuardar, ""));
             }
-        }
-
-        protected void Llenar_gvRequisitosVerificacion()
-        {
-            var tbl = new DataTable();
-
-            tbl = objCNVerificacion.SelectRequisitos();
-
-            gvRequisitosVerificacion.DataSource = tbl;
-            gvRequisitosVerificacion.DataBind();
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)
@@ -74,29 +67,6 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos
 
         }
 
-        protected Boolean ActualizarRequisito(int id_requisito)
-        {
-            var respuesta = false;
-
-            objCEVerificacion.ID_Requisito = id_requisito;
-            objCEVerificacion.Nombre = txtNombre.Text;
-            objCEVerificacion.Descripcion = txtDescripcionOpcion.Text;
-            objCEVerificacion.Obligatorio = cb_obligatorio.Checked;
-            
-            respuesta = objCNVerificacion.UpdateRequisito(objCEVerificacion);
-
-            return respuesta;
-        }
-
-        protected Boolean GuardarRequisito()
-        {
-            objCEVerificacion.Nombre = txtNombre.Text;
-            objCEVerificacion.Descripcion = txtDescripcionOpcion.Text;
-            objCEVerificacion.Obligatorio = cb_obligatorio.Checked;
-
-            return objCNVerificacion.SaveRequisito(objCEVerificacion);
-        }
-
         protected void gvRequisitosVerificacion_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             int index = Convert.ToInt32(e.CommandArgument);
@@ -119,6 +89,50 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos
                 default:
                     break;
             }
+        }
+
+        protected void btnSalir_Click(object sender, EventArgs e)
+        {
+            LimpiarPanel();
+            btnGuardar.Text = "Guardar";
+            btnGuardar.CommandName = "Guardar";
+        }
+
+        #endregion
+
+        #region Funciones
+
+        protected void Llenar_gvRequisitosVerificacion()
+        {
+            var tbl = new DataTable();
+
+            tbl = objCNVerificacion.SelectRequisitos();
+
+            gvRequisitosVerificacion.DataSource = tbl;
+            gvRequisitosVerificacion.DataBind();
+        }
+
+        protected Boolean ActualizarRequisito(int id_requisito)
+        {
+            var respuesta = false;
+
+            objCEVerificacion.ID_Requisito = id_requisito;
+            objCEVerificacion.Nombre = txtNombre.Text;
+            objCEVerificacion.Descripcion = txtDescripcionOpcion.Text;
+            objCEVerificacion.Obligatorio = cb_obligatorio.Checked;
+
+            respuesta = objCNVerificacion.UpdateRequisito(objCEVerificacion);
+
+            return respuesta;
+        }
+
+        protected Boolean GuardarRequisito()
+        {
+            objCEVerificacion.Nombre = txtNombre.Text;
+            objCEVerificacion.Descripcion = txtDescripcionOpcion.Text;
+            objCEVerificacion.Obligatorio = cb_obligatorio.Checked;
+
+            return objCNVerificacion.SaveRequisito(objCEVerificacion);
         }
 
         protected void MostrarDatos(int id_requisito)
@@ -147,11 +161,7 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos
             cb_obligatorio.Checked = false;
         }
 
-        protected void btnSalir_Click(object sender, EventArgs e)
-        {
-            LimpiarPanel();
-            btnGuardar.Text = "Guardar";
-            btnGuardar.CommandName = "Guardar";
-        }
+        #endregion
+        
     }
 }

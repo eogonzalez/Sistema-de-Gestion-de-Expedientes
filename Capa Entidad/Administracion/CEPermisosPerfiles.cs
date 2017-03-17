@@ -8,6 +8,7 @@ namespace Capa_Entidad.Administracion
 {
     public class CEPermisosPerfiles
     {
+        public int ID_PermisoPerfil { get; set; }
         public int ID_TipoUsuario {get;set;}
 
         public int ID_Opcion { get; set; }

@@ -14,6 +14,9 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
     {
         CNMenu objCNMenu = new CNMenu();
         CEMenu objCEMenu = new CEMenu();
+
+        #region Eventos del formulario
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -23,7 +26,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                 Session.Add("id_menu", id_menu);
 
                 Llenar_gvMenu(id_menu);
-                
+
                 //Valores por defecto si es nuevo
                 txtOrden.Text = "0";
                 cb_obligatorio.Checked = false;
@@ -58,6 +61,8 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                     {
                         Llenar_gvMenu(Convert.ToInt32(Session["id_menu"].ToString()));
                         LimpiarPanel();
+                        btnGuardar.Text = "Guardar";
+                        btnGuardar.CommandName = "Guardar";
                     }
                     else
                     {
@@ -84,62 +89,6 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             }
 
 
-        }
-
-        protected Boolean GuardarMenu()
-        {
-            objCEMenu.Nombre = txtNombreOpcion.Text;
-            objCEMenu.Descripcion = getDescripcion();
-            objCEMenu.URL = getURL();
-            objCEMenu.Comando = getComando();
-            objCEMenu.Orden = getOrden();
-            objCEMenu.Obligatorio = getObligatorio();
-            objCEMenu.Visible = getVisible();
-            objCEMenu.Login = getConLogin();
-            objCEMenu.Id_Padre = Convert.ToInt32(Session["id_menu"].ToString());
-            objCEMenu.ID_UsuarioAutoriza = Convert.ToInt32(Session["UsuarioID"].ToString());
-
-            return objCNMenu.SaveMenu(objCEMenu);
-        }
-
-        protected string getNombre()
-        {
-            return txtNombreOpcion.Text;
-        }
-
-        protected string getDescripcion()
-        {
-            return txtDescripcionOpcion.Text;
-        }
-
-        protected string getURL()
-        {
-            return txtURL.Text;
-        }
-
-        protected string getComando()
-        {
-            return txtComando.Text;
-        }
-
-        protected int getOrden()
-        {
-            return Convert.ToInt32(txtOrden.Text);
-        }
-
-        protected Boolean getObligatorio()
-        {
-            return cb_obligatorio.Checked;
-        }
-
-        protected Boolean getVisible()
-        {
-            return cb_visible.Checked;
-        }
-
-        protected Boolean getConLogin()
-        {
-            return cb_login.Checked;
         }
 
         protected void gvMenu_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -179,6 +128,33 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                 default:
                     break;
             }
+        }
+
+        protected void btnSalir_Click(object sender, EventArgs e)
+        {
+            LimpiarPanel();
+            btnGuardar.Text = "Guardar";
+            btnGuardar.CommandName = "Guardar";
+        }
+
+        #endregion
+
+        #region Funciones
+
+        protected Boolean GuardarMenu()
+        {
+            objCEMenu.Nombre = txtNombreOpcion.Text;
+            objCEMenu.Descripcion = getDescripcion();
+            objCEMenu.URL = getURL();
+            objCEMenu.Comando = getComando();
+            objCEMenu.Orden = getOrden();
+            objCEMenu.Obligatorio = getObligatorio();
+            objCEMenu.Visible = getVisible();
+            objCEMenu.Login = getConLogin();
+            objCEMenu.Id_Padre = Convert.ToInt32(Session["id_menu"].ToString());
+            objCEMenu.ID_UsuarioAutoriza = Convert.ToInt32(Session["UsuarioID"].ToString());
+
+            return objCNMenu.SaveMenu(objCEMenu);
         }
 
         protected Boolean ActualizarMenuOpcion(int id_opcion)
@@ -245,11 +221,51 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             cb_login.Checked = false;
         }
 
-        protected void btnSalir_Click(object sender, EventArgs e)
+        #endregion
+
+        #region Funciones para obtener valores del formulario
+
+        protected string getNombre()
         {
-            LimpiarPanel();
-            btnGuardar.Text = "Guardar";
-            btnGuardar.CommandName = "Guardar";
+            return txtNombreOpcion.Text;
         }
+
+        protected string getDescripcion()
+        {
+            return txtDescripcionOpcion.Text;
+        }
+
+        protected string getURL()
+        {
+            return txtURL.Text;
+        }
+
+        protected string getComando()
+        {
+            return txtComando.Text;
+        }
+
+        protected int getOrden()
+        {
+            return Convert.ToInt32(txtOrden.Text);
+        }
+
+        protected Boolean getObligatorio()
+        {
+            return cb_obligatorio.Checked;
+        }
+
+        protected Boolean getVisible()
+        {
+            return cb_visible.Checked;
+        }
+
+        protected Boolean getConLogin()
+        {
+            return cb_login.Checked;
+        }
+
+        #endregion
+        
     }
 }

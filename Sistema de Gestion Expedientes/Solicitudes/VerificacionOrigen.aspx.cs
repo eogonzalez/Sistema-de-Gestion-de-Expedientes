@@ -18,7 +18,6 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
         CNLogin objCNLogin = new CNLogin();
         CNVerificacionOrigen objCNVerificacion = new CNVerificacionOrigen();
         CEVerificacionOrigen objCEVerificacion = new CEVerificacionOrigen();
-        //string carpeta;
 
         #region Eventos del formulario
 

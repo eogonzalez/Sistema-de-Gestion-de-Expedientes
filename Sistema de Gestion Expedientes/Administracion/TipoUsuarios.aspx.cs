@@ -61,6 +61,8 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                     {
                         LLenar_gvTipoUsuario();
                         LimpiarTipoUsuario();
+                        btnGuardar.CommandName = "Guardar";
+                        btnGuardar.Text = "Guardar";
                     }
                     else
                     {
