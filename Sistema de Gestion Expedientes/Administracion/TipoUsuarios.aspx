@@ -7,7 +7,7 @@
 
         <br />
         <div class="panel-body form-vertical">
-            <div class="btn-group" role="group">
+            <div class="btn">
                 <asp:LinkButton runat="server" ID="lkBtn_nuevo" CssClass="btn btn-primary"><i aria-hidden="true" class="glyphicon glyphicon-pencil"></i> Nuevo </asp:LinkButton>
                 <asp:LinkButton runat="server" ID="lkBtn_test"></asp:LinkButton>
 
@@ -36,11 +36,7 @@
                             AutoGenerateColumns="false">
 
                             <Columns>
-                                <asp:BoundField DataField="id_tipousuario" SortExpression="id_tipousuario">
-                                    <HeaderStyle CssClass="display:none" />
-                                    <ItemStyle CssClass="display:none" />
-                                </asp:BoundField>
-
+                                <asp:BoundField DataField="id_tipousuario" SortExpression="id_tipousuario" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
                                 <asp:BoundField DataField="nombre" HeaderText="Nombre" />
                                 <%--<asp:BoundField DataField="tipo_permiso" HeaderText="Tipo Permiso" />--%>
                                 <asp:BoundField DataField="fecha_creacion" HeaderText="Fecha Registro" />
@@ -92,16 +88,17 @@
                     </div>
                 </div>
 
-                <%--<div class="form-group">
+                <div class="form-group">
                     <asp:Label runat="server" AssociatedControlID="ddlTipoPermiso" CssClass="control-label col-xs-2" Text="Permiso: "></asp:Label>
                     <div class="col-xs-10">
                         <asp:DropDownList runat="server" ID="ddlTipoPermiso" CssClass="form-control">
-                            <asp:ListItem Value="A">Administrador</asp:ListItem>
-                            <asp:ListItem Value="F">Funcionario</asp:ListItem>
+                            <asp:ListItem Value="A">Administrador DACE</asp:ListItem>
+                            <asp:ListItem Value="F">Funcionario DACE</asp:ListItem>
                             <asp:ListItem Value="I">Insitucion</asp:ListItem>
+                            <asp:ListItem Value="E">Usuario Externo</asp:ListItem>
                         </asp:DropDownList>
                     </div>
-                </div>--%>
+                </div>
 
 
                 <div class="panel-footer">

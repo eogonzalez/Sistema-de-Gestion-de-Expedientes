@@ -29,17 +29,11 @@
                     AutoGenerateColumns="false" OnRowCommand="gvPaises_RowCommand">
 
                     <Columns>
-                        <asp:BoundField DataField="idPais" SortExpression="idPais">
-                            <HeaderStyle CssClass="display:none" />
-                            <ItemStyle CssClass="display:none" />
-                        </asp:BoundField>
-
+                        <asp:BoundField DataField="idPais" SortExpression="idPais" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
                         <asp:BoundField DataField="nombre" HeaderText="Pais" />
                         <asp:BoundField DataField="iso2" HeaderText="ISO2" />
 
-
                         <asp:ButtonField ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />
-
                         <asp:TemplateField HeaderText="Eliminar">
                             <ItemTemplate>
                                 <asp:Button Text="Eliminar" runat="server" ID="btnEliminar" CausesValidation="false" CommandName="eliminar" CommandArgument="<%# Container.DataItemIndex %>" CssClass="btn btn-danger" OnClientClick="return confirm(&quot;¿Esta seguro de borrar opcion seleccionada?&quot;)" />

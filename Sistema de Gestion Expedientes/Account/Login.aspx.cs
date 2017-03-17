@@ -9,6 +9,7 @@ using System.Web.UI;
 using Sistema_de_Gestion_Expedientes.Models;
 using Capa_Negocio.General;
 using System.Web.Security;
+using System.Data;
 
 namespace Sistema_de_Gestion_Expedientes.Account
 {
@@ -58,8 +59,16 @@ namespace Sistema_de_Gestion_Expedientes.Account
                         //Se almacena cuando el usuario ingresa al sistema
                         cnLogin.Seguridad(idUsuario, DateTime.Now, Convert.ToString(Request.ServerVariables["REMOTE_ADDR"]));
 
+                        //Obtengo datos de usuario para variables de session
+                        var tbl = new DataTable();
+                        tbl = cnLogin.SelectDatosUsuario(idUsuario);
+                        DataRow row = tbl.Rows[0];
+
                         Session["UsuarioID"] = idUsuario;
-                        Session.Add("CorreoUsuarioLogin", txtCorreo.Text);
+                        //Session.Add("CorreoUsuarioLogin", txtCorreo.Text);
+                        Session.Add("CorreoUsuarioLogin", row["correo"].ToString());
+                        Session.Add("NombresUsuarioLogin", row["nombres"].ToString());
+                        Session.Add("ApellidosUsuarioLogin", row["apellidos"].ToString());
 
 
                         FormsAuthentication.RedirectFromLoginPage(strCorreo, RememberMe.Checked);                        

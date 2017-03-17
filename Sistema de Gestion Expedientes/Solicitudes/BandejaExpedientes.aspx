@@ -1,9 +1,8 @@
-﻿<%@ Page Title="Bandeja de Borradores de Solicitudes " Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="BandejaBorradores.aspx.cs" Inherits="Sistema_de_Gestion_Expedientes.Solicitudes.BandejaBorradores" %>
+﻿<%@ Page Title="Bandeja de Expedientes " Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="BandejaExpedientes.aspx.cs" Inherits="Sistema_de_Gestion_Expedientes.Solicitudes.BandejaExpedientes" %>
 
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="panel panel-primary">
-        <div class="panel-heading"><%: Title %><asp:Label runat="server" ID="lblCantidadBandeja"  CssClass="label label-info"/></div>
+        <div class="panel-heading"><%: Title %><asp:Label runat="server" ID="lblCantidadBandeja" CssClass="label label-info"/></div>
         <br />
         <div class="panel-body form-vertical">
             <div class="btn-group" role="group">
@@ -21,29 +20,33 @@
             </div>
             <br />
             <div>
-                <asp:GridView runat="server" ID="gvBorradores"
+                <asp:GridView runat="server" ID="gvBandeja"
                     CssClass="table table-hover table-striped"
                     GridLines="None"
                     EmptyDataText="No existen registros."
-                    AutoGenerateColumns="false" OnRowCommand="gvBorradores_RowCommand">
+                    AutoGenerateColumns="false" OnRowCommand="gvBandeja_RowCommand">
 
                     <Columns>
-                        <asp:BoundField DataField="id_Solicitud" SortExpression="id_Solicitud" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
+                        <asp:BoundField DataField="id_expediente" HeaderText="#Expediente" SortExpression="id_expediente"  />                        
                         <asp:BoundField DataField="cmd" HeaderText="cmd" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
+                        <asp:BoundField DataField="id_Solicitud" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
+                        <asp:BoundField DataField="nombres" HeaderText="Usuario" />
                         <asp:BoundField DataField="tipoSolicitud" HeaderText="Tipo de Solicitud" />
                         <asp:BoundField DataField="razonSocialImportador" HeaderText="Importador" />
                         <%--<asp:BoundField DataField="correoImportador" HeaderText="Correo Importador" />--%>
                         <asp:BoundField DataField="razonSocialExportador" HeaderText="Exportador" />
-                        <asp:BoundField DataField="pais" HeaderText="Pais" />
+                        <%--<asp:BoundField DataField="pais" HeaderText="Pais" />--%>
                         <%--<asp:BoundField DataField="correoExportador" HeaderText="Correo Exportador" />--%>
                         <asp:BoundField DataField="fecha_creacion" HeaderText="Fecha Creacion" />
                         <asp:BoundField DataField="fecha_modificacion" HeaderText="Fecha Modificacion" />
 
-                        <asp:ButtonField ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />
-
-                        <asp:TemplateField HeaderText="Eliminar">
+                        <asp:ButtonField ButtonType="Button" Text="Revisar" HeaderText="Revisar" CommandName="revisar" ControlStyle-CssClass="btn btn-success" />
+                        <asp:ButtonField ButtonType="Button" Text="Aclarar" HeaderText="Aclarar" CommandName="aclarar" ControlStyle-CssClass="btn btn-info" />
+                        <asp:ButtonField ButtonType="Button" Text="Aprobar" HeaderText="Aprobar" CommandName="aprobar" ControlStyle-CssClass="btn btn-primary" />
+                        
+                        <asp:TemplateField HeaderText="Rechazar">
                             <ItemTemplate>
-                                <asp:Button Text="Eliminar" runat="server" ID="btnEliminar" CausesValidation="false" CommandName="eliminar" CommandArgument="<%# Container.DataItemIndex %>" CssClass="btn btn-danger" OnClientClick="return confirm(&quot;¿Esta seguro de borrar opcion seleccionada?&quot;)" />
+                                <asp:Button Text="Rechazar" runat="server" ID="btnRechazar" CausesValidation="false" CommandName="rechazar" CommandArgument="<%# Container.DataItemIndex %>" CssClass="btn btn-danger" OnClientClick="return confirm(&quot;¿Esta seguro de rechazar opcion seleccionada?&quot;)" />
                             </ItemTemplate>
                         </asp:TemplateField>
 

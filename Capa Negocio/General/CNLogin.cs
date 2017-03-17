@@ -67,5 +67,10 @@ namespace Capa_Negocio.General
         {
             return objCDLogin.SelectComboDepartamentos();
         }
+
+        public DataTable SelectDatosUsuario(int idUsuario)
+        {
+            return objCDLogin.SelectDatosUsuario(idUsuario);
+        }
     }
 }

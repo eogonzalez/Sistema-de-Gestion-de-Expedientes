@@ -52,6 +52,7 @@
     <Compile Include="Requisitos\OpinionTecnica.cs" />
     <Compile Include="Requisitos\Verificacion.cs" />
     <Compile Include="Solicitudes\BandejaBorradores.cs" />
+    <Compile Include="Solicitudes\BandejaExpedientes.cs" />
     <Compile Include="Solicitudes\VerificacionOrigen.cs" />
   </ItemGroup>
   <ItemGroup>

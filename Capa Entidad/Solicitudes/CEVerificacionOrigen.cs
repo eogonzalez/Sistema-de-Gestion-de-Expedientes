@@ -67,6 +67,7 @@ namespace Capa_Entidad.Solicitudes
         #endregion
 
         #region Ficha de Adjuntos
+        public int ID_Anexo { get; set; }
         public Boolean OficioSAT_Check { get; set; }
         public int IDPrefijoSAT { get; set; }
         public string PrefijoSAT { get; set; }

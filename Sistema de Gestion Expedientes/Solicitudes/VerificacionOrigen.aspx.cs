@@ -9,6 +9,7 @@ using Capa_Negocio.General;
 using Capa_Negocio.Solicitudes;
 using Capa_Entidad.Solicitudes;
 using System.IO;
+using System.Net.Mail;
 
 namespace Sistema_de_Gestion_Expedientes.Solicitudes
 {
@@ -25,6 +26,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
         {
             if (!IsPostBack)
             {
+                
 
                 if (Session["UsuarioID"] != null)
                 {
@@ -45,6 +47,14 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                     if (Request.QueryString["cmd"] != null)
                     {
                         cmd = Request.QueryString["cmd"].ToString();
+                        if (cmd == "VO")
+                        {
+                            Page.Title = "Solicitud de Verificacion de Origen";
+                        }
+                        else
+                        {
+                            Page.Title = "Solicitud de Opinion Tecnica";
+                        }
                     }
 
                     /*Session.Add("id_menu", id_menu);*/
@@ -57,14 +67,27 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                         Session["IDSolicitud"] = idSolicitud;
                         Llenar_DatosPrimarios(idSolicitud);
                         Llenar_Motivos(idSolicitud);
-                        Llenar_gvAnexos(idSolicitud);
+                        Llenar_gvAnexos(idSolicitud, cmd);
                         //Llenar_Productos(idSolicitud);
+                    }
+
+                    
+                    if (Request.QueryString["idex"] != null)
+                    {
+                        idSolicitud = Convert.ToInt32(Request.QueryString["idex"].ToString());
+                        Session["IDSolicitud"] = idSolicitud;
+                        Llenar_DatosPrimarios(idSolicitud);
+                        Llenar_Motivos(idSolicitud);
+                        Llenar_gvAnexos(idSolicitud, cmd);
+                        //Llenar_Productos(idSolicitud);
+                        BloqueoGeneral();
                     }
 
                     /*Envento de guardar informacion primaria*/
                     btnGuardar.Attributes.Add("onclick", "this.value='Procesando Espere...';this.disabled=true;" + ClientScript.GetPostBackEventReference(btnGuardar, ""));
                     btnGuardarMotivo.Attributes.Add("onclick", "this.value='Procesando Espere...';this.disabled=true;" + ClientScript.GetPostBackEventReference(btnGuardarMotivo, ""));
-                    btnGuardarAnexo.Attributes.Add("onclick", "this.value='Cargado documento Espere...';this.disabled=true;" + ClientScript.GetPostBackEventReference(btnGuardarAnexo, ""));
+                    //btnGuardarAnexo.Attributes.Add("onclick", "this.value='Cargado documento Espere...';this.disabled=true;" + ClientScript.GetPostBackEventReference(btnGuardarAnexo, ""));
+                    btnEnviar.Attributes.Add("onclick", "this.value='Procesando Espere...';this.disabled=true;" + ClientScript.GetPostBackEventReference(btnEnviar, ""));
 
                     txtAnioOficioSAT.Text = DateTime.Now.Year.ToString();
                     //carpeta = Path.Combine(Request.PhysicalApplicationPath, "doctos");
@@ -83,6 +106,9 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
 
             //tbProductos.Attributes.Remove("class");
             //tbProductos.Attributes.Add("class", "tab-pane");
+            btnGuardarAnexo.Text = "Guardar Documento";
+            btnGuardarAnexo.CommandName = "GuardarAnexo";
+            LimpiarPanelAnexos();
         }
 
         protected void cb_ObsMotivo_CheckedChanged(object sender, EventArgs e)
@@ -133,14 +159,19 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             GridViewRow row = gvAnexos.Rows[index];
             int id_anexo = Convert.ToInt32(row.Cells[0].Text);
             string pathAnexo = row.Cells[1].Text;
+            string filename = row.Cells[2].Text;
+
+            Session.Add("IDANEXO", id_anexo);
 
             switch (e.CommandName)
             {
                 case "mostrar":
-                    //Response.Write(String.Format("window.open('{0}','_blank')", ResolveUrl(pathAnexo)));
-                    //Page.ClientScript.RegisterStartupScript(Page.GetType(), null, "window.open('pathAnexo', '_newtab')", true);
-                    //Response.Redirect(pathAnexo, false);
+                    Response.Redirect("~/doctos/"+filename);           
                     return;
+                case "modificar":
+                    LlenarDatosAnexos(id_anexo);
+                    lkBtn_viewPanel_ModalPopupExtender.Show();
+                    break;
                 default:
                     break;
             }
@@ -182,12 +213,102 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
 
         protected void btnEnviar_Click(object sender, EventArgs e)
         {
-            //Envia solicitud
+            //Envia Solicitud
+            var cmd = string.Empty;
+            if (Request.QueryString["cmd"] != null)
+            {
+                cmd = Request.QueryString["cmd"].ToString();
+            }
+
+            if (Session["IDSolicitud"] != null)
+            {
+                int id_solicitud = (int)Session["IDSolicitud"];
+                
+                if (CumpleRequisitos(id_solicitud, cmd))
+                {
+                    MensajeCorrectoPrincipal.Text = Session["SIVALIDA"].ToString();
+
+                    //Genero expediente
+                    var idExpediente = GeneroExpediente(id_solicitud);
+                    if ( idExpediente > 0)
+                    {
+                        
+                        MensajeCorrectoPrincipal.Text = "Se ha generado correctamente el expediente.";
+
+                        /*Envio mensaje a Usuario*/
+                        
+                        var correoUsuario = string.Empty;
+                        var nombreUsuario = string.Empty;
+                        var apellidoUsuario = string.Empty;
+
+                        if (Session["CorreoUsuarioLogin"] != null)
+                        {
+                            correoUsuario = Session["CorreoUsuarioLogin"].ToString();
+                        }
+                        if (Session["NombresUsuarioLogin"] != null)
+                        {
+                            nombreUsuario = Session["NombresUsuarioLogin"].ToString();
+                        }
+                        if (Session["ApellidosUsuarioLogin"] != null)
+                        {
+                            apellidoUsuario = Session["ApellidosUsuarioLogin"].ToString();
+                        }
+
+                        var mensaje = new MailMessage();
+                        mensaje.Subject = "Expediente Enviado -Unidad Origen DACE-";
+                        mensaje.Body = "Apreciable usuario "+nombreUsuario+" "+apellidoUsuario+", \n"+
+                            "se ha generado expediente y enviado a la unidad de origen, para verificar el estado puede consultar con el numero "+idExpediente.ToString()+". \n"+
+                            "NOTA: Favor no responder este correo. ";
+
+                        if (EnvioMensajeUsuario(nombreUsuario, apellidoUsuario, correoUsuario, mensaje))
+                        {
+                            MensajeCorrectoPrincipal.Text += " Se ha enviado correo de notificacion al usuario.";
+                        }
+                        else
+                        {
+                            ErrorMessagePrincipal.Text += " Ha ocurrido un error al enviar mensaje de notificacion al usuario.";
+                        }
+
+                        mensaje.Subject = "Nuevo Expediente";
+                        mensaje.Body = "Ha ingresado nuevo expediente numero "+idExpediente.ToString()+", favor revisar bandeja de expedientes. \n" +
+                            "NOTA: Favor no responder este correo.";
+
+                        /*envio Mensaje usuarios DACE */
+                        if (EnvioMensajeFuncionariosDACE(mensaje))
+                        {
+                            MensajeCorrectoPrincipal.Text += " Se ha enviado correo de notificacion a los funcionarios DACE.";
+                        }
+                        else
+                        {
+                            ErrorMessagePrincipal.Text += " Ha ocurrido un error al enviar mensaje de notificacion a los funcionarios DACE.";
+                        }
+                    }
+                    else
+                    {
+                        //Error al generar expediente
+                        ErrorMessagePrincipal.Text += " Ha ocurrido un error al generar expediente.";
+                    }
+                }
+                else
+                {
+                    //Muestro mensaje correcto si valido algo correctamente
+                    MensajeCorrectoPrincipal.Text = Session["SIVALIDA"].ToString();
+
+                    ErrorMessagePrincipal.Text = "ERROR: "+Session["NOVALIDA"].ToString();
+                }
+            }
+            else
+            {
+                ErrorMessagePrincipal.Text = "ERROR: Debe de Guardar los datos del encabezado y llenar los requerimientos minimos antes de enviar Solicitud.";
+            }
+            
+
         }
 
         protected void btnCancelar_Click(object sender, EventArgs e)
         {
             //Cancela solicitud y regresa a menu principal
+            Response.Redirect("~/Default.aspx");
         }
 
         protected void btnGuardarMotivo_Click(object sender, EventArgs e)
@@ -215,6 +336,10 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                     if (ActulizarMotivos(id_solicitud))
                     {
                         MensajeMotivo.Text = "Se han Actualizado los motivos seleccionados.";
+                        
+                        btnGuardarAnexo.Text = "Guardar Documento";
+                        btnGuardarAnexo.CommandName = "GuardarAnexo";
+                        LimpiarPanelAnexos();
                     }
                     else
                     {
@@ -243,15 +368,44 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                     cmd = Request.QueryString["cmd"].ToString();
                 }
 
-                if (GuardarDocumento(id_solicitud, cmd))
+                switch (btnGuardarAnexo.CommandName)
                 {
-                    Llenar_gvAnexos(id_solicitud);
+                    case "GuardarAnexo":
+                        if (GuardarDocumento(id_solicitud, cmd))
+                        {
+                            LimpiarPanelAnexos();
+                            Llenar_gvAnexos(id_solicitud, cmd);
+                        }
+                        else
+                        {
+                            ErrorMessage.Text = "Ha ocurrido un error al cargar archivo al servidor.";
+                            lkBtn_viewPanel_ModalPopupExtender.Show();
+                        }
+                        break;
+                    case "ModificarAnexo":
+                        if (Session["IDANEXO"] != null)
+                        {
+                            int id_anexo = 0;
+                            id_anexo = (int)Session["IDANEXO"];
+                            if (ActualizarDocumento(id_solicitud, cmd, id_anexo))
+                            {
+                                LimpiarPanelAnexos();
+                                Llenar_gvAnexos(id_solicitud, cmd);
+                            }
+                            else
+                            {
+                                ErrorMessage.Text = "Ha ocurrido un error al cargar archivo al servidor.";
+                                lkBtn_viewPanel_ModalPopupExtender.Show();
+                            }
+                        }
+
+                        
+                        break;
+                    default:
+                        break;
                 }
-                else
-                {
-                    ErrorMessage.Text = "Ha ocurrido un error al cargar archivo al servidor.";
-                    lkBtn_viewPanel_ModalPopupExtender.Show();
-                }
+
+
 
             }
             else
@@ -338,25 +492,16 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
 
         }
 
-        protected void Llenar_gvAnexos(int id_solicitud)
+        protected void Llenar_gvAnexos(int id_solicitud, string cmd)
         {
 
             var tbl = new DataTable();
 
-            tbl = objCNVerificacion.SelectDocumentosAnexos(id_solicitud);
+            tbl = objCNVerificacion.SelectDocumentosAnexos(id_solicitud, cmd);
 
             gvAnexos.DataSource = tbl;
             gvAnexos.DataBind();
 
-            //switch (cmd)
-            //{
-            //    case "VO":
-            //        break;
-            //    case "OP":
-            //        break;
-            //    default:
-            //        break;
-            //}
         }
 
         protected void LlenoDatosSolicitante(int idUsuario)
@@ -577,6 +722,66 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             return respuesta;
         }
 
+        protected Boolean ActualizarDocumento(int id_solicitud, string cmd, int id_anexo)
+        {
+            var respuesta = false;
+
+            string carpeta = Path.Combine(Request.PhysicalApplicationPath, "doctos");
+            string prefijo = id_solicitud.ToString() + "_" + cmd + "_" + cboTipoRequisito.SelectedValue.ToString() + "_";
+
+            string documentoOriginal = string.Empty;
+            string carpeta_final = string.Empty;
+            string documentoSistema = string.Empty;
+
+            //var subeArchivo = false;
+
+
+            if (!FileUpload_Anexo.HasFile)
+            {
+                documentoOriginal = null;
+                carpeta_final = null;
+                documentoSistema = null;
+            }
+            else
+            {
+                string extension = Path.GetExtension(FileUpload_Anexo.PostedFile.FileName);
+
+                switch (extension.ToLower())
+                {
+                    case ".pdf":
+                        break;
+                    default:
+                        ErrorMessage.Text = "Extension no valida.";
+                        return false;
+                }
+
+                try
+                {
+                    
+                    documentoOriginal = Path.GetFileName(FileUpload_Anexo.PostedFile.FileName);
+                    carpeta_final = Path.Combine(carpeta, prefijo + documentoOriginal);
+                    FileUpload_Anexo.PostedFile.SaveAs(carpeta_final);
+                    //Archivo copiado correctamente
+                    respuesta = true;
+                    
+                    documentoSistema = prefijo+documentoOriginal;
+                }
+                catch (Exception ex)
+                {
+
+                    ErrorMessage.Text = "Error: " + ex.Message;
+                    lkBtn_viewPanel_ModalPopupExtender.Show();
+                }
+            }
+
+
+            //Actualizo de documento    
+            respuesta = ActualizarDatosAnexo(id_anexo, documentoOriginal, documentoSistema, carpeta_final);
+
+                                
+            return respuesta;
+        }
+
         protected Boolean GuardarFichaDocumentoAnexo(int id_solicitud, string cmd, string DocumentoOriginal, string DocumentoSistema, string Path)
         {
             var respuesta = false;
@@ -665,6 +870,281 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
 
         }
 
+        protected Boolean CumpleRequisitos(int id_solicitud, string cmd)
+        {
+            var respuesta = false;
+            var mensajeValidacionNo = string.Empty;
+            var mensajeValidacionSi = string.Empty;
+
+            //Exite motivo
+            if (ExistenMotivos(id_solicitud))
+            {
+                //Verifica que almenos exista un motivo seleccionado
+                if (VerificaMotivo(id_solicitud))
+                {
+                    mensajeValidacionSi = "Motivos Validados Correctamente. \n";
+                    respuesta = true;
+                }
+                else
+                {
+                    mensajeValidacionNo = "Debe de existir almenos un motivo.\n";
+                    respuesta = false;
+                }
+            }
+            else
+            {
+                mensajeValidacionNo = "Agrege un motivo a su solicitud antes de enviarla.\n";
+                respuesta = false;
+            }
+                        
+            //existe Anexo
+            if (ExistenAnexos(id_solicitud))
+            {
+                if (CumpleAnexosObligatorios(id_solicitud, cmd))
+                {
+                    mensajeValidacionSi += "Anexos Validados Correctamento. \n";
+                    respuesta = true;
+                }
+                else
+                {
+                    mensajeValidacionNo += "Hace falta algun documento anexo que es obligatorio, favor verifique.";
+                    respuesta = false;
+                }
+            }
+            else
+            {
+                mensajeValidacionNo += " Debe de exitir almenos un documento Anexo.\n ";
+                respuesta = false;
+            }
+            
+
+            //Valido productos
+
+            Session.Add("SIVALIDA", mensajeValidacionSi);
+            Session.Add("NOVALIDA", mensajeValidacionNo);
+            return respuesta;
+        }
+
+        protected int GeneroExpediente(int id_solicitud)
+        {
+            var respuesta = 0;
+            respuesta = objCNVerificacion.GeneroExpediente(id_solicitud);
+            return respuesta;
+        }
+
+        protected Boolean VerificaMotivo(int id_solicitud)
+        {
+            var respuesta = false;
+            respuesta = objCNVerificacion.VerificaMotivo(id_solicitud);
+            return respuesta;
+        }
+
+        protected Boolean ExistenAnexos(int id_solicitud)
+        {
+            return objCNVerificacion.ExisteAnexo(id_solicitud);
+        }
+
+        protected Boolean CumpleAnexosObligatorios(int id_solicitud, string cmd)
+        {
+            return objCNVerificacion.CumpleAnexoObligatorio(id_solicitud, cmd);
+        }
+
+        protected Boolean EnvioMensajeUsuario(string nombre, string apellido, string correo, MailMessage mensaje)
+        {
+            var respuesta = false;
+
+            try
+            {
+                Correo cr = new Correo();
+                MailMessage mnsj = new MailMessage();
+
+                mnsj.Subject = mensaje.Subject;
+                mnsj.To.Add(new MailAddress(correo));
+                
+                mnsj.From = new MailAddress("alertas.dace@gmail.com", "Alertas DACE");
+
+                /* Si deseamos Adjuntar algún archivo*/
+                //mnsj.Attachments.Add(new Attachment("C:\\archivo.pdf"));
+
+                mnsj.Body = mensaje.Body;
+
+                /*Enviar*/
+                cr.EnviarCorreo(mnsj);
+                respuesta = true;
+            }
+            catch (Exception)
+            {
+                //Capturo mensaje de error
+                respuesta = false;
+            }
+
+            return respuesta;
+        }
+
+        protected Boolean EnvioMensajeFuncionariosDACE(MailMessage mensaje)
+        {
+            var respuesta = false;
+
+            try
+            {
+                Correo cr = new Correo();
+                MailMessage msg = new MailMessage();
+                string listaCorreos = string.Empty;
+
+                listaCorreos = ListaCorreosFuncionariosDACE();
+
+                msg.Subject = mensaje.Subject;
+                msg.To.Add(listaCorreos);
+                msg.From = new MailAddress("alertas.dace@gmail.com", "Alertas DACE");
+
+                /* Si deseamos Adjuntar algún archivo*/
+                //mnsj.Attachments.Add(new Attachment("C:\\archivo.pdf"));
+
+                msg.Body = mensaje.Body;
+
+                /*Enviar*/
+                cr.EnviarCorreo(msg);
+                respuesta = true;
+            }
+            catch (Exception)
+            {
+                
+                //capturo mensaje de error
+                respuesta = false;
+            }
+
+            return respuesta;
+        }
+        
+        protected string ListaCorreosFuncionariosDACE()
+        {
+            var respuesta = string.Empty;
+
+            //Verifico si DT trae datos
+            var tbl = new DataTable();
+
+            tbl = objCNVerificacion.SelectFuncionariosDACE();
+
+            if (tbl.Rows.Count > 0)
+            {
+                //DataRow row = tbl.Rows[0];
+                long cont = 0;
+                foreach (DataRow row in tbl.Rows)
+                {
+                    /*foreach (DataColumn item in tbl.Columns)
+                    {
+                        var field = row[2].ToString();
+                    }*/
+                    if (cont == 0)
+                    {
+                        respuesta += row[2].ToString();
+                    }
+                    else
+                    {
+                        respuesta += "," + row[2].ToString();
+                    }
+                    cont++;
+                }
+            }
+
+
+            //Si trae recorro y adjunto corres en el string
+
+            return respuesta;
+        }
+
+        protected void LlenarDatosAnexos(int id_anexo)
+        {
+            btnGuardarAnexo.Text = "Editar Documento";
+            btnGuardarAnexo.CommandName = "ModificarAnexo";
+
+            var tbl = new DataTable();
+
+            tbl = objCNVerificacion.SelectDatosAnexo(id_anexo);
+
+            if (tbl.Rows.Count > 0)
+            {
+                DataRow row = tbl.Rows[0];
+
+                cboTipoRequisito.SelectedValue = row["idRequisito"].ToString();
+                cbOficioSAT.Checked = (Boolean)row["oficioSAT"];
+                cb_CorrelativoSAT.SelectedValue = row["idPrefijoSAT"].ToString();
+                txtNumeroOficioSAT.Text = row["numeroOficioSAT"].ToString();
+                txtAnioOficioSAT.Text = row["anioOficioSAT"].ToString();
+                txtNoReferencia.Text = row["numeroReferencia"].ToString();
+                txtObservaciones.Text = row["observaciones"].ToString();
+                            
+            }
+        }
+
+        protected void LimpiarPanelAnexos()
+        {
+            cbOficioSAT.Checked = false;
+            txtNumeroOficioSAT.Text = string.Empty;
+            txtNoReferencia.Text = string.Empty;
+            txtObservaciones.Text = string.Empty;
+        }
+
+        protected Boolean ActualizarDatosAnexo(int id_anexo, string DocumentoOriginal, string DocumentoSistema, string RutaArchivo)
+        {
+            objCEVerificacion.ID_Anexo = id_anexo;
+            objCEVerificacion.OficioSAT_Check = getOficioSATCheck();
+            objCEVerificacion.IDPrefijoSAT = getIdPrefijoSAT();
+            objCEVerificacion.PrefijoSAT = getPrefijoSAT();
+            objCEVerificacion.numeroOficioSAT = getNumeroOficioSAT();
+            objCEVerificacion.anioOficioSAT = getAnioOficioSAT();
+            objCEVerificacion.numeroReferencia = getNumeroReferencia();
+            objCEVerificacion.IdRequisito = getTipoRequisito();
+            objCEVerificacion.ObservacionesAnexo = getObservacionesAnexo();
+
+            objCEVerificacion.NombreDocumentoOriginal = DocumentoOriginal;
+            objCEVerificacion.NombreDocumentoSistema = DocumentoSistema;
+
+            objCEVerificacion.Path = RutaArchivo;
+
+            return objCNVerificacion.UpdateDatosAnexo(objCEVerificacion);
+        }
+
+        protected void BloqueoGeneral()
+        {
+            //Bloqueo datos primarios
+            txtRazonSocialImpo.Enabled = false;
+            txtDireccionImpo.Enabled = false;
+            txtNITImpo.Enabled = false;
+            txtCorreoImpo.Enabled = false;
+            cboDepartamento.Enabled = false;
+            txtTelImpo.Enabled = false;
+
+            txtRazonSocialExpo.Enabled = false;
+            txtDireccionExpo.Enabled = false;
+            txtNITExpo.Enabled = false;
+            txtCorreoExpo.Enabled = false;
+            cboPaisExpo.Enabled = false;
+            txtTelExpo.Enabled = false;
+
+            cb_Uno.Enabled = false;
+            cb_Dos.Enabled = false;
+            cb_tres.Enabled = false;
+            cb_cuatro.Enabled = false;
+            cb_cinco.Enabled = false;
+            cb_seis.Enabled = false;
+            cb_siete.Enabled = false;
+            cb_ocho.Enabled = false;
+            cb_ObsMotivo.Enabled = false;
+            txtObsMotivo.Enabled = false;
+            txtOtrosMotivos.Enabled = false;
+
+            btnGuardar.Enabled = false;
+            btnEnviar.Enabled = false;
+            btnGuardarMotivo.Enabled = false;
+            btnGuardarAnexo.Enabled = false;
+            
+            lkBtn_AgregarAdjunto.Visible = false;
+            //lkBtn_AgregarAdjunto.Enabled = false;
+
+            gvAnexos.Columns[6].Visible = false;
+            
+        }
 
         #endregion
 

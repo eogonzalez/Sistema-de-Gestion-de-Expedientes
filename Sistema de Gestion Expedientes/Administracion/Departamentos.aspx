@@ -6,7 +6,7 @@
         <div class="panel-heading"><%: Title %></div>
         <br />
         <div class="panel-body form-vertical">
-            <div class="btn-group" role="group">
+            <div class="btn">
                 <asp:LinkButton runat="server" ID="lkBtn_nuevo" CssClass="btn btn-primary"><i aria-hidden="true" class="glyphicon glyphicon-pencil"></i> Nuevo </asp:LinkButton>
                 <asp:LinkButton runat="server" ID="lkBtn_viewPanel"></asp:LinkButton>
 
@@ -29,17 +29,12 @@
                     AutoGenerateColumns="false" OnRowCommand="gvDepartamento_RowCommand">
 
                     <Columns>
-                        <asp:BoundField DataField="idDepartamento" SortExpression="idDepartamento">
-                            <HeaderStyle CssClass="display:none" />
-                            <ItemStyle CssClass="display:none" />
-                        </asp:BoundField>
-
+                        <asp:BoundField DataField="idDepartamento" SortExpression="idDepartamento" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
                         <asp:BoundField DataField="codigoDepto" HeaderText="Codigo" />
                         <asp:BoundField DataField="nombre" HeaderText="Departamento" />
                         <asp:BoundField DataField="descripcion" HeaderText="Descripcion" />
 
                         <asp:ButtonField ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />
-
                         <asp:TemplateField HeaderText="Eliminar">
                             <ItemTemplate>
                                 <asp:Button Text="Eliminar" runat="server" ID="btnEliminar" CausesValidation="false" CommandName="eliminar" CommandArgument="<%# Container.DataItemIndex %>" CssClass="btn btn-danger" OnClientClick="return confirm(&quot;¿Esta seguro de borrar opcion seleccionada?&quot;)" />

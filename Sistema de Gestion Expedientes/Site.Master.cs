@@ -85,7 +85,16 @@ namespace Sistema_de_Gestion_Expedientes
                 {//Si usuario esta logeado
                     //Genero menu con permisos                                        
                     LlenarMenu(idUsuario);
-                    lblUsuarioLogin.Text = string.Format("Bienvenido al sistema: {0} ", Thread.CurrentPrincipal.Identity.Name);                    
+                    
+                    if (Session["NombresUsuarioLogin"] != null)
+                    {
+                        lblUsuarioLogin.Text = "Bienvenido al sistema: " + Session["NombresUsuarioLogin"].ToString() + " " + Session["CorreoUsuarioLogin"].ToString();
+                    }
+                    else
+                    {
+                        lblUsuarioLogin.Text = string.Format("Bienvenido al sistema: {0} ", Thread.CurrentPrincipal.Identity.Name);
+                    }
+                    
                 }
                 else
                 {// Genero Menu sin permisos

@@ -63,9 +63,9 @@ namespace Capa_Negocio.Solicitudes
             return objCDVerificacionOrigen.InsertDocumentoAnexo(objCEVerificacion);
         }
 
-        public DataTable SelectDocumentosAnexos(int id_solicitud)
+        public DataTable SelectDocumentosAnexos(int id_solicitud, string cmd)
         {
-            return objCDVerificacionOrigen.SelectDocumentosAnexos(id_solicitud);
+            return objCDVerificacionOrigen.SelectDocumentosAnexos(id_solicitud, cmd);
         }
 
         public DataTable SelectDatosSolicitudEnc(int id_solicitud)
@@ -76,6 +76,41 @@ namespace Capa_Negocio.Solicitudes
         public DataTable SelectMotivos(int id_solicitud)
         {
             return objCDVerificacionOrigen.SelectMotivos(id_solicitud);
+        }
+
+        public Boolean VerificaMotivo(int id_solicitud)
+        {
+            return objCDVerificacionOrigen.VerificaMotivo(id_solicitud);
+        }
+
+        public Boolean ExisteAnexo(int id_solicitud)
+        {
+            return objCDVerificacionOrigen.ExisteAnexo(id_solicitud);
+        }
+
+        public Boolean CumpleAnexoObligatorio(int id_solicitud, string cmd)
+        {
+            return objCDVerificacionOrigen.CumpleAnexoObligatorio(id_solicitud, cmd);
+        }
+
+        public int GeneroExpediente(int id_solicitud)
+        {
+            return objCDVerificacionOrigen.GeneroExpediente(id_solicitud);
+        }
+
+        public DataTable SelectFuncionariosDACE()
+        {
+            return objCDVerificacionOrigen.SelectFuncionariosDACE();
+        }
+
+        public DataTable SelectDatosAnexo(int id_anexo)
+        {
+            return objCDVerificacionOrigen.SelectDatosAnexo(id_anexo);
+        }
+
+        public Boolean UpdateDatosAnexo(CEVerificacionOrigen objCEVerificacion)
+        {
+            return objCDVerificacionOrigen.UpdateDatosAnexo(objCEVerificacion);
         }
     }
 }

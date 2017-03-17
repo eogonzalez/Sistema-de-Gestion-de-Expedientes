@@ -15,6 +15,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
         CNTipoUsuarios objCapaNegocio = new CNTipoUsuarios();
         CETipoUsuarios objetoEntidad = new CETipoUsuarios();
 
+        #region Eventos del Formulario
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -50,11 +51,11 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             {
                 id_tipousuario = Convert.ToInt32(Session["IDTipoUsuario"].ToString());
             }
-            
+
 
             switch (btnGuardar.CommandName)
             {
-                case    "Editar":
+                case "Editar":
 
                     if (UpdateTipoUsuario(id_tipousuario))
                     {
@@ -66,7 +67,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                         ErrorMessage.Text = "Ha ocurrido un error al Editar Perfil.";
                         lkBtn_testModalPopupExtender.Show();
                     }
-                    
+
                     break;
                 case "Guardar":
 
@@ -78,7 +79,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                     }
                     else
                     {
-                        
+
                         ErrorMessage.Text = "Ha ocurrido un error al Guardar Perfil.";
                         lkBtn_testModalPopupExtender.Show();
                     }
@@ -92,7 +93,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
         protected void gvTipoUsuario_RowCommand(Object sender, GridViewCommandEventArgs e)
         {
-            
+
             int index = Convert.ToInt32(e.CommandArgument);
 
             GridViewRow row = gvTipoUsuario.Rows[index];
@@ -122,6 +123,16 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             }
         }
 
+        protected void btnSalir_Click(object sender, EventArgs e)
+        {
+            LimpiarTipoUsuario();
+            btnGuardar.CommandName = "Guardar";
+            btnGuardar.Text = "Guardar";
+        }
+
+        #endregion
+
+        #region Funciones
         protected Boolean GuardarTipoUsuario()
         {
             bool respuesta = false;
@@ -130,11 +141,11 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
             objetoEntidad.Nombre = txtNombre.Text;
             objetoEntidad.Descripcion = txtDescripcion.Text;
-            //objetoEntidad.TipoPermiso = ddlTipoPermiso.SelectedValue;
+            objetoEntidad.TipoPermiso = ddlTipoPermiso.SelectedValue;
             objetoEntidad.ID_UsuarioAutoriza = Convert.ToInt32(Session["UsuarioID"].ToString());
 
             respuesta = objCapaNegocio.InsertTipoUsuarios(objetoEntidad);
-            
+
             return respuesta;
         }
 
@@ -146,7 +157,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
             objetoEntidad.Nombre = txtNombre.Text;
             objetoEntidad.Descripcion = txtDescripcion.Text;
-            //objetoEntidad.TipoPermiso = ddlTipoPermiso.SelectedValue;
+            objetoEntidad.TipoPermiso = ddlTipoPermiso.SelectedValue;
             objetoEntidad.ID_TipoUsuario = id_tipousuario;
             objetoEntidad.ID_UsuarioAutoriza = Convert.ToInt32(Session["UsuarioID"].ToString());
 
@@ -164,7 +175,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
             respuesta = objCapaNegocio.DeleteTipoUsuario(objetoEntidad);
 
-            return respuesta;   
+            return respuesta;
         }
 
         protected void LimpiarTipoUsuario()
@@ -175,7 +186,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
         protected void Mostrardatos(int id_tipousuario)
         {
-            
+
             btnGuardar.Text = "Editar";
             btnGuardar.CommandName = "Editar";
 
@@ -185,19 +196,19 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
             txtNombre.Text = row["nombre"].ToString();
             txtDescripcion.Text = row["descripcion"].ToString();
-            //ddlTipoPermiso.SelectedValue = row["tipo_permiso"].ToString();
+            ddlTipoPermiso.SelectedValue = row["tipo_permiso"].ToString();
 
             //lkBtn_nuevo_ModalPopupExtender.Show();
             this.lkBtn_testModalPopupExtender.Show();
-            
+
         }
 
-        protected void btnSalir_Click(object sender, EventArgs e)
-        {
-            LimpiarTipoUsuario();
-            btnGuardar.CommandName = "Guardar";
-            btnGuardar.Text = "Guardar";
-        }
+        #endregion
+        
+
+
+
+
 
     }
 }

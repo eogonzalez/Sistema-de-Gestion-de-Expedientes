@@ -7,7 +7,7 @@
 
         <br />
         <div class="panel-body form-vertical">
-            <div class="btn-group" role="group">
+            <div class="btn" >
                 <asp:LinkButton runat="server" ID="lkBtn_nuevo" CssClass="btn btn-primary"><i aria-hidden="true" class="glyphicon glyphicon-pencil"></i> Nuevo </asp:LinkButton>
                 <%--<asp:LinkButton runat="server" ID="lkBtn_Hidden_nuevo" Style="display: hidden"></asp:LinkButton>--%>
 
@@ -24,11 +24,7 @@
                     AutoGenerateColumns="false">
 
                     <Columns>
-                        <asp:BoundField DataField="corrPermisoTipoUsuario" SortExpression="corrPermisoTipoUsuario">
-                            <HeaderStyle CssClass="display:none" />
-                            <ItemStyle CssClass="display:none" />
-                        </asp:BoundField>
-
+                        <asp:BoundField DataField="corrPermisoTipoUsuario" SortExpression="corrPermisoTipoUsuario" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
                         <asp:BoundField DataField="nombrePerfil" HeaderText="Perfil" />
                         <asp:BoundField DataField="nombreMenu" HeaderText="Menu Opcion" />
                         <asp:BoundField DataField="acceder" HeaderText="Acceder" />

@@ -56,10 +56,10 @@ namespace Capa_Datos.Administracion
             try
             {
                 sql_query = " INSERT INTO [SGEODB].[dbo].[G_TipoUsuario] "+
-                    " ([nombre],[descripcion],[fecha_creacion] "+
+                    " ([nombre],[descripcion],[tipo_permiso],[fecha_creacion] "+
                     " ,[fecha_modificacion],[estado], [id_usuarioAutoriza]) " +
                     " VALUES "+
-                    " (@nombre,@descripcion"+
+                    " (@nombre,@descripcion,@tipo_permiso"+
                     " ,@fecha_creacion,@fecha_modificacion"+
                     " ,@estado, @id_usuarioAutoriza) ";
 
@@ -68,7 +68,7 @@ namespace Capa_Datos.Administracion
                     SqlCommand command = new SqlCommand(sql_query, cn);
                     command.Parameters.AddWithValue("nombre", objetoEntidad.Nombre);
                     command.Parameters.AddWithValue("descripcion", objetoEntidad.Descripcion);
-                    //command.Parameters.AddWithValue("tipo_permiso", objetoEntidad.TipoPermiso);
+                    command.Parameters.AddWithValue("tipo_permiso", objetoEntidad.TipoPermiso);
                     command.Parameters.AddWithValue("fecha_creacion", DateTime.Now);
                     command.Parameters.AddWithValue("fecha_modificacion", DateTime.Now);
                     command.Parameters.AddWithValue("estado", "A");
@@ -137,6 +137,7 @@ namespace Capa_Datos.Administracion
             sql_query = " UPDATE G_TipoUsuario "+
                 " SET [nombre] = @nombre "+
                 " ,[descripcion] = @descripcion "+
+                " ,[tipo_permiso] = @tipo_permiso "+
                 " ,[fecha_modificacion] = @fecha_modificacion "+
                 " ,[id_usuarioAutoriza] = @id_usuarioAutoriza "+
                 " WHERE id_tipousuario = @id_tipousuario ";
@@ -146,6 +147,7 @@ namespace Capa_Datos.Administracion
                 var command = new SqlCommand(sql_query, cn);
                 command.Parameters.AddWithValue("nombre", objTipoUsuario.Nombre);
                 command.Parameters.AddWithValue("descripcion", objTipoUsuario.Descripcion);
+                command.Parameters.AddWithValue("tipo_permiso", objTipoUsuario.TipoPermiso);
                 command.Parameters.AddWithValue("fecha_modificacion", DateTime.Now);
                 command.Parameters.AddWithValue("id_usuarioAutoriza", objTipoUsuario.ID_UsuarioAutoriza);
                 command.Parameters.AddWithValue("id_tipousuario", objTipoUsuario.ID_TipoUsuario);

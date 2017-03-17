@@ -50,6 +50,7 @@
     <Compile Include="Requisitos\CNOpinionTecnica.cs" />
     <Compile Include="Requisitos\CNVerificacion.cs" />
     <Compile Include="Solicitudes\CNBandejaBorradores.cs" />
+    <Compile Include="Solicitudes\CNBandejaExpedientes.cs" />
     <Compile Include="Solicitudes\CNVerificacionOrigen.cs" />
   </ItemGroup>
   <ItemGroup />

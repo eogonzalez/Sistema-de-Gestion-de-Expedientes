@@ -213,6 +213,7 @@
     <Content Include="Global.asax" />
     <Content Include="Site.Master" />
     <Content Include="Solicitudes\BandejaBorradores.aspx" />
+    <Content Include="Solicitudes\BandejaExpedientes.aspx" />
     <Content Include="Solicitudes\VerificacionOrigen.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
@@ -396,6 +397,13 @@
     </Compile>
     <Compile Include="Solicitudes\BandejaBorradores.aspx.designer.cs">
       <DependentUpon>BandejaBorradores.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Solicitudes\BandejaExpedientes.aspx.cs">
+      <DependentUpon>BandejaExpedientes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Solicitudes\BandejaExpedientes.aspx.designer.cs">
+      <DependentUpon>BandejaExpedientes.aspx</DependentUpon>
     </Compile>
     <Compile Include="Solicitudes\VerificacionOrigen.aspx.cs">
       <DependentUpon>VerificacionOrigen.aspx</DependentUpon>

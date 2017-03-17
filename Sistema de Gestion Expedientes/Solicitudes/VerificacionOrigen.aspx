@@ -144,17 +144,17 @@
             </div>
 
             <div class="panel-footer">
-                <p class="text-success">
-                    <asp:Literal runat="server" ID="MensajeCorrectoPrincipal" />
+                <p class="alert alert-success">
+                    <asp:Literal runat="server" ID="MensajeCorrectoPrincipal"/>
                 </p>
-                <p class="text-danger">
-                    <asp:Literal runat="server" ID="ErrorMessagePrincipal" />
+                <p class="alert alert-danger">
+                    <asp:Literal runat="server" ID="ErrorMessagePrincipal"/>
                 </p>
                 <div class="text-center">
                     <div class="btn-group">
                         <asp:Button Text="Guardar Datos de Identificacion " ID="btnGuardar" runat="server" CssClass="btn btn-primary" OnClick="btnGuardar_Click" />
                         <asp:Button Text="Enviar Solicitud" ID="btnEnviar" runat="server" CssClass="btn btn-success" OnClick="btnEnviar_Click" />
-                        <asp:Button Text="Cancelar" ID="btnCancelar" runat="server" CssClass="btn btn-danger" OnClick="btnCancelar_Click" />
+                        <asp:Button Text="Salir" ID="btnCancelar" runat="server" CssClass="btn btn-info" OnClick="btnCancelar_Click" />
                     </div>
                 </div>
             </div>
@@ -264,7 +264,7 @@
                             </cc1:ModalPopupExtender>
 
                             <cc1:ModalPopupExtender ID="lkBtn_viewPanel_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackground"
-                                BehaviorID="lkBtn_viewPanel_ModalPopupExtender" PopupControlID="pnl_nuevo" TargetControlID="lkBtn_viewPanel">
+                                BehaviorID="lkBtn_viewPanel_ModalPopupExtender" PopupControlID="pnl_Anexo" TargetControlID="lkBtn_viewPanel">
                             </cc1:ModalPopupExtender>
                         </div>
 
@@ -279,15 +279,22 @@
                                     <Columns>
                                         <asp:BoundField DataField="corr_BorradorAnexo" SortExpression="corr_BorradorAnexo" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
                                         <asp:BoundField DataField="path" HeaderText="Direccion" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
-                                        <asp:BoundField DataField="idRequisito" HeaderText="Requisito" />                                        
+                                        <asp:BoundField DataField="nombreDocumentoSistema" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
+                                        <asp:BoundField DataField="nombre" HeaderText="Requisito" />                                        
                                         <asp:BoundField DataField="numeroReferencia" HeaderText="No. Referencia" />
-                                        <asp:ButtonField ButtonType="Button" Text="Ver Documento" HeaderText="Ver Documento" CommandName="mostrar" ControlStyle-CssClass="btn btn-primary" />
+                                        <asp:ButtonField  ButtonType="Button" Text="Ver Documento" HeaderText="Ver Documento" CommandName="mostrar" ControlStyle-CssClass="btn btn-primary" />
+<%--                                        <asp:TemplateField>
+                                            <ItemTemplate>
+                                                <asp:HyperLink id="openpdf" NavigateUrl='<%#Eval("path")%>' text='<%#Eval("nombreDocumentoSistema")%>' runat="server" />
+                                                <asp:LinkButton id="lkbAbrirDocto" Text="Open" CausesValidation="false" CommandArgument='<%#Eval("nombreDocumentoSistema")%>'  OnClick="Unnamed_Click" runat="server" />                                                
+                                            </ItemTemplate>
+                                        </asp:TemplateField>--%>
                                         <asp:ButtonField ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />
                                     </Columns>
                                 </asp:GridView>
                             </ContentTemplate>
                             <Triggers>
-                                <asp:PostBackTrigger ControlID="btnGuardarAnexo" />
+                                <asp:PostBackTrigger ControlID="btnGuardarAnexo" />                                
                             </Triggers>
                         </asp:UpdatePanel>
                     </div>

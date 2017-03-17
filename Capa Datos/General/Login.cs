@@ -486,5 +486,35 @@ namespace Capa_Datos.General
             }
             return dt_respuesta;
         }
+
+        public DataTable SelectDatosUsuario(int idUsuario)
+        {
+            var dt_respuesta = new DataTable();
+            var sql_query = string.Empty;
+
+            sql_query = " select nombres, apellidos, correo "+
+                " from g_usuarios "+
+                " where id_usuario = @id_usuario ";
+
+            using (var cn = objConexion.Conectar())
+            {
+                try
+                {
+                    var command = new SqlCommand(sql_query, cn);
+                    command.Parameters.AddWithValue("id_usuario", idUsuario);
+                    var da = new SqlDataAdapter(command);
+                    da.Fill(dt_respuesta);
+                }
+                catch (Exception)
+                {
+                    
+                    throw;
+                }
+                
+            }
+
+
+            return dt_respuesta;
+        }
     }
 }

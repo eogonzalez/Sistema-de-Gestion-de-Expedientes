@@ -149,7 +149,9 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos
 
         protected void btnSalir_Click(object sender, EventArgs e)
         {
-
+            LimpiarPanel();
+            btnGuardar.Text = "Guardar";
+            btnGuardar.CommandName = "Guardar";
         }
     }
 }
