@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administracion\CEDepartamentos.cs" />
+    <Compile Include="Administracion\CEInstrumento.cs" />
     <Compile Include="Administracion\CEMenu.cs" />
     <Compile Include="Administracion\CEPaises.cs" />
     <Compile Include="Administracion\CEPermisosPerfiles.cs" />
