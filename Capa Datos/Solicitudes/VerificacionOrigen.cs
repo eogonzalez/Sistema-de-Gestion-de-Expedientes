@@ -961,5 +961,32 @@ namespace Capa_Datos.Solicitudes
 
             return respuesta;
         }
+
+        public DataTable SelectComboInstrumentos()
+        {
+            var dt_respuesta = new DataTable();
+
+            string sql_query = string.Empty;
+
+            using (var cn = objConexion.Conectar())
+            {
+                sql_query = " SELECT [id_instrumento],[sigla]+' - '+[nombre_instrumento] as nombre_instrumento "+
+                    " FROM G_Instrumentos "+
+                    " where estado = 'A' ";
+                try
+                {
+                    var command = new SqlCommand(sql_query, cn);
+                    var da = new SqlDataAdapter(command);
+                    da.Fill(dt_respuesta);
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+
+            return dt_respuesta;
+        }
     }
 }

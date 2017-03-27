@@ -91,5 +91,66 @@ namespace Capa_Datos.Administracion
             return dt_respuesta;
         }
 
+        public Boolean UpdateInstrumento(CEInstrumento objCEInstrumento)
+        {
+            var respuesta = false;
+            var sql_query = string.Empty;
+
+            sql_query = " UPDATE G_Instrumentos "+
+                " SET [nombre_instrumento] = @nombre_instrumento "+
+                " ,[sigla] = @sigla,[observaciones] = @observaciones "+
+                " ,[fecha_vigencia] = @fecha_vigencia ,[fecha_modificacion] = @fecha_modificacion "+
+                " ,[id_usuarioAutoriza] = @id_usuarioAutoriza "+
+                " WHERE id_instrumento = @id_instrumento ";
+
+            using (var conn = objConexion.Conectar())
+            {
+                var command = new SqlCommand(sql_query, conn);
+                command.Parameters.AddWithValue("nombre_instrumento", objCEInstrumento.Nombre_Instrumento);
+                command.Parameters.AddWithValue("sigla", objCEInstrumento.Sigla);
+                command.Parameters.AddWithValue("observaciones", objCEInstrumento.Observaciones);
+                command.Parameters.AddWithValue("fecha_vigencia", objCEInstrumento.Fecha_Vigencia);
+                command.Parameters.AddWithValue("fecha_modificacion", DateTime.Now);
+                command.Parameters.AddWithValue("id_usuarioAutoriza", objCEInstrumento.ID_UsuarioAutoriza);
+                command.Parameters.AddWithValue("id_instrumento", objCEInstrumento.ID_Instrumento);
+
+                conn.Open();
+                command.ExecuteScalar();
+                respuesta = true;
+            }
+
+
+            return respuesta;
+        }
+
+        public Boolean DeleteInstrumento(CEInstrumento objCEInstrumento)
+        {
+            var respuesta = false;
+            var sql_query = string.Empty;
+
+            sql_query = " UPDATE G_Instrumentos " +
+                " SET "+
+                " [estado] = @estado "+
+                " ,[fecha_modificacion] = @fecha_modificacion " +
+                " ,[id_usuarioAutoriza] = @id_usuarioAutoriza " +
+                " WHERE id_instrumento = @id_instrumento ";
+
+            using (var conn = objConexion.Conectar())
+            {
+                var command = new SqlCommand(sql_query, conn);
+                command.Parameters.AddWithValue("estado", "B");                
+                command.Parameters.AddWithValue("fecha_modificacion", DateTime.Now);
+                command.Parameters.AddWithValue("id_usuarioAutoriza", objCEInstrumento.ID_UsuarioAutoriza);
+                command.Parameters.AddWithValue("id_instrumento", objCEInstrumento.ID_Instrumento);
+
+                conn.Open();
+                command.ExecuteScalar();
+                respuesta = true;
+            }
+
+
+            return respuesta;
+        }
+
     }
 }

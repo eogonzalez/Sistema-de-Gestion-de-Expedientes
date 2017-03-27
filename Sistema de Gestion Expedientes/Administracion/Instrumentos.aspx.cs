@@ -29,6 +29,12 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
+            int id_instrumento = 0;
+            if (Session["IDInstrumento"] != null)
+            {
+                id_instrumento = (Int32)Session["IDInstrumento"];
+            }
+
             switch (btnGuardar.CommandName)
             {
                 case "Guardar":
@@ -46,9 +52,17 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                     break;
                 case "Editar":
 
-                    if (true)
+                    if (ActualizarInstrumento(id_instrumento))
                     {
-                        
+                        Llenar_gvInstrumentos();
+                        LimpiarPanel();
+                        btnGuardar.Text = "Guardar";
+                        btnGuardar.CommandName = "Guardar";
+                    }
+                    else
+                    {
+                        lkBtn_viewPanel_ModalPopupExtender.Show();
+                        ErrorMessage.Text = "Ha ocurrido un error al actualizar Instrumento.";
                     }
 
                     break;                
@@ -60,7 +74,9 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
         protected void btnSalir_Click(object sender, EventArgs e)
         {
-
+            LimpiarPanel();
+            btnGuardar.Text = "Guardar";
+            btnGuardar.CommandName = "Guardar";
         }
 
         protected void gvInstrumentos_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -79,14 +95,14 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                     lkBtn_viewPanel_ModalPopupExtender.Show();
                     break;
                 case "eliminar":
-
+                    EliminarInstrumento(id_instrumento);
+                    Llenar_gvInstrumentos();
                     break;
                 default:
                     break;
             }
         }
         
-
         #endregion
 
         #region Funciones
@@ -127,6 +143,38 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             txtFechaVigencia.Text = row["fecha_vigencia"].ToString();
 
 
+        }
+
+        protected Boolean ActualizarInstrumento(int id_instrumento)
+        {
+            var respuesta = false;
+            
+            objCEInstrumentos.ID_Instrumento = id_instrumento;
+            objCEInstrumentos.Nombre_Instrumento = txtNombre.Text;
+            objCEInstrumentos.Sigla = txtSigla.Text;
+            objCEInstrumentos.Observaciones = txtObservaciones.Text;
+            objCEInstrumentos.Fecha_Vigencia = Convert.ToDateTime(txtFechaVigencia.Text);
+            objCEInstrumentos.ID_UsuarioAutoriza = (Int32)Session["UsuarioID"];
+
+            respuesta = objCNInstrumentos.UpdateInstrumento(objCEInstrumentos);
+
+            return respuesta;
+        }
+
+        protected void LimpiarPanel()
+        {
+            txtNombre.Text = string.Empty;
+            txtSigla.Text = string.Empty;
+            txtObservaciones.Text = string.Empty;
+            txtFechaVigencia.Text = string.Empty;
+        }
+
+        protected void EliminarInstrumento(int id_instrumento)
+        {
+            objCEInstrumentos.ID_Instrumento = id_instrumento;
+            objCEInstrumentos.ID_UsuarioAutoriza = (Int32)Session["UsuarioID"];
+
+            objCNInstrumentos.DeleteInstrumento(objCEInstrumentos);
         }
 
         #endregion

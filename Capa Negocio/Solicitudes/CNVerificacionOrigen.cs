@@ -112,5 +112,10 @@ namespace Capa_Negocio.Solicitudes
         {
             return objCDVerificacionOrigen.UpdateDatosAnexo(objCEVerificacion);
         }
+
+        public DataTable SelectComboInstrumentos()
+        {
+            return objCDVerificacionOrigen.SelectComboInstrumentos();
+        }
     }
 }

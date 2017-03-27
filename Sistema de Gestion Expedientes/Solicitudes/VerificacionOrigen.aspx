@@ -9,6 +9,26 @@
 
         <div class="panel-body form-horizontal">
 
+            <div class="form-group input-sm">
+                <asp:Label ID="lblPeriodo" AssociatedControlID="txtFechaInicial" CssClass="control-label col-xs-2" runat="server" Text="Periodo: Fecha Inicial:"></asp:Label>
+                <div class="col-xs-4">
+                    <asp:TextBox ID="txtFechaInicial" CssClass="form-control" runat="server"></asp:TextBox>
+                    <cc1:CalendarExtender ID="txtFechaInicial_CalendarExtender" runat="server" BehaviorID="txtFechaInicial_CalendarExtender" TargetControlID="txtFechaInicial" Format="dd/MM/yyyy" />
+                </div>
+                <asp:Label ID="lblFechaFin" AssociatedControlID="txtFechaFinal" CssClass="control-label col-xs-2" runat="server" Text=" Fecha Final:"></asp:Label>
+                <div class="col-xs-4">
+                    <asp:TextBox ID="txtFechaFinal" CssClass="form-control" runat="server"></asp:TextBox>
+                    <cc1:CalendarExtender ID="txtFechaFinal_CalendarExtender" runat="server" BehaviorID="txtFechaFinal_CalendarExtender" TargetControlID="txtFechaFinal" Format="dd/MM/yyyy" />
+                </div>
+            </div>
+
+            <div class="form-group input-sm">
+                <asp:Label AssociatedControlID="cbo_instrumento" Text="Tratado Comercial: " runat="server" CssClass="control-label col-xs-2" />
+                <div class="col-xs-10">
+                    <asp:DropDownList runat="server" ID="cbo_instrumento" CssClass="form-control" />
+                </div>
+            </div>
+
             <h3><span class="label label-primary">Datos de Identificacion del Solicitante</span></h3>
             <div class="thumbnail">
                 <div class="form-group input-sm">
@@ -49,7 +69,6 @@
                     </div>
                 </div>
             </div>
-
 
             <h3><span class="label label-primary">Datos de Identificacion del Importador</span></h3>
             <div class="thumbnail">
@@ -96,7 +115,6 @@
                 </div>
 
             </div>
-
 
             <h3><span class="label label-primary">Datos de Identificacion del Exportador</span></h3>
             <div class="thumbnail">
@@ -145,10 +163,10 @@
 
             <div class="panel-footer">
                 <p class="alert alert-success">
-                    <asp:Literal runat="server" ID="MensajeCorrectoPrincipal"/>
+                    <asp:Literal runat="server" ID="MensajeCorrectoPrincipal" />
                 </p>
                 <p class="alert alert-danger">
-                    <asp:Literal runat="server" ID="ErrorMessagePrincipal"/>
+                    <asp:Literal runat="server" ID="ErrorMessagePrincipal" />
                 </p>
                 <div class="text-center">
                     <div class="btn-group">
@@ -172,7 +190,6 @@
                 <div class="tab-content">
                     <%--Panel de Motivo--%>
                     <div role="tabpanel" class="tab-pane active" id="tbMotivo">
-
                         <div class="panel-body form-horizontal">
                             <div class="form-group input-sm">
                                 <asp:Label runat="server" CssClass="control-label col-xs-5 " Text="1. Inclumplimiento de la Regla de Origen:" AssociatedControlID="cb_Uno"></asp:Label>
@@ -240,16 +257,16 @@
                                     <asp:TextBox runat="server" TextMode="MultiLine" ID="txtOtrosMotivos" CssClass="form-control"></asp:TextBox>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="panel-footer">
-                                <p class="text-success">
-                                    <asp:Literal runat="server" ID="MensajeMotivo" />
-                                </p>
-                                <p class="text-danger">
-                                    <asp:Literal runat="server" ID="ErrorMotivo" />
-                                </p>
-                                <asp:Button Text="Guardar Motivo" ID="btnGuardarMotivo" runat="server" CssClass="btn btn-primary" OnClick="btnGuardarMotivo_Click" />
-                            </div>
+                        <div class="panel-footer">
+                            <p class="text-success">
+                                <asp:Literal runat="server" ID="MensajeMotivo" />
+                            </p>
+                            <p class="text-danger">
+                                <asp:Literal runat="server" ID="ErrorMotivo" />
+                            </p>
+                            <asp:Button Text="Guardar Motivo" ID="btnGuardarMotivo" runat="server" CssClass="btn btn-primary" OnClick="btnGuardarMotivo_Click" />
                         </div>
                     </div>
 
@@ -277,13 +294,13 @@
                                     AutoGenerateColumns="false" OnRowCommand="gvAnexos_RowCommand">
 
                                     <Columns>
-                                        <asp:BoundField DataField="corr_BorradorAnexo" SortExpression="corr_BorradorAnexo" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
-                                        <asp:BoundField DataField="path" HeaderText="Direccion" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
-                                        <asp:BoundField DataField="nombreDocumentoSistema" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
-                                        <asp:BoundField DataField="nombre" HeaderText="Requisito" />                                        
+                                        <asp:BoundField DataField="corr_BorradorAnexo" SortExpression="corr_BorradorAnexo" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
+                                        <asp:BoundField DataField="path" HeaderText="Direccion" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
+                                        <asp:BoundField DataField="nombreDocumentoSistema" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
+                                        <asp:BoundField DataField="nombre" HeaderText="Requisito" />
                                         <asp:BoundField DataField="numeroReferencia" HeaderText="No. Referencia" />
-                                        <asp:ButtonField  ButtonType="Button" Text="Ver Documento" HeaderText="Ver Documento" CommandName="mostrar" ControlStyle-CssClass="btn btn-primary" />
-<%--                                        <asp:TemplateField>
+                                        <asp:ButtonField ButtonType="Button" Text="Ver Documento" HeaderText="Ver Documento" CommandName="mostrar" ControlStyle-CssClass="btn btn-primary" />
+                                        <%--                                        <asp:TemplateField>
                                             <ItemTemplate>
                                                 <asp:HyperLink id="openpdf" NavigateUrl='<%#Eval("path")%>' text='<%#Eval("nombreDocumentoSistema")%>' runat="server" />
                                                 <asp:LinkButton id="lkbAbrirDocto" Text="Open" CausesValidation="false" CommandArgument='<%#Eval("nombreDocumentoSistema")%>'  OnClick="Unnamed_Click" runat="server" />                                                
@@ -294,14 +311,66 @@
                                 </asp:GridView>
                             </ContentTemplate>
                             <Triggers>
-                                <asp:PostBackTrigger ControlID="btnGuardarAnexo" />                                
+                                <asp:PostBackTrigger ControlID="btnGuardarAnexo" />
                             </Triggers>
                         </asp:UpdatePanel>
                     </div>
 
                     <%--Panel de Productos--%>
                     <div role="tabpanel" class="tab-pane" id="tbProductos">
-                        Informacion de Productos
+
+                        <div class="panel-body form-horizontal">
+                            <div class="form-group">
+                                <asp:Label AssociatedControlID="cboRegimen_Producto" CssClass="control-label col-xs-2" Text="Regimen de Importacion: " runat="server" />
+                                <div class="col-xs-10">
+                                    <asp:DropDownList ID="cboRegimen_Producto" CssClass="form-control" runat="server" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <asp:Label AssociatedControlID="cboAduana_Producto" CssClass="control-label col-xs-2" Text="Aduana de Ingreso:" runat="server" />
+                                <div class="col-xs-10">
+                                    <asp:DropDownList ID="cboAduana_Producto" CssClass="form-control" runat="server" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <asp:Label AssociatedControlID="txtClasificacion_Producto" Text="Clasificacion Arancelaria Declarada:" CssClass="control-label col-xs-2" runat="server" />
+                                <div class="col-xs-10">
+                                    <asp:TextBox ID="txtClasificacion_Producto" CssClass="form-control" runat="server" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <asp:Label AssociatedControlID="txtDescripcionComercial_Producto" Text="Descripcion Comercial:" CssClass="control-label col-xs-2" runat="server" />
+                                <div class="col-xs-10">
+                                    <asp:TextBox ID="txtDescripcionComercial_Producto" runat="server" CssClass="form-control" TextMode="MultiLine" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <asp:Label AssociatedControlID="txtDescripcionFactura_Producto" Text="Descripcion en Factura:" CssClass="control-label col-xs-2" runat="server" />
+                                <div class="col-xs-10">
+                                    <asp:TextBox ID="txtDescripcionFactura_Producto" runat="server" CssClass="form-control" TextMode="MultiLine"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <asp:Label AssociatedControlID="txtObservaciones_Producto" Text="Observaciones / Comentarios" CssClass="control-label col-xs-2" runat="server" />
+                                <div class="col-xs-10">
+                                    <asp:TextBox ID="txtObservaciones_Producto" runat="server" CssClass="form-control"  TextMode="MultiLine"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <p class="text-success">
+                                <asp:Literal runat="server" ID="MensajeProducto" />
+                            </p>
+                            <p class="text-danger">
+                                <asp:Literal runat="server" ID="ErrorProducto" />
+                            </p>
+                            <asp:Button Text="Guardar Producto" ID="btnGuardarProducto" runat="server" CssClass="btn btn-primary" />
+                        </div>
                     </div>
                 </div>
 
@@ -330,7 +399,7 @@
                                 <%--<asp:Label runat="server" AssociatedControlID="cb_CorrelativoSAT" CssClass="control-label col-xs-2" Text=" de numero  "></asp:Label>--%>
                                 <div class="col-xs-3">
                                     <asp:DropDownList runat="server" ID="cb_CorrelativoSAT" CssClass="form-control input-sm">
-                                        <asp:ListItem Value="1" >OFI-SAT-IAD-DOP-UTO</asp:ListItem>                                        
+                                        <asp:ListItem Value="1">OFI-SAT-IAD-DOP-UTO</asp:ListItem>
                                     </asp:DropDownList>
                                 </div>
 

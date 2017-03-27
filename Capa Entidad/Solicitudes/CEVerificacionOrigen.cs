@@ -10,6 +10,11 @@ namespace Capa_Entidad.Solicitudes
     {
         
         #region Datos Primarios
+
+        public DateTime fecha_periodo_inicial { get; set; }
+        public DateTime fecha_periodo_final { get; set; }
+        public int ID_Tratado { get; set; }
+
         public int ID_Solicitud { get; set; }
         public int ID_UsuarioSolicita {get;set;}
         public string TipoSolicitud { get; set; }
@@ -80,6 +85,10 @@ namespace Capa_Entidad.Solicitudes
         public string Path { get; set; }
         public string ObservacionesAnexo { get; set; }
 
+        #endregion
+
+        #region Ficha de Producto
+        
         #endregion
 
     }

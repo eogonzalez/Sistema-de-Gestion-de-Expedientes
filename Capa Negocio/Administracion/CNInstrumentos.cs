@@ -26,5 +26,15 @@ namespace Capa_Negocio.Administracion
         {
             return objCDInstrumentos.SelectInstrumento(id_instrumento);
         }
+
+        public Boolean UpdateInstrumento(CEInstrumento objCEInstrumento)
+        {
+            return objCDInstrumentos.UpdateInstrumento(objCEInstrumento);
+        }
+
+        public Boolean DeleteInstrumento(CEInstrumento objCEInstrumento)
+        {
+            return objCDInstrumentos.DeleteInstrumento(objCEInstrumento);
+        }
     }
 }

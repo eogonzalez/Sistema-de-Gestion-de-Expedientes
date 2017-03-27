@@ -30,7 +30,16 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                 if (Session["UsuarioID"] != null)
                 {
                     //Page.Form.Attributes.Add("enctype", "multipart/form-data");
+                    int anio = DateTime.Now.Year;
+                    int mes = DateTime.Now.Month;
+                    int dia = DateTime.Now.Day;
+                    DateTime fecha = new DateTime(anio, mes, dia);
+
+                    txtFechaInicial.Text = fecha.ToString("dd/MM/yyyy");
+                    txtFechaFinal.Text = fecha.ToString("dd/MM/yyyy");
+
                     BloqueoControlesIniciales();
+                    Llenar_cboInstrumento();
                     Llenar_cbDepartamento();
                     Llenar_cbPais();
 
@@ -454,6 +463,21 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                 cboPaisExpo.DataValueField = dt.Columns["idPais"].ToString();
                 cboPaisExpo.DataSource = dt;
                 cboPaisExpo.DataBind();
+            }
+        }
+
+        protected void Llenar_cboInstrumento()
+        {
+            var dt = new DataTable();
+
+            dt = objCNVerificacion.SelectComboInstrumentos();
+
+            if (dt.Rows.Count > 0)
+            {
+                cbo_instrumento.DataTextField = dt.Columns["nombre_instrumento"].ToString();
+                cbo_instrumento.DataValueField = dt.Columns["id_instrumento"].ToString();
+                cbo_instrumento.DataSource = dt;
+                cbo_instrumento.DataBind();
             }
         }
 
