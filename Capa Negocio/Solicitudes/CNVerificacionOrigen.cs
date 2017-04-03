@@ -117,5 +117,11 @@ namespace Capa_Negocio.Solicitudes
         {
             return objCDVerificacionOrigen.SelectComboInstrumentos();
         }
+
+        public DataTable SelectComboAduanas()
+        {
+            return objCDVerificacionOrigen.SelectComboAduanas();
+        }
+
     }
 }

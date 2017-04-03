@@ -42,6 +42,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                     Llenar_cboInstrumento();
                     Llenar_cbDepartamento();
                     Llenar_cbPais();
+                    Llenar_cboAduana();
 
                     if (Session["UsuarioID"] != null)
                     {
@@ -481,6 +482,21 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             }
         }
 
+        protected void Llenar_cboAduana()
+        {
+            var dt = new DataTable();
+
+            dt = objCNVerificacion.SelectComboAduanas();
+
+            if (dt.Rows.Count > 0)
+            {
+                cboAduana_Producto.DataTextField = dt.Columns["nombre"].ToString();
+                cboAduana_Producto.DataValueField = dt.Columns["idAduana"].ToString();
+                cboAduana_Producto.DataSource = dt;
+                cboAduana_Producto.DataBind();
+            }
+        }
+
         protected void Llenar_cboTipoRequisito(string cmd)
         {
             var dt = new DataTable();
@@ -573,6 +589,11 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
 
             objCEVerificacion.ID_UsuarioSolicita = Convert.ToInt32(Session["UsuarioID"].ToString());
             objCEVerificacion.TipoSolicitud = cmd;
+
+            objCEVerificacion.ID_Tratado = getTratado();
+            objCEVerificacion.fecha_periodo_inicial = getPeriodoInicial();
+            objCEVerificacion.fecha_periodo_final = getPeriodoFinal();
+
             objCEVerificacion.NombresSolicitante = getNombresSolicitante();
             objCEVerificacion.ApellidosSolicitante = getApellidosSolicitante();
             objCEVerificacion.DireccionSolicitante = getDireccionSolicitante();
@@ -670,6 +691,11 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             objCEVerificacion.ID_Solicitud = id_solicitud;
             objCEVerificacion.ID_UsuarioSolicita = Convert.ToInt32(Session["UsuarioID"].ToString());
             objCEVerificacion.TipoSolicitud = cmd;
+
+            objCEVerificacion.ID_Tratado = getTratado();
+            objCEVerificacion.fecha_periodo_inicial = getPeriodoInicial();
+            objCEVerificacion.fecha_periodo_final = getPeriodoFinal();
+
             objCEVerificacion.NombresSolicitante = getNombresSolicitante();
             objCEVerificacion.ApellidosSolicitante = getApellidosSolicitante();
             objCEVerificacion.DireccionSolicitante = getDireccionSolicitante();
@@ -841,6 +867,10 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             if (tbl.Rows.Count > 0)
             {
                 DataRow row = tbl.Rows[0];
+
+                txtFechaInicial.Text = row["fecha_inicio_periodo"].ToString();
+                txtFechaFinal.Text = row["fecha_fin_periodo"].ToString();
+                cbo_instrumento.SelectedValue = row["id_instrumento"].ToString();
 
                 txtNombre.Text = row["nombres"].ToString();
                 txtApellido.Text = row["apellidos"].ToString();
@@ -1174,6 +1204,21 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
         #region Obtener valores primarios
 
         /* Datos de Identificaion del Solicitante */
+        protected DateTime getPeriodoInicial()
+        {
+            return Convert.ToDateTime(txtFechaInicial.Text);
+        }
+
+        protected DateTime getPeriodoFinal()
+        {
+            return Convert.ToDateTime(txtFechaFinal.Text);
+        }
+
+        protected int getTratado()
+        {
+            return Convert.ToInt32(cbo_instrumento.SelectedValue.ToString());
+        }
+
         protected string getNombresSolicitante()
         {
             return txtNombre.Text;

@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Administracion\Aduanas.cs" />
     <Compile Include="Administracion\Departamentos.cs" />
     <Compile Include="Administracion\Instrumentos.cs" />
     <Compile Include="Administracion\Menu.cs" />

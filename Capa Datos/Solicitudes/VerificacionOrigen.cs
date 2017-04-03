@@ -140,7 +140,8 @@ namespace Capa_Datos.Solicitudes
             var sql_query = string.Empty;
 
             sql_query = " INSERT INTO [SGEODB].[dbo].[BorradorSolicitud_Enc] "+
-                " ([id_usuarioSolicita],[tipoSolicitud],[nombres],[apellidos],[direccion] " +
+                " ([id_usuarioSolicita],[tipoSolicitud],[id_instrumento], [fecha_inicio_periodo],[fecha_fin_periodo] "+
+                " ,[nombres],[apellidos],[direccion] " +
                 " ,[idDepartamentoSolicita],[correo],[telefono] "+
                 " ,[razonSocialImportador],[direccionImportador],[correoImportador]"+
                 " ,[idDepartamentoImportador],[nitImportador],[telefonoImportador] "+
@@ -148,7 +149,8 @@ namespace Capa_Datos.Solicitudes
                 " ,[idPaisExportador],[nitExportador],[telefonoExportador] "+
                 " ,[fecha_creacion],[fecha_modificacion],[estado]) "+
                 " VALUES "+
-                " (@id_usuarioSolicita,@tipoSolicitud,@nombres,@apellidos,@direccion "+
+                " (@id_usuarioSolicita,@tipoSolicitud,@id_instrumento, @fecha_inicio_periodo, @fecha_fin_periodo "+
+                " ,@nombres,@apellidos,@direccion "+
                 " ,@idDepartamentoSolicita,@correo,@telefono "+
                 " ,@razonSocialImportador,@direccionImportador,@correoImportador"+
                 " ,@idDepartamentoImportador,@nitImportador,@telefonoImportador "+
@@ -162,6 +164,9 @@ namespace Capa_Datos.Solicitudes
                 var command = new SqlCommand(sql_query, cn);
                 command.Parameters.AddWithValue("id_usuarioSolicita", objCEVerificacion.ID_UsuarioSolicita);
                 command.Parameters.AddWithValue("tipoSolicitud", objCEVerificacion.TipoSolicitud);
+                command.Parameters.AddWithValue("id_instrumento", objCEVerificacion.ID_Tratado);
+                command.Parameters.AddWithValue("fecha_inicio_periodo", objCEVerificacion.fecha_periodo_inicial);
+                command.Parameters.AddWithValue("fecha_fin_periodo", objCEVerificacion.fecha_periodo_final);
                 command.Parameters.AddWithValue("nombres", objCEVerificacion.NombresSolicitante);
                 command.Parameters.AddWithValue("apellidos", objCEVerificacion.ApellidosSolicitante);
                 command.Parameters.AddWithValue("direccion", objCEVerificacion.DireccionSolicitante);
@@ -216,6 +221,7 @@ namespace Capa_Datos.Solicitudes
             sql_query = " UPDATE BorradorSolicitud_Enc " +
                 " SET "+
                 " id_usuarioSolicita = @id_usuarioSolicita, tipoSolicitud = @tipoSolicitud"+
+                " ,id_instrumento = @id_instrumento, fecha_inicio_periodo = @fecha_inicio_periodo, fecha_fin_periodo = @fecha_fin_periodo "+
                 " ,nombres = @nombres,apellidos = @apellidos, direccion = @direccion " +
                 " ,idDepartamentoSolicita = @idDepartamentoSolicita,correo = @correo,telefono = @telefono " +
                 " ,razonSocialImportador = @razonSocialImportador,direccionImportador = @direccionImportador "+
@@ -232,6 +238,11 @@ namespace Capa_Datos.Solicitudes
                 var command = new SqlCommand(sql_query, cn);
                 command.Parameters.AddWithValue("id_usuarioSolicita", objCEVerificacion.ID_UsuarioSolicita);
                 command.Parameters.AddWithValue("tipoSolicitud", objCEVerificacion.TipoSolicitud);
+
+                command.Parameters.AddWithValue("id_instrumento", objCEVerificacion.ID_Tratado);
+                command.Parameters.AddWithValue("fecha_inicio_periodo", objCEVerificacion.fecha_periodo_inicial);
+                command.Parameters.AddWithValue("fecha_fin_periodo", objCEVerificacion.fecha_periodo_final);
+
                 command.Parameters.AddWithValue("nombres", objCEVerificacion.NombresSolicitante);
                 command.Parameters.AddWithValue("apellidos", objCEVerificacion.ApellidosSolicitante);
                 command.Parameters.AddWithValue("direccion", objCEVerificacion.DireccionSolicitante);
@@ -530,7 +541,8 @@ namespace Capa_Datos.Solicitudes
             string sql_query = string.Empty;
 
             sql_query = " SELECT      "+ 
-                " [tipoSolicitud],[nombres],[apellidos] "+
+                " [tipoSolicitud],[id_solicitud],[id_instrumento],[fecha_inicio_periodo],[fecha_fin_periodo]"+
+                " ,[nombres],[apellidos] "+
                 " ,[direccion],[idDepartamentoSolicita],[correo] "+
                 " ,[telefono],[razonSocialImportador],[direccionImportador] "+
                 " ,[correoImportador],[idDepartamentoImportador],[nitImportador] "+
@@ -972,6 +984,33 @@ namespace Capa_Datos.Solicitudes
             {
                 sql_query = " SELECT [id_instrumento],[sigla]+' - '+[nombre_instrumento] as nombre_instrumento "+
                     " FROM G_Instrumentos "+
+                    " where estado = 'A' ";
+                try
+                {
+                    var command = new SqlCommand(sql_query, cn);
+                    var da = new SqlDataAdapter(command);
+                    da.Fill(dt_respuesta);
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+
+            return dt_respuesta;
+        }
+
+        public DataTable SelectComboAduanas()
+        {
+            var dt_respuesta = new DataTable();
+
+            string sql_query = string.Empty;
+
+            using (var cn = objConexion.Conectar())
+            {
+                sql_query = " SELECT [idAduana],[codigo]+' - '+[nombre] as nombre " +
+                    " FROM G_Aduanas " +
                     " where estado = 'A' ";
                 try
                 {

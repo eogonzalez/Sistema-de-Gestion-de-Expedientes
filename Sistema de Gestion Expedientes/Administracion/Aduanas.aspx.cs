@@ -4,47 +4,47 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data;
 using Capa_Negocio.Administracion;
 using Capa_Entidad.Administracion;
+using System.Data;
 
 namespace Sistema_de_Gestion_Expedientes.Administracion
 {
-    public partial class Paises : System.Web.UI.Page
+    public partial class Aduanas : System.Web.UI.Page
     {
-        CNPaises objCNPaises = new CNPaises();
-        CEPaises objCEPaises = new CEPaises();
+        CNAduanas objCNAduana = new CNAduanas();
+        CEAduanas objCEAduana = new CEAduanas();
 
         #region Eventos del formulario
-
+                
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                Llenar_gvPaises();
+                Llenar_gvAduanas();
                 btnGuardar.Attributes.Add("onclick", "this.value='Procesando Espere...';this.disabled=true;" + ClientScript.GetPostBackEventReference(btnGuardar, ""));
             }
         }
-     
-        protected void gvPaises_RowCommand(object sender, GridViewCommandEventArgs e)
+
+        protected void gvAduanas_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             int index = Convert.ToInt32(e.CommandArgument);
 
-            GridViewRow row = gvPaises.Rows[index];
-            int id_pais = Convert.ToInt32(row.Cells[0].Text);
+            GridViewRow row = gvAduanas.Rows[index];
+            int id_aduana = Convert.ToInt32(row.Cells[0].Text);
 
-            Session.Add("IDPais", id_pais);
+            Session.Add("IDAduana", id_aduana);
 
             switch (e.CommandName)
             {
                 case "modificar":
-                    MostrarDatos(id_pais);
+                    MostrarDatos(id_aduana);
                     lkBtn_viewPanel_ModalPopupExtender.Show();
                     break;
 
                 case "eliminar":
-                    EliminarPais(id_pais);
-                    Llenar_gvPaises();
+                    EliminarAduana(id_aduana);
+                    Llenar_gvAduanas();
                     break;
 
                 default:
@@ -54,18 +54,18 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
-            int id_pais = 0;
-            if (Session["IDPais"] != null)
+            int id_aduana = 0;
+            if (Session["IDAduana"] != null)
             {
-                id_pais = (Int32)Session["IDPais"];
+                id_aduana = (Int32)Session["IDAduana"];
             }
 
             switch (btnGuardar.CommandName)
             {
                 case "Editar":
-                    if (ActualizarPais(id_pais))
+                    if (ActualizarAduana(id_aduana))
                     {
-                        Llenar_gvPaises();
+                        Llenar_gvAduanas();
                         LimpiarPanel();
                         btnGuardar.Text = "Guardar";
                         btnGuardar.CommandName = "Guardar";
@@ -73,19 +73,19 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                     else
                     {
                         lkBtn_viewPanel_ModalPopupExtender.Show();
-                        ErrorMessage.Text = "Ha ocurrido un error al actualizar Pais.";
+                        ErrorMessage.Text = "Ha ocurrido un error al actualizar Aduana.";
                     }
                     break;
                 case "Guardar":
-                    if (GuardarPais())
+                    if (GuardarAduana())
                     {
                         LimpiarPanel();
-                        Llenar_gvPaises();
+                        Llenar_gvAduanas();
                     }
                     else
                     {
                         lkBtn_viewPanel_ModalPopupExtender.Show();
-                        ErrorMessage.Text = "Ha ocurrido un error al guardar Pais.";
+                        ErrorMessage.Text = "Ha ocurrido un error al guardar Aduana.";
                     }
                     break;
                 default:
@@ -104,54 +104,54 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
         #region Funciones
 
-        protected void Llenar_gvPaises()
+        protected void Llenar_gvAduanas()
         {
             var tbl = new DataTable();
 
-            tbl = objCNPaises.SelectPaises();
+            tbl = objCNAduana.SelectAduanas();
 
-            gvPaises.DataSource = tbl;
-            gvPaises.DataBind();
+            gvAduanas.DataSource = tbl;
+            gvAduanas.DataBind();
         }
 
-        protected void EliminarPais(int id_pais)
+        protected void EliminarAduana(int id_aduana)
         {
-            objCNPaises.DeletePais(id_pais);
+            objCNAduana.DeleteAduana(id_aduana);
         }
 
-        protected void MostrarDatos(int id_pais)
+        protected void MostrarDatos(int id_aduana)
         {
             btnGuardar.Text = "Editar";
             btnGuardar.CommandName = "Editar";
 
             var tbl = new DataTable();
-            tbl = objCNPaises.SelectPais(id_pais);
+            tbl = objCNAduana.SelectAduana(id_aduana);
             var row = tbl.Rows[0];
 
-            txtISO.Text = row["ISO2"].ToString();
+            txtISO.Text = row["codigo"].ToString();
             txtNombre.Text = row["nombre"].ToString();
 
         }
 
-        protected Boolean ActualizarPais(int id_pais)
+        protected Boolean ActualizarAduana(int id_aduana)
         {
             var respuesta = false;
 
-            objCEPaises.ID_Pais = id_pais;
-            objCEPaises.Nombre = txtNombre.Text;
-            objCEPaises.ISO2 = txtISO.Text;
+            objCEAduana.ID_Aduana = id_aduana;
+            objCEAduana.Nombre = txtNombre.Text;
+            objCEAduana.Codigo = txtISO.Text;
 
-            respuesta = objCNPaises.UpdatePais(objCEPaises);
+            respuesta = objCNAduana.UpdateAduana(objCEAduana);
 
             return respuesta;
         }
 
-        protected Boolean GuardarPais()
+        protected Boolean GuardarAduana()
         {
-            objCEPaises.Nombre = txtNombre.Text;
-            objCEPaises.ISO2 = txtISO.Text;
+            objCEAduana.Nombre = txtNombre.Text;
+            objCEAduana.Codigo = txtISO.Text;
 
-            return objCNPaises.SavePaises(objCEPaises);
+            return objCNAduana.SaveAduanas(objCEAduana);
         }
 
         protected void LimpiarPanel()
@@ -161,6 +161,5 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
         }
 
         #endregion
-
     }
 }
