@@ -323,7 +323,10 @@
                             <div class="form-group">
                                 <asp:Label AssociatedControlID="cboRegimen_Producto" CssClass="control-label col-xs-2" Text="Regimen de Importacion: " runat="server" />
                                 <div class="col-xs-10">
-                                    <asp:DropDownList ID="cboRegimen_Producto" CssClass="form-control" runat="server" />
+                                    <asp:DropDownList ID="cboRegimen_Producto" CssClass="form-control" runat="server">
+                                        <asp:ListItem Value="1">DI - Importación definitiva de mercancías proveniente de almacén fiscal.</asp:ListItem>
+                                        <asp:ListItem Value="2">ID - Importación definitiva</asp:ListItem>                                        
+                                    </asp:DropDownList>
                                 </div>
                             </div>
 
@@ -351,14 +354,14 @@
                             <div class="form-group">
                                 <asp:Label AssociatedControlID="txtDescripcionFactura_Producto" Text="Descripcion en Factura:" CssClass="control-label col-xs-2" runat="server" />
                                 <div class="col-xs-10">
-                                    <asp:TextBox ID="txtDescripcionFactura_Producto" runat="server" CssClass="form-control" TextMode="MultiLine"/>
+                                    <asp:TextBox ID="txtDescripcionFactura_Producto" runat="server" CssClass="form-control" TextMode="MultiLine" />
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <asp:Label AssociatedControlID="txtObservaciones_Producto" Text="Observaciones / Comentarios" CssClass="control-label col-xs-2" runat="server" />
                                 <div class="col-xs-10">
-                                    <asp:TextBox ID="txtObservaciones_Producto" runat="server" CssClass="form-control"  TextMode="MultiLine"/>
+                                    <asp:TextBox ID="txtObservaciones_Producto" runat="server" CssClass="form-control" TextMode="MultiLine" />
                                 </div>
                             </div>
                         </div>

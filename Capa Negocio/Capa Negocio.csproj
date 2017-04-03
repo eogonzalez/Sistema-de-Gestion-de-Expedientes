@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Administracion\CNAduanas.cs" />
     <Compile Include="Administracion\CNDepartamentos.cs" />
     <Compile Include="Administracion\CNInstrumentos.cs" />
     <Compile Include="Administracion\CNMenu.cs" />

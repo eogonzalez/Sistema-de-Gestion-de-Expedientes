@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Administracion\CEAduanas.cs" />
     <Compile Include="Administracion\CEDepartamentos.cs" />
     <Compile Include="Administracion\CEInstrumento.cs" />
     <Compile Include="Administracion\CEMenu.cs" />

@@ -158,6 +158,7 @@
     <Content Include="Account\RegisterDone.aspx" />
     <Content Include="Account\RegisterExternalLogin.aspx" />
     <Content Include="Account\SolicitudRegistro.aspx" />
+    <Content Include="Administracion\Aduanas.aspx" />
     <Content Include="Administracion\Departamentos.aspx" />
     <Content Include="Administracion\Instrumentos.aspx" />
     <Content Include="Administracion\Menu.aspx" />
@@ -287,6 +288,13 @@
     </Compile>
     <Compile Include="Account\SolicitudRegistro.aspx.designer.cs">
       <DependentUpon>SolicitudRegistro.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Administracion\Aduanas.aspx.cs">
+      <DependentUpon>Aduanas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Administracion\Aduanas.aspx.designer.cs">
+      <DependentUpon>Aduanas.aspx</DependentUpon>
     </Compile>
     <Compile Include="Administracion\Departamentos.aspx.cs">
       <DependentUpon>Departamentos.aspx</DependentUpon>
