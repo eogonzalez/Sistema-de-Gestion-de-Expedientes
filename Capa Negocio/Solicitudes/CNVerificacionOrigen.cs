@@ -123,5 +123,24 @@ namespace Capa_Negocio.Solicitudes
             return objCDVerificacionOrigen.SelectComboAduanas();
         }
 
+        public Boolean ExistenProductos(int id_solicitud)
+        {
+            return objCDVerificacionOrigen.ExistenProductos(id_solicitud);
+        }
+
+        public Boolean InsertBorradorProducto(CEVerificacionOrigen objCEVerificacion)
+        {
+            return objCDVerificacionOrigen.InsertBorradorProducto(objCEVerificacion);
+        }
+
+        public Boolean UpdateBorradorProducto(CEVerificacionOrigen objCEVerificacion)
+        {
+            return objCDVerificacionOrigen.UpdateBorradorProducto(objCEVerificacion);
+        }
+
+        public DataTable SelectProductos(int id_solicitud)
+        {
+            return objCDVerificacionOrigen.SelectProductos(id_solicitud);
+        }
     }
 }

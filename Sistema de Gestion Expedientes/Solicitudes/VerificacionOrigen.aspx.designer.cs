@@ -292,33 +292,6 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes {
         protected global::System.Web.UI.WebControls.CheckBox cb_Uno;
         
         /// <summary>
-        /// Control cb_cinco.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox cb_cinco;
-        
-        /// <summary>
-        /// Control cb_Dos.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox cb_Dos;
-        
-        /// <summary>
-        /// Control cb_seis.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox cb_seis;
-        
-        /// <summary>
         /// Control cb_tres.
         /// </summary>
         /// <remarks>
@@ -328,13 +301,13 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes {
         protected global::System.Web.UI.WebControls.CheckBox cb_tres;
         
         /// <summary>
-        /// Control cb_siete.
+        /// Control cb_Dos.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox cb_siete;
+        protected global::System.Web.UI.WebControls.CheckBox cb_Dos;
         
         /// <summary>
         /// Control cb_cuatro.
@@ -355,13 +328,13 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes {
         protected global::System.Web.UI.WebControls.CheckBox cb_ObsMotivo;
         
         /// <summary>
-        /// Control cb_ocho.
+        /// Control cb_cinco.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox cb_ocho;
+        protected global::System.Web.UI.WebControls.CheckBox cb_cinco;
         
         /// <summary>
         /// Control txtObsMotivo.

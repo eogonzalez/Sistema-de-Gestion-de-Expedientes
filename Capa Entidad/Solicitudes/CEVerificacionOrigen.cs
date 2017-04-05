@@ -88,7 +88,15 @@ namespace Capa_Entidad.Solicitudes
         #endregion
 
         #region Ficha de Producto
-        
+
+        public int ID_Regimem_Importacion { get; set; }
+        public string Nombre_Regimen_Importacion { get; set; }
+        public int IDAduana { get; set; }
+        public string Clasificacion_Arancelaria { get;set;}
+        public string Descripcion_Comercial { get; set; }
+        public string Descripcion_Factura { get; set; }
+        public string ObservacionesProducto { get; set; }
+
         #endregion
 
     }

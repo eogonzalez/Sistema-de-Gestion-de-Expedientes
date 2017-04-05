@@ -77,7 +77,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                         Llenar_DatosPrimarios(idSolicitud);
                         Llenar_Motivos(idSolicitud);
                         Llenar_gvAnexos(idSolicitud, cmd);
-                        //Llenar_Productos(idSolicitud);
+                        Llenar_Productos(idSolicitud);
                     }
 
                     
@@ -88,7 +88,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                         Llenar_DatosPrimarios(idSolicitud);
                         Llenar_Motivos(idSolicitud);
                         Llenar_gvAnexos(idSolicitud, cmd);
-                        //Llenar_Productos(idSolicitud);
+                        Llenar_Productos(idSolicitud);
                         BloqueoGeneral();
                     }
 
@@ -96,6 +96,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                     btnGuardar.Attributes.Add("onclick", "this.value='Procesando Espere...';this.disabled=true;" + ClientScript.GetPostBackEventReference(btnGuardar, ""));
                     btnGuardarMotivo.Attributes.Add("onclick", "this.value='Procesando Espere...';this.disabled=true;" + ClientScript.GetPostBackEventReference(btnGuardarMotivo, ""));
                     //btnGuardarAnexo.Attributes.Add("onclick", "this.value='Cargado documento Espere...';this.disabled=true;" + ClientScript.GetPostBackEventReference(btnGuardarAnexo, ""));
+                    btnGuardarProducto.Attributes.Add("onclick", "this.value='Procesando Espere...';this.disabled=true;" + ClientScript.GetPostBackEventReference(btnGuardarProducto, ""));
                     btnEnviar.Attributes.Add("onclick", "this.value='Procesando Espere...';this.disabled=true;" + ClientScript.GetPostBackEventReference(btnEnviar, ""));
 
                     txtAnioOficioSAT.Text = DateTime.Now.Year.ToString();
@@ -127,15 +128,14 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                 txtObsMotivo.Enabled = true;
             }
             else
-            {
-                //cb_ObsMotivo.Checked = true;
+            {                
                 txtObsMotivo.Enabled = false;
             }
         }
 
-        protected void cb_ocho_CheckedChanged(object sender, EventArgs e)
+        protected void cb_cinco_CheckedChanged(object sender, EventArgs e)
         {
-            if (cb_ocho.Checked)
+            if (cb_cinco.Checked)
             {
                 txtOtrosMotivos.Enabled = true;
             }
@@ -419,10 +419,51 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             }
             else
             {
-                ErrorMessage.Text = "Debe de Guardar los datos del encabezado antes de guardar los Motivos de la solicitud.";
+                ErrorMessage.Text = "Debe de Guardar los datos del encabezado antes de guardar los Anexos de la solicitud.";
                 lkBtn_viewPanel_ModalPopupExtender.Show();
             }
               
+        }
+
+        protected void btnGuardarProducto_Click(object sender, EventArgs e)
+        {
+            //Guardar producto de importacion de solicitud
+            if (Session["IDSolicitud"] != null)
+            {
+                int id_solicitud = 0;
+                id_solicitud = (int)Session["IDSolicitud"];
+
+                //Verifico si existe producto de solicitud
+                if (!ExistenProductos(id_solicitud))
+                {
+                    //Guardo Producto
+                    if (GuardarProducto(id_solicitud))
+                    {
+                        MensajeProducto.Text = "Se han Guardado los datos del producto de importacion.";
+                    }
+                    else
+                    {
+                        ErrorProducto.Text = "Ha ocurrido un error al guardar los datos del producto de importacion.";
+                    }
+                }
+                else
+                {
+                    //Actualizo Producto
+                    if (ActualizarProducto(id_solicitud))
+                    {
+                        MensajeProducto.Text = "Se han Actualizado los datos del producto.";
+                    }
+                    else
+                    {
+                        ErrorProducto.Text = "Ha ocurrido un error al actualizar los datos del producto.";
+                    }
+                }
+
+            }
+            else
+            {
+                ErrorMotivo.Text = "Debe de Guardar los datos del encabezado antes de guardar los datos del producto de importacion de la solicitud.";
+            }
         }
 
         #endregion
@@ -637,9 +678,9 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             objCEVerificacion.Motivo_3 = getMotivo_3();
             objCEVerificacion.Motivo_4 = getMotivo_4();
             objCEVerificacion.Motivo_5 = getMotivo_5();
-            objCEVerificacion.Motivo_6 = getMotivo_6();
-            objCEVerificacion.Motivo_7 = getMotivo_7();
-            objCEVerificacion.Motivo_8 = getMotivo_8();
+            //objCEVerificacion.Motivo_6 = getMotivo_6();
+            //objCEVerificacion.Motivo_7 = getMotivo_7();
+            //objCEVerificacion.Motivo_8 = getMotivo_8();
             objCEVerificacion.Observacion_Check = getObservacion_Check();
             objCEVerificacion.Observaciones = getObservaciones();
             objCEVerificacion.OtrosMotivos = getOtrosMotivos();
@@ -659,9 +700,9 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             objCEVerificacion.Motivo_3 = getMotivo_3();
             objCEVerificacion.Motivo_4 = getMotivo_4();
             objCEVerificacion.Motivo_5 = getMotivo_5();
-            objCEVerificacion.Motivo_6 = getMotivo_6();
-            objCEVerificacion.Motivo_7 = getMotivo_7();
-            objCEVerificacion.Motivo_8 = getMotivo_8();
+            //objCEVerificacion.Motivo_6 = getMotivo_6();
+            //objCEVerificacion.Motivo_7 = getMotivo_7();
+            //objCEVerificacion.Motivo_8 = getMotivo_8();
             objCEVerificacion.Observacion_Check = getObservacion_Check();
             objCEVerificacion.Observaciones = getObservaciones();
             objCEVerificacion.OtrosMotivos = getOtrosMotivos();
@@ -911,9 +952,9 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                 cb_tres.Checked = (Boolean)row["motivo_3"];
                 cb_cuatro.Checked = (Boolean)row["motivo_4"];
                 cb_cinco.Checked = (Boolean)row["motivo_5"];
-                cb_seis.Checked = (Boolean)row["motivo_6"];
-                cb_siete.Checked = (Boolean)row["motivo_7"];
-                cb_ocho.Checked = (Boolean)row["motivo_8"];
+                //cb_seis.Checked = (Boolean)row["motivo_6"];
+                //cb_siete.Checked = (Boolean)row["motivo_7"];
+                //cb_ocho.Checked = (Boolean)row["motivo_8"];
                 cb_ObsMotivo.Checked = (Boolean)row["observacion_si_no"];
                 txtObsMotivo.Text = row["observaciones"].ToString();
                 txtOtrosMotivos.Text = row["otros_motivos"].ToString();
@@ -928,6 +969,8 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             var respuesta = false;
             var mensajeValidacionNo = string.Empty;
             var mensajeValidacionSi = string.Empty;
+
+            //Validacion de periodo de tratado
 
             //Exite motivo
             if (ExistenMotivos(id_solicitud))
@@ -972,6 +1015,15 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             
 
             //Valido productos
+            if (ExistenProductos(id_solicitud))
+            {
+                mensajeValidacionSi += " Productos Validados Correctamente";
+            }
+            else
+            {
+                mensajeValidacionNo += " Debe de existir un producto de importacion.\n";
+                respuesta = false;
+            }
 
             Session.Add("SIVALIDA", mensajeValidacionSi);
             Session.Add("NOVALIDA", mensajeValidacionNo);
@@ -1161,11 +1213,15 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
         protected void BloqueoGeneral()
         {
             //Bloqueo datos primarios
+            txtFechaInicial.Enabled = false;
+            txtFechaFinal.Enabled = false;
+            cbo_instrumento.Enabled = false;
+
             txtRazonSocialImpo.Enabled = false;
             txtDireccionImpo.Enabled = false;
             txtNITImpo.Enabled = false;
-            txtCorreoImpo.Enabled = false;
-            cboDepartamento.Enabled = false;
+            txtCorreoImpo.Enabled = false;            
+            cboDeptoImpo.Enabled = false;
             txtTelImpo.Enabled = false;
 
             txtRazonSocialExpo.Enabled = false;
@@ -1175,28 +1231,102 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             cboPaisExpo.Enabled = false;
             txtTelExpo.Enabled = false;
 
+            btnGuardar.Enabled = false;
+            btnEnviar.Enabled = false;
+
+            //Bloqueo Motivos
             cb_Uno.Enabled = false;
             cb_Dos.Enabled = false;
             cb_tres.Enabled = false;
             cb_cuatro.Enabled = false;
             cb_cinco.Enabled = false;
-            cb_seis.Enabled = false;
-            cb_siete.Enabled = false;
-            cb_ocho.Enabled = false;
+            //cb_seis.Enabled = false;
+            //cb_siete.Enabled = false;
+            //cb_ocho.Enabled = false;
             cb_ObsMotivo.Enabled = false;
             txtObsMotivo.Enabled = false;
             txtOtrosMotivos.Enabled = false;
-
-            btnGuardar.Enabled = false;
-            btnEnviar.Enabled = false;
+                        
             btnGuardarMotivo.Enabled = false;
-            btnGuardarAnexo.Enabled = false;
-            
+
+            //Bloqueo Anexos
+            btnGuardarAnexo.Enabled = false;            
             lkBtn_AgregarAdjunto.Visible = false;
             //lkBtn_AgregarAdjunto.Enabled = false;
-
             gvAnexos.Columns[6].Visible = false;
-            
+
+            //Bloqueo datos producto
+            cboRegimen_Producto.Enabled = false;
+            cboAduana_Producto.Enabled = false;
+            txtClasificacion_Producto.Enabled = false;
+            txtDescripcionComercial_Producto.Enabled = false;
+            txtDescripcionFactura_Producto.Enabled = false;
+            txtObservaciones_Producto.Enabled = false;
+
+            btnGuardarProducto.Enabled = false;
+        }
+
+        protected Boolean ExistenProductos(int id_solicitud)
+        {
+            return objCNVerificacion.ExistenProductos(id_solicitud);
+        }
+
+        protected Boolean GuardarProducto(int id_solicitud)
+        {
+            var respuesta = false;
+
+            objCEVerificacion.ID_Solicitud = id_solicitud;
+            objCEVerificacion.ID_Regimem_Importacion = getRegimenImportacion();
+            objCEVerificacion.Nombre_Regimen_Importacion = getNombreRegimenImportacion();
+            objCEVerificacion.IDAduana = getAduana();
+            objCEVerificacion.Clasificacion_Arancelaria = getClasificacionArancelaria();
+            objCEVerificacion.Descripcion_Comercial = getDescripcionComercial();
+            objCEVerificacion.Descripcion_Factura = getDescripcionFactura();
+            objCEVerificacion.ObservacionesProducto = getObservacionesProducto();
+
+            respuesta = objCNVerificacion.InsertBorradorProducto(objCEVerificacion);
+
+            return respuesta;
+        }
+
+        protected Boolean ActualizarProducto(int id_solicitud)
+        {
+            var respuesta = false;
+
+            objCEVerificacion.ID_Solicitud = id_solicitud;
+            objCEVerificacion.ID_Regimem_Importacion = getRegimenImportacion();
+            objCEVerificacion.ID_Regimem_Importacion = getRegimenImportacion();
+            objCEVerificacion.Nombre_Regimen_Importacion = getNombreRegimenImportacion();
+            objCEVerificacion.IDAduana = getAduana();
+            objCEVerificacion.Clasificacion_Arancelaria = getClasificacionArancelaria();
+            objCEVerificacion.Descripcion_Comercial = getDescripcionComercial();
+            objCEVerificacion.Descripcion_Factura = getDescripcionFactura();
+            objCEVerificacion.ObservacionesProducto = getObservacionesProducto();
+
+            respuesta = objCNVerificacion.UpdateBorradorProducto(objCEVerificacion);
+
+            return respuesta;
+        }
+
+        protected void Llenar_Productos(int id_solicitud)
+        {
+            var tbl = new DataTable();
+
+            tbl = objCNVerificacion.SelectProductos(id_solicitud);
+
+            if (tbl.Rows.Count > 0)
+            {
+                DataRow row = tbl.Rows[0];
+
+                cboRegimen_Producto.SelectedValue = row["id_regimen_importacion"].ToString();
+                cboAduana_Producto.SelectedValue = row["idAduana"].ToString();
+                txtClasificacion_Producto.Text = row["clasificacion_arancelaria"].ToString();
+                txtDescripcionComercial_Producto.Text = row["descripcion_comercial"].ToString();
+                txtDescripcionFactura_Producto.Text = row["descripcion_factura"].ToString();
+                txtObservaciones_Producto.Text = row["observaciones"].ToString();
+
+            }
+
         }
 
         #endregion
@@ -1352,20 +1482,20 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             return cb_cinco.Checked;
         }
 
-        protected Boolean getMotivo_6()
-        {
-            return cb_seis.Checked;
-        }
+        //protected Boolean getMotivo_6()
+        //{
+        //    return cb_seis.Checked;
+        //}
 
-        protected Boolean getMotivo_7()
-        {
-            return cb_siete.Checked;
-        }
+        //protected Boolean getMotivo_7()
+        //{
+        //    return cb_siete.Checked;
+        //}
 
-        protected Boolean getMotivo_8()
-        {
-            return cb_ocho.Checked;
-        }
+        //protected Boolean getMotivo_8()
+        //{
+        //    return cb_ocho.Checked;
+        //}
 
         protected Boolean getObservacion_Check()
         {
@@ -1384,7 +1514,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
 
         #endregion
 
-        #region valores de archivos adjuntos
+        #region Valores de archivos adjuntos
         
         protected Boolean getOficioSATCheck()
         {
@@ -1445,6 +1575,47 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
         }
 
         #endregion
+
+        #region Valores Productos de Importacion
+
+        protected int getRegimenImportacion()
+        {
+            return Convert.ToInt32(cboRegimen_Producto.SelectedValue);
+        }
+
+        protected string getNombreRegimenImportacion()
+        {
+            return cboRegimen_Producto.SelectedItem.ToString();
+        }
+
+        protected int getAduana()
+        {
+            return Convert.ToInt32(cboAduana_Producto.SelectedValue);
+        }
+
+        protected string getClasificacionArancelaria()
+        {
+            return txtClasificacion_Producto.Text;
+        }
+
+        protected string getDescripcionComercial()
+        {
+            return txtDescripcionComercial_Producto.Text;
+        }
+
+        protected string getDescripcionFactura()
+        {
+            return txtDescripcionFactura_Producto.Text;
+        }
+
+        protected string getObservacionesProducto()
+        {
+            return txtObservaciones_Producto.Text;
+        }
+
+        #endregion
+
+
 
     }
 

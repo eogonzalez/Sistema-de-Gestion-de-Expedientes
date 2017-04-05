@@ -749,6 +749,7 @@ namespace Capa_Datos.Solicitudes
                     command.CommandText = " INSERT INTO  "+
 	                    " ExpedienteSolicitud_Enc "+
 	                    " ([id_Solicitud],[id_usuarioSolicita],[tipoSolicitud] "+
+                        " ,[id_instrumento],[fecha_inicio_periodo],[fecha_fin_periodo] "+
 	                    " ,[nombres],[apellidos],[direccion],[idDepartamentoSolicita] "+
 	                    " ,[correo],[telefono],[razonSocialImportador],[direccionImportador] "+
 	                    " ,[correoImportador],[idDepartamentoImportador],[nitImportador] "+
@@ -758,6 +759,7 @@ namespace Capa_Datos.Solicitudes
 	                    " ,[fecha_creacion],[fecha_modificacion],[estado]) "+
                         " select "+
 	                    " id_Solicitud, id_usuarioSolicita, tipoSolicitud, "+
+                        " id_instrumento, fecha_inicio_periodo, fecha_fin_periodo, "+
 	                    " nombres, apellidos, direccion, idDepartamentoSolicita,  "+
 	                    " correo, telefono, razonSocialImportador, "+
 	                    " direccionImportador, correoImportador, idDepartamentoImportador, "+
@@ -824,6 +826,30 @@ namespace Capa_Datos.Solicitudes
                     command.Parameters.AddWithValue("id_solicitud_anexo", id_solicitud);
                     command.ExecuteNonQuery();
 
+                    /*Query para insetar datos del producto */
+                    command.CommandText = " INSERT INTO ExpedienteProductoImportacion "+
+                        " ([id_expediente],[id_Solicitud],[id_regimen_importacion] "+
+                        " ,[nombre_regimen_importacion],[idAduana],[clasificacion_arancelaria]"+
+                        " ,[descripcion_comercial],[descripcion_factura],[observaciones] "+
+                        " ,[fecha_creacion],[fecha_modificacion],[estado]) "+
+                        " SELECT "+
+	                    " @id_expediente_producto as id_expediente, id_Solicitud "+
+	                    " ,id_regimen_importacion,nombre_regimen_importacion "+
+	                    " ,idAduana,clasificacion_arancelaria,descripcion_comercial"+
+                        " ,descripcion_factura,observaciones "+
+	                    " ,@fecha_creacion_producto as fecha_creacion "+
+	                    " ,@fecha_modificacion_producto as fecha_modificacion "+
+	                    " ,@estado_producto as estado "+
+                        " from BorradorProductoImportacion "+
+                        " where id_Solicitud = @id_solicitud_producto ";
+
+                    command.Parameters.AddWithValue("id_expediente_producto", id_expediente);
+                    command.Parameters.AddWithValue("fecha_creacion_producto", DateTime.Now);
+                    command.Parameters.AddWithValue("fecha_modificacion_producto", DateTime.Now);
+                    command.Parameters.AddWithValue("estado_producto", "E");
+                    command.Parameters.AddWithValue("id_solicitud_producto", id_solicitud);
+                    command.ExecuteNonQuery();
+
                     transaccion.Commit();
                     /*Cambio estatus en borrador*/
                     
@@ -840,7 +866,12 @@ namespace Capa_Datos.Solicitudes
                         " UPDATE BorradorAdjunto " +
                         " SET " +
                         " [estado] = @estado_BS " +
+                        " WHERE id_solicitud = @id_solicitud_BS; "+
+                        " UPDATE BorradorProductoImportacion "+
+                        " SET "+
+                        " [estado] = @estado_BS "+
                         " WHERE id_solicitud = @id_solicitud_BS; ";
+
                     command = new SqlCommand(sql_query, cn);
                     command.Parameters.AddWithValue("estado_BS", "E");
                     command.Parameters.AddWithValue("id_solicitud_BS", id_solicitud);
@@ -1015,6 +1046,151 @@ namespace Capa_Datos.Solicitudes
                 try
                 {
                     var command = new SqlCommand(sql_query, cn);
+                    var da = new SqlDataAdapter(command);
+                    da.Fill(dt_respuesta);
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+
+            return dt_respuesta;
+        }
+
+        public Boolean ExistenProductos(int id_solicitud)
+        {
+            var respuesta = false;
+            var sql_query = string.Empty;
+
+            sql_query = " SELECT COALESCE(count(1), 0)  as existe    " +
+                " FROM BorradorProductoImportacion " +
+                " where id_Solicitud = @id_solicitud ";
+
+            using (var cn = objConexion.Conectar())
+            {
+                var command = new SqlCommand(sql_query, cn);
+                command.Parameters.AddWithValue("id_solicitud", id_solicitud);
+
+                cn.Open();
+                if (Convert.ToInt32(command.ExecuteScalar()) > 0)
+                {
+                    respuesta = true;
+                }
+
+            }
+
+            return respuesta;
+        }
+
+        public Boolean InsertBorradorProducto(CEVerificacionOrigen objCEVerificacion)
+        {
+            var respuesta = false;
+            var sql_query = string.Empty;
+
+            sql_query = " INSERT INTO BorradorProductoImportacion "+
+            " ([id_Solicitud],[id_regimen_importacion],[nombre_regimen_importacion] "+
+            " ,[idAduana],[clasificacion_arancelaria],[descripcion_comercial] "+
+            " ,[descripcion_factura],[observaciones],[fecha_creacion] "+
+            " ,[fecha_modificacion],[estado]) "+
+            " VALUES "+
+            " (@id_Solicitud,@id_regimen_importacion,@nombre_regimen_importacion "+
+            " ,@idAduana,@clasificacion_arancelaria,@descripcion_comercial "+
+            " ,@descripcion_factura,@observaciones,@fecha_creacion "+
+            " ,@fecha_modificacion,@estado)" ;
+
+            using (var con = objConexion.Conectar())
+            {
+                var command = new SqlCommand(sql_query, con);
+                command.Parameters.AddWithValue("id_solicitud", objCEVerificacion.ID_Solicitud);
+                command.Parameters.AddWithValue("id_regimen_importacion", objCEVerificacion.ID_Regimem_Importacion);
+                command.Parameters.AddWithValue("nombre_regimen_importacion", objCEVerificacion.Nombre_Regimen_Importacion);
+                command.Parameters.AddWithValue("idAduana", objCEVerificacion.IDAduana);
+                command.Parameters.AddWithValue("clasificacion_arancelaria", objCEVerificacion.Clasificacion_Arancelaria);
+                command.Parameters.AddWithValue("descripcion_comercial", objCEVerificacion.Descripcion_Comercial);
+                command.Parameters.AddWithValue("descripcion_factura", objCEVerificacion.Descripcion_Factura);
+                command.Parameters.AddWithValue("observaciones", objCEVerificacion.ObservacionesProducto);
+                command.Parameters.AddWithValue("fecha_creacion", DateTime.Now);
+                command.Parameters.AddWithValue("fecha_modificacion", DateTime.Now);
+                command.Parameters.AddWithValue("estado", "A");
+
+                try
+                {
+                    con.Open();
+                    command.ExecuteScalar();
+                    respuesta = true;
+                }
+                catch (Exception)
+                {
+                    
+                    throw;
+                }
+            }
+
+            return respuesta;
+        }
+
+        public Boolean UpdateBorradorProducto(CEVerificacionOrigen objCEVerificacion)
+        {
+            var respuesta = false;
+            var sql_query = string.Empty;
+
+            sql_query = " UPDATE BorradorProductoImportacion "+
+                " SET [id_regimen_importacion] = @id_regimen_importacion "+
+                " ,[nombre_regimen_importacion] = @nombre_regimen_importacion "+
+                " ,[idAduana] = @idAduana,[clasificacion_arancelaria] = @clasificacion_arancelaria "+
+                " ,[descripcion_comercial] = @descripcion_comercial,[descripcion_factura] = @descripcion_factura "+
+                " ,[observaciones] = @observaciones, [fecha_modificacion] = @fecha_modificacion "+
+                " WHERE id_Solicitud = @id_solicitud ";
+
+            using (var conn = objConexion.Conectar())
+            {
+                var command = new SqlCommand(sql_query, conn);
+                command.Parameters.AddWithValue("id_regimen_importacion", objCEVerificacion.ID_Regimem_Importacion);
+                command.Parameters.AddWithValue("nombre_regimen_importacion", objCEVerificacion.Nombre_Regimen_Importacion);
+                command.Parameters.AddWithValue("idAduana", objCEVerificacion.IDAduana);
+                command.Parameters.AddWithValue("clasificacion_arancelaria", objCEVerificacion.Clasificacion_Arancelaria);
+                command.Parameters.AddWithValue("descripcion_comercial", objCEVerificacion.Descripcion_Comercial);
+                command.Parameters.AddWithValue("descripcion_factura", objCEVerificacion.Descripcion_Factura);
+                command.Parameters.AddWithValue("observaciones", objCEVerificacion.ObservacionesProducto);
+                command.Parameters.AddWithValue("fecha_modificacion", DateTime.Now);
+                command.Parameters.AddWithValue("id_solicitud", objCEVerificacion.ID_Solicitud);
+
+                try
+                {
+                    conn.Open();
+                    command.ExecuteScalar();
+                    respuesta = true;
+                }
+                catch (Exception)
+                {
+                    
+                    throw;
+                }
+            }
+
+            return respuesta;
+        }
+
+        public DataTable SelectProductos(int id_solicitud)
+        {
+            DataTable dt_respuesta = new DataTable();
+
+            var sql_query = string.Empty;
+            
+            sql_query = " SELECT [id_regimen_importacion],[nombre_regimen_importacion],[idAduana] "+
+                " ,[clasificacion_arancelaria],[descripcion_comercial] "+
+                " ,[descripcion_factura],[observaciones] "+
+                " FROM BorradorProductoImportacion "+
+                " WHERE id_Solicitud = @id_solicitud ";
+
+            using (var conn = objConexion.Conectar())
+            {                                
+                try
+                {
+                    var command = new SqlCommand(sql_query, conn);
+                    command.Parameters.AddWithValue("id_solicitud", id_solicitud);
                     var da = new SqlDataAdapter(command);
                     da.Fill(dt_respuesta);
                 }

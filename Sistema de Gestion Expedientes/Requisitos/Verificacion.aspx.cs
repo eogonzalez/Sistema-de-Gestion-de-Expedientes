@@ -41,6 +41,8 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos
                     {
                         Llenar_gvRequisitosVerificacion();
                         LimpiarPanel();
+                        btnGuardar.Text = "Guardar";
+                        btnGuardar.CommandName = "Guardar";
                     }
                     else
                     {

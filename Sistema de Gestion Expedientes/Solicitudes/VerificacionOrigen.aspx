@@ -197,43 +197,22 @@
                                     <asp:CheckBox runat="server" ID="cb_Uno" />
                                 </div>
 
-                                <asp:Label runat="server" CssClass="control-label col-xs-5" Text="5. Certificado de Origen Apocrifo(falso o alterado):" AssociatedControlID="cb_cinco"></asp:Label>
+                                <asp:Label CssClass="control-label col-xs-5" Text="3. Incumplimiento de Normas de Traslado y Transbordo:" runat="server" AssociatedControlID="cb_tres" />
                                 <div class="col-xs-1">
-                                    <asp:CheckBox ID="cb_cinco" runat="server" />
+                                    <asp:CheckBox ID="cb_tres" runat="server" />
                                 </div>
                             </div>
 
                             <div class="form-group input-sm">
-                                <asp:Label runat="server" CssClass="control-label col-xs-5 " Text="2. Falla de Marcado Pais de Origen:" AssociatedControlID="cb_Dos"></asp:Label>
+                                <asp:Label runat="server" CssClass="control-label col-xs-5 " Text="2. Inconsistencia en el Marcado del Pais de Origen:" AssociatedControlID="cb_Dos"></asp:Label>
                                 <div class="col-xs-1">
                                     <asp:CheckBox runat="server" ID="cb_Dos" />
                                 </div>
 
-                                <asp:Label runat="server" CssClass="control-label col-xs-5" Text="6. Irregularidades en el Comercio Exterior:" AssociatedControlID="cb_seis"></asp:Label>
-                                <div class="col-xs-1">
-                                    <asp:CheckBox runat="server" ID="cb_seis" />
-                                </div>
-                            </div>
-
-                            <div class="form-group input-sm">
-                                <asp:Label CssClass="control-label col-xs-5" Text="3. Exportador No Produce la Mercancia:" runat="server" AssociatedControlID="cb_tres" />
-                                <div class="col-xs-1">
-                                    <asp:CheckBox ID="cb_tres" runat="server" />
-                                </div>
-
-                                <asp:Label CssClass="control-label col-xs-5" Text="7. Inconsistencias en Datos del Certificado de Origen:" runat="server" AssociatedControlID="cb_siete" />
-                                <div class="col-xs-1">
-                                    <asp:CheckBox ID="cb_siete" runat="server" />
-                                </div>
-                            </div>
-
-                            <div class="form-group input-sm">
-                                <asp:Label CssClass="control-label col-xs-5" Text="4. Investigar el Origen:" runat="server" AssociatedControlID="cb_cuatro"></asp:Label>
+                                <asp:Label runat="server" CssClass="control-label col-xs-5" Text="4. Certificado de Origen Apocrifo(falso o alterado):" AssociatedControlID="cb_cinco"></asp:Label>
                                 <div class="col-xs-1">
                                     <asp:CheckBox ID="cb_cuatro" runat="server" />
                                 </div>
-
-
                             </div>
 
                             <div class="form-group input-sm">
@@ -242,9 +221,9 @@
                                     <asp:CheckBox ID="cb_ObsMotivo" runat="server" AutoPostBack="True" OnCheckedChanged="cb_ObsMotivo_CheckedChanged" />
                                 </div>
 
-                                <asp:Label Text="8. Otras Irregularidades:" runat="server" CssClass="control-label col-xs-5" AssociatedControlID="cb_ocho" />
+                                <asp:Label Text="5. Otras Irregularidades:" runat="server" CssClass="control-label col-xs-5" AssociatedControlID="cb_cinco" />
                                 <div class="col-xs-1">
-                                    <asp:CheckBox ID="cb_ocho" runat="server" AutoPostBack="True" OnCheckedChanged="cb_ocho_CheckedChanged" />
+                                    <asp:CheckBox ID="cb_cinco" runat="server" AutoPostBack="True" OnCheckedChanged="cb_cinco_CheckedChanged" />
                                 </div>
 
                             </div>
@@ -325,7 +304,7 @@
                                 <div class="col-xs-10">
                                     <asp:DropDownList ID="cboRegimen_Producto" CssClass="form-control" runat="server">
                                         <asp:ListItem Value="1">DI - Importación definitiva de mercancías proveniente de almacén fiscal.</asp:ListItem>
-                                        <asp:ListItem Value="2">ID - Importación definitiva</asp:ListItem>                                        
+                                        <asp:ListItem Value="2">ID - Importación definitiva</asp:ListItem>
                                     </asp:DropDownList>
                                 </div>
                             </div>
@@ -372,7 +351,7 @@
                             <p class="text-danger">
                                 <asp:Literal runat="server" ID="ErrorProducto" />
                             </p>
-                            <asp:Button Text="Guardar Producto" ID="btnGuardarProducto" runat="server" CssClass="btn btn-primary" />
+                            <asp:Button Text="Guardar Producto" ID="btnGuardarProducto" runat="server" CssClass="btn btn-primary" OnClick="btnGuardarProducto_Click" />
                         </div>
                     </div>
                 </div>
