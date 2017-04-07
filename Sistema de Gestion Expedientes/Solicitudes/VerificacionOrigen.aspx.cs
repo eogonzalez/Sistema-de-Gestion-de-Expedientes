@@ -24,9 +24,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
-            {
-                
-
+            {                
                 if (Session["UsuarioID"] != null)
                 {
                     //Page.Form.Attributes.Add("enctype", "multipart/form-data");
@@ -37,6 +35,10 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
 
                     txtFechaInicial.Text = fecha.ToString("dd/MM/yyyy");
                     txtFechaFinal.Text = fecha.ToString("dd/MM/yyyy");
+                    lkBtn_PanelImpo_ModalPopupExtender.Hide();
+
+                    divAlertCorrecto.Visible = false;
+                    divAlertError.Visible = false;
 
                     BloqueoControlesIniciales();
                     Llenar_cboInstrumento();
@@ -78,6 +80,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                         Llenar_Motivos(idSolicitud);
                         Llenar_gvAnexos(idSolicitud, cmd);
                         Llenar_Productos(idSolicitud);
+                        Llenar_gvImportadores(idSolicitud, cmd);
                     }
 
                     
@@ -89,6 +92,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                         Llenar_Motivos(idSolicitud);
                         Llenar_gvAnexos(idSolicitud, cmd);
                         Llenar_Productos(idSolicitud);
+                        Llenar_gvImportadores(idSolicitud, cmd);
                         BloqueoGeneral();
                     }
 
@@ -197,10 +201,12 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                 if (ActualizarDatosPrimarios(id_solicitud))
                 {
                     MensajeCorrectoPrincipal.Text = "Datos Primarios han sido Actualizados.";
+                    divAlertCorrecto.Visible = true;
                 }
                 else
                 {
                     ErrorMessagePrincipal.Text = "Ha ocurrido un error al Actualizar Datos Primarios";
+                    divAlertError.Visible = true;
                 }
             }
             else
@@ -208,12 +214,13 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                 if (GuardarDatosPrimarios())
                 {
                     MensajeCorrectoPrincipal.Text = "Datos Primarios han sido Guardados, su solicitud esta ahora en bandeja de borradores.";
-
+                    divAlertCorrecto.Visible = true;
                     //Envia mensaje a usuario de nuevo borrador de solictud
                 }
                 else
                 {
                     ErrorMessagePrincipal.Text = "Ha ocurrido un error al Guardar Datos Primarios";
+                    divAlertError.Visible = true;
                 }
             }
 
@@ -222,6 +229,9 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
 
         protected void btnEnviar_Click(object sender, EventArgs e)
         {
+            divAlertCorrecto.Visible = false;
+            divAlertCorrecto.Visible = false;
+
             //Envia Solicitud
             var cmd = string.Empty;
             if (Request.QueryString["cmd"] != null)
@@ -236,6 +246,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                 if (CumpleRequisitos(id_solicitud, cmd))
                 {
                     MensajeCorrectoPrincipal.Text = Session["SIVALIDA"].ToString();
+                    divAlertCorrecto.Visible = true;
 
                     //Genero expediente
                     var idExpediente = GeneroExpediente(id_solicitud);
@@ -243,6 +254,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                     {
                         
                         MensajeCorrectoPrincipal.Text = "Se ha generado correctamente el expediente.";
+                        divAlertCorrecto.Visible = true;
 
                         /*Envio mensaje a Usuario*/
                         
@@ -272,10 +284,12 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                         if (EnvioMensajeUsuario(nombreUsuario, apellidoUsuario, correoUsuario, mensaje))
                         {
                             MensajeCorrectoPrincipal.Text += " Se ha enviado correo de notificacion al usuario.";
+                            divAlertCorrecto.Visible = true;
                         }
                         else
                         {
                             ErrorMessagePrincipal.Text += " Ha ocurrido un error al enviar mensaje de notificacion al usuario.";
+                            divAlertError.Visible = true;
                         }
 
                         mensaje.Subject = "Nuevo Expediente";
@@ -286,29 +300,35 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                         if (EnvioMensajeFuncionariosDACE(mensaje))
                         {
                             MensajeCorrectoPrincipal.Text += " Se ha enviado correo de notificacion a los funcionarios DACE.";
+                            divAlertCorrecto.Visible = true;
                         }
                         else
                         {
                             ErrorMessagePrincipal.Text += " Ha ocurrido un error al enviar mensaje de notificacion a los funcionarios DACE.";
+                            divAlertError.Visible = true;
                         }
                     }
                     else
                     {
                         //Error al generar expediente
                         ErrorMessagePrincipal.Text += " Ha ocurrido un error al generar expediente.";
+                        divAlertError.Visible = true;
                     }
                 }
                 else
                 {
                     //Muestro mensaje correcto si valido algo correctamente
                     MensajeCorrectoPrincipal.Text = Session["SIVALIDA"].ToString();
+                    divAlertCorrecto.Visible = true;
 
                     ErrorMessagePrincipal.Text = "ERROR: "+Session["NOVALIDA"].ToString();
+                    divAlertError.Visible = true;
                 }
             }
             else
             {
                 ErrorMessagePrincipal.Text = "ERROR: Debe de Guardar los datos del encabezado y llenar los requerimientos minimos antes de enviar Solicitud.";
+                divAlertError.Visible = true;
             }
             
 
@@ -463,6 +483,71 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             else
             {
                 ErrorMotivo.Text = "Debe de Guardar los datos del encabezado antes de guardar los datos del producto de importacion de la solicitud.";
+            }
+        }
+
+        protected void gvImportadores_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+
+        }
+
+        protected void btnGuardarImportador_Click(object sender, EventArgs e)
+        {
+            if (Session["IDSolicitud"] != null)
+            {
+                int id_solicitud = 0;
+                id_solicitud = (int)Session["IDSolicitud"];
+
+                var cmd = string.Empty;
+                if (Request.QueryString["cmd"] != null)
+                {
+                    cmd = Request.QueryString["cmd"].ToString();
+                }
+
+                switch (btnGuardarImportador.CommandName)
+                {
+                    case "GuardarImportador":
+                        if (GuardarImportador(id_solicitud, cmd))
+                        {
+                            LimpiarPanelImportador();
+                            Llenar_gvImportadores(id_solicitud, cmd);                        
+                        }
+                        else
+                        {
+                            ErrorMessageImportaroTab.Text = "Ha ocurrido un error al almacenar datos del importador.";
+                            lkBtn_AgregarImportador_ModalPopupExtender.Show();                        
+                        }
+                        break;
+                    case "ModificarImportador":
+                        //if (Session["IDANEXO"] != null)
+                        //{
+                        //    int id_anexo = 0;
+                        //    id_anexo = (int)Session["IDANEXO"];
+                        //    if (ActualizarDocumento(id_solicitud, cmd, id_anexo))
+                        //    {
+                        //        LimpiarPanelAnexos();
+                        //        Llenar_gvAnexos(id_solicitud, cmd);
+                        //    }
+                        //    else
+                        //    {
+                        //        ErrorMessage.Text = "Ha ocurrido un error al cargar archivo al servidor.";
+                        //        lkBtn_viewPanel_ModalPopupExtender.Show();
+                        //    }
+                        //}
+
+
+                        break;
+                    default:
+                        break;
+                }
+
+
+
+            }
+            else
+            {
+                ErrorMessage.Text = "Debe de Guardar los datos del encabezado antes de guardar los Anexos de la solicitud.";
+                lkBtn_viewPanel_ModalPopupExtender.Show();
             }
         }
 
@@ -1329,6 +1414,39 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
 
         }
 
+        protected void Llenar_gvImportadores(int id_solicitud, string cmd)
+        {
+            var tbl = new DataTable();
+
+            tbl = objCNVerificacion.SelectImportadores(id_solicitud);
+
+            gvImportadores.DataSource = tbl;
+            gvImportadores.DataBind();
+        }
+
+        protected Boolean GuardarImportador(int id_solicitud, string cmd)
+        {
+            var respuesta = false;
+            objCEVerificacion.ID_Solicitud = id_solicitud;
+            objCEVerificacion.TipoSolicitud = cmd;
+            objCEVerificacion.RazonSocial_Ficha_Importador = getRazonFichaImportador();
+            objCEVerificacion.Correo_Ficha_Importador = getCorreoFichaImportador();
+            objCEVerificacion.Nit_Ficha_Importador = getNitFichaImportador();
+            objCEVerificacion.Telefono_Ficha_Importador = getTelefonoFichaImportador();
+
+            respuesta = objCNVerificacion.InsertImportador(objCEVerificacion);
+
+            return respuesta;
+        }
+
+        protected void LimpiarPanelImportador()
+        {
+            txtRazonSocialImpoTab.Text = string.Empty;
+            txtCorreoImpoTab.Text = string.Empty;
+            txtNITImpoTab.Text = string.Empty;
+            txtTelImpoTab.Text = string.Empty;
+        }
+
         #endregion
 
         #region Obtener valores primarios
@@ -1615,7 +1733,30 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
 
         #endregion
 
+        #region Obtener valores Importadores
 
+        protected string getRazonFichaImportador()
+        {
+            return txtRazonSocialImpoTab.Text;
+        }
+
+        protected string getCorreoFichaImportador()
+        {
+            return txtCorreoImpoTab.Text;
+        }
+
+        protected string getNitFichaImportador()
+        {
+            return txtNITImpoTab.Text;
+        }
+
+        protected string getTelefonoFichaImportador()
+        {
+            return txtTelImpoTab.Text;
+        }
+
+
+        #endregion
 
     }
 

@@ -112,7 +112,7 @@
 
         <asp:UpdatePanel runat="server" ID="UPMenuDinamico">
             <ContentTemplate>
-                <div class="navbar navbar-inverse navbar-default">
+                <div class="navbar navbar-default ">
                     <div class="container">
                         <div class="navbar-header">
                             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -141,7 +141,7 @@
 
 
         <div class="container body-content">
-            <asp:UpdatePanel runat="server" ID="UPMainContent">
+            <asp:UpdatePanel runat="server" ID="UPMainContent" UpdateMode="Always">
                 <ContentTemplate>
 
                     <asp:ContentPlaceHolder ID="MainContent" runat="server">

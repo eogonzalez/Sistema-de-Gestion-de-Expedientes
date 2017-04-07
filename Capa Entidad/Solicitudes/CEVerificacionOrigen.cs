@@ -99,5 +99,13 @@ namespace Capa_Entidad.Solicitudes
 
         #endregion
 
+        #region Ficha Importadores
+        public int ID_Importador { get; set; }
+        public string RazonSocial_Ficha_Importador {get;set;}
+        public string Correo_Ficha_Importador { get; set; }
+        public string Nit_Ficha_Importador { get; set; }
+        public string Telefono_Ficha_Importador { get; set; }
+
+        #endregion
     }
 }

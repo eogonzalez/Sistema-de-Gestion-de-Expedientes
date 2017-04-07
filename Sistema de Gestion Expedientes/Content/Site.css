@@ -27,11 +27,11 @@ input[type="password"] {
     }
 }
 
-.navbar-default {
+/*.navbar-default {
   background-color: #054795;
   background-image: none;
   background-repeat: no-repeat;
- }
+ }*/
 
 .ColumnaOculta {
     display: none;

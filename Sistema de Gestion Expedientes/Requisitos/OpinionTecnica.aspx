@@ -29,7 +29,7 @@
 
                     <Columns>
                         <asp:BoundField DataField="idRequisito" SortExpression="idDepartamento" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
-                        <asp:BoundField DataField="nombre" HeaderText="Departamento" />
+                        <asp:BoundField DataField="nombre" HeaderText="Requisito" />
                         <asp:BoundField DataField="descripcion" HeaderText="Descripcion" />
 
                         <asp:ButtonField ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />

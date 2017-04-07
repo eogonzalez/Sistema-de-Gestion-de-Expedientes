@@ -149,7 +149,7 @@
                 <div class="form-group input-sm">
 
 
-                    <asp:Label Text="NIT" runat="server" CssClass="control-label col-xs-2" AssociatedControlID="txtNITExpo" />
+                    <asp:Label Text="Numero de Identificación" runat="server" CssClass="control-label col-xs-2" AssociatedControlID="txtNITExpo" />
                     <div class="col-xs-4">
                         <asp:TextBox runat="server" ID="txtNITExpo" CssClass="form-control input-sm" />
                     </div>
@@ -162,12 +162,17 @@
             </div>
 
             <div class="panel-footer">
-                <p class="alert alert-success">
-                    <asp:Literal runat="server" ID="MensajeCorrectoPrincipal" />
-                </p>
-                <p class="alert alert-danger">
-                    <asp:Literal runat="server" ID="ErrorMessagePrincipal" />
-                </p>
+                <div id="divAlertCorrecto" runat="server">
+                    <p class="alert alert-success">
+                        <asp:Literal runat="server" ID="MensajeCorrectoPrincipal" />
+                    </p>
+                </div>
+                <div id="divAlertError" runat="server">
+                    <p class="alert alert-danger" id="pAlertError" runat="server">
+                        <asp:Literal runat="server" ID="ErrorMessagePrincipal" />
+                    </p>
+                </div>
+
                 <div class="text-center">
                     <div class="btn-group">
                         <asp:Button Text="Guardar Datos de Identificacion " ID="btnGuardar" runat="server" CssClass="btn btn-primary" OnClick="btnGuardar_Click" />
@@ -183,12 +188,13 @@
                     <li role="presentation" class="active"><a href="#tbMotivo" aria-controls="tbMotivo" data-toggle="tab">Motivo de Solicitud</a></li>
                     <li role="presentation"><a href="#tbAnexos" aria-controls="tbAnexos" data-toggle="tab">Documentacion Anexa</a></li>
                     <li role="presentation"><a href="#tbProductos" aria-controls="tbProductos" data-toggle="tab">Datos del Producto Importado</a></li>
+                    <li role="presentation"><a href="#tbImportadores" aria-controls="tbImportadores" data-toggle="tab">Importadores</a></li>
                 </ul>
 
                 <%--Contenido de los paneles--%>
 
                 <div class="tab-content">
-                    <%--Panel de Motivo--%>
+                    <%--Tab de Motivo--%>
                     <div role="tabpanel" class="tab-pane active" id="tbMotivo">
                         <div class="panel-body form-horizontal">
                             <div class="form-group input-sm">
@@ -249,7 +255,7 @@
                         </div>
                     </div>
 
-                    <%--Panel de Anexos--%>
+                    <%--Tab de Anexos--%>
                     <div role="tabpanel" class="tab-pane" id="tbAnexos">
                         <div class="panel-body form-horizontal">
                             <asp:LinkButton runat="server" ID="lkBtn_AgregarAdjunto" CssClass="btn btn-primary"><i aria-hidden="true" class="glyphicon glyphicon-pencil"></i>Adjuntar Requisito</asp:LinkButton>
@@ -295,7 +301,7 @@
                         </asp:UpdatePanel>
                     </div>
 
-                    <%--Panel de Productos--%>
+                    <%--Tab de Productos--%>
                     <div role="tabpanel" class="tab-pane" id="tbProductos">
 
                         <div class="panel-body form-horizontal">
@@ -354,11 +360,48 @@
                             <asp:Button Text="Guardar Producto" ID="btnGuardarProducto" runat="server" CssClass="btn btn-primary" OnClick="btnGuardarProducto_Click" />
                         </div>
                     </div>
+
+                    <%--Tab de Importadores--%>
+                    <div role="tabpanel" class="tab-pane" id="tbImportadores">
+                        <div class="panel-body form-horizontal">
+                            <asp:LinkButton runat="server" ID="lkBtn_AgregarImportador" CssClass="btn btn-primary"><i aria-hidden="true" class="glyphicon glyphicon-pencil"></i>Agregar Importador</asp:LinkButton>
+                            <asp:LinkButton runat="server" ID="lkBtn_PanelImpo"></asp:LinkButton>
+
+                            <cc1:ModalPopupExtender ID="lkBtn_AgregarImportador_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackgroupd"
+                                BehaviorID="lkBtn_AgregarImportador_ModalPopupExtender" PopupControlID="pnl_Importador" TargetControlID="lkBtn_AgregarImportador" CancelControlID="btnHide">
+                            </cc1:ModalPopupExtender>
+
+                            <cc1:ModalPopupExtender ID="lkBtn_PanelImpo_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackgroupd"
+                                BehaviorID="lkBtn_PanelImpo_ModalPopupExtender" PopupControlID="pnl_Importador" TargetControlID="lkBtn_PanelImpo">
+                            </cc1:ModalPopupExtender>
+                        </div>
+
+                        <asp:UpdatePanel runat="server" ID="up_Importadores">
+                            <ContentTemplate>
+                                <asp:GridView runat="server" ID="gvImportadores"
+                                    CssClass="table table-hover table-striped"
+                                    GridLines="None"
+                                    EmptyDataText="No se han agregado importadores."
+                                    AutoGenerateColumns="false" OnRowCommand="gvImportadores_RowCommand">
+                                    <Columns>
+                                        <asp:BoundField DataField="corr_BorradorImportador" SortExpression="corr_BorradorImportador" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
+                                        <asp:BoundField DataField="razon_social" HeaderText="Razon Social" />
+                                        <asp:BoundField DataField="correo" HeaderText="Correo" />
+                                        <asp:BoundField DataField="telefono" HeaderText="Telefono" />
+                                        <asp:ButtonField ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />
+                                    </Columns>
+                                </asp:GridView>
+                            </ContentTemplate>
+                            <Triggers>
+                                <asp:PostBackTrigger ControlID="btnGuardarImportador" />
+                            </Triggers>
+                        </asp:UpdatePanel>
+                    </div>
                 </div>
 
-
-                <%--Panel de documentos Adjuntos--%>
+                <%--Panel Modales--%>
                 <div>
+                    <%--Panel de documentos Adjuntos--%>
                     <asp:Panel runat="server" ID="pnl_Anexo" CssClass="panel panel-primary" BorderColor="Black" BackColor="White"
                         BorderStyle="Inset" BorderWidth="1px" Style="overflow: auto; max-height: 445px; width: 75%;">
 
@@ -394,8 +437,6 @@
                                 </div>
                             </div>
 
-
-
                             <div class="form-group">
                                 <asp:Label runat="server" AssociatedControlID="txtNoReferencia" CssClass="control-label col-xs-2" Text="2. Numero de Referencia del Documento: "></asp:Label>
                                 <div class="col-xs-4">
@@ -424,20 +465,77 @@
                                 </div>
                             </div>
 
+                        </div>
 
+                        <div class="panel-footer">
+                            <asp:Button runat="server" ID="btnGuardarAnexo" CssClass="btn btn-primary" Text="Guardar Documento" CommandName="GuardarAnexo" OnClick="btnGuardarAnexo_Click" />
+                            <asp:Button runat="server" ID="btnSalir" CssClass="btn btn-default" Text="Salir" CausesValidation="false" OnClick="btnSalir_Click" />
+                        </div>
 
-                            <div class="panel-footer">
-                                <asp:Button runat="server" ID="btnGuardarAnexo" CssClass="btn btn-primary" Text="Guardar Documento" CommandName="GuardarAnexo" OnClick="btnGuardarAnexo_Click" />
-                                <asp:Button runat="server" ID="btnSalir" CssClass="btn btn-default" Text="Salir" CausesValidation="false" OnClick="btnSalir_Click" />
+                    </asp:Panel>
+
+                    <%--Panel datos importador--%>
+
+                    <asp:Panel runat="server" ID="pnl_Importador" CssClass="panel panel-primary" BorderColor="Black" BackColor="White"
+                        BorderStyle="Inset" BorderWidth="1px" Style="display: none; overflow: auto; max-height: 445px; width: 75%;">
+
+                        <div class="panel-heading">Datos del Importador</div>
+                        <p class="text-danger">
+                            <asp:Literal runat="server" ID="ErrorMessageImportaroTab" />
+                        </p>
+
+                        <div class="panel-body form-horizontal">
+                            <div class="form-group input-sm">
+
+                                <asp:Label Text="Nombre o Razon Social" runat="server" CssClass="control-label col-xs-2" AssociatedControlID="txtRazonSocialImpoTab" />
+                                <div class="col-xs-4">
+                                    <asp:TextBox runat="server" ID="txtRazonSocialImpoTab" CssClass="form-control input-sm" />
+                                </div>
+
+                                <asp:Label Text="E-Mail" runat="server" AssociatedControlID="txtCorreoImpoTab" CssClass="control-label col-xs-2" />
+                                <div class="col-xs-4">
+                                    <asp:TextBox runat="server" ID="txtCorreoImpoTab" CssClass="form-control input-sm" />
+                                </div>
+                            </div>
+
+                            <div class="form-group input-sm">
+                                <asp:Label Text="Direccion:" runat="server" AssociatedControlID="txtDireccionImpoTab" CssClass="control-label col-xs-2" />
+                                <div class="col-xs-4">
+                                    <asp:TextBox runat="server" ID="txtDireccionImpoTab" CssClass="form-control input-sm" />
+                                </div>
+
+                                <asp:Label Text="Departamento" runat="server" AssociatedControlID="cboDeptoImpoTab" CssClass="control-label col-xs-2" />
+                                <div class="col-xs-4">
+                                    <asp:DropDownList runat="server" ID="cboDeptoImpoTab" CssClass="form-control input-sm">
+                                    </asp:DropDownList>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group input-sm">
+                                <asp:Label Text="NIT" runat="server" CssClass="control-label col-xs-2" AssociatedControlID="txtNITImpoTab" />
+                                <div class="col-xs-4">
+                                    <asp:TextBox runat="server" ID="txtNITImpoTab" CssClass="form-control input-sm" />
+                                </div>
+
+                                <asp:Label Text="Telefono" runat="server" CssClass="control-label col-xs-2" AssociatedControlID="txtTelImpoTab" />
+                                <div class="col-xs-4">
+                                    <asp:TextBox runat="server" ID="txtTelImpoTab" CssClass="form-control input-sm" />
+                                </div>
                             </div>
                         </div>
 
-
-
+                        <div class="panel-footer">
+                            <asp:Button Text="Guardar Importador" runat="server" ID="btnGuardarImportador" CssClass="btn btn-primary" CommandName="GuardarImportador" OnClick="btnGuardarImportador_Click" />
+                            <asp:Button Text="Salir" runat="server" ID="btnSalirImpo" CssClass="btn btn-default" CausesValidation="false" />
+                        </div>
                     </asp:Panel>
                 </div>
 
             </div>
+
+
+
         </div>
     </div>
 

@@ -1203,5 +1203,77 @@ namespace Capa_Datos.Solicitudes
 
             return dt_respuesta;
         }
+
+        public DataTable SelectImportadores(int id_solicitud)
+        {
+            var dt_respuesta = new DataTable();
+
+            string sql_query = string.Empty;
+
+            using (var cn = objConexion.Conectar())
+            {
+
+                sql_query = " SELECT [corr_BorradorImportador],[razon_social],[correo],[telefono] "+
+                    " FROM BorradorImportador "+
+                    " where id_Solicitud = @id_Solicitud ";                
+
+                try
+                {
+                    var command = new SqlCommand(sql_query, cn);
+                    command.Parameters.AddWithValue("id_solicitud", id_solicitud);
+                    var da = new SqlDataAdapter(command);
+                    da.Fill(dt_respuesta);
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+
+            return dt_respuesta;
+        }
+
+        public Boolean InsertImportador(CEVerificacionOrigen objCEVerificacion)
+        {
+            var respuesta = false;
+            var sql_query = string.Empty;
+
+            sql_query = " INSERT INTO BorradorImportador "+
+                " ([id_Solicitud],[tipoSolicitud],[razon_social] "+
+                " ,[correo],[nit],[telefono] "+
+                " ,[fecha_creacion],[fecha_modificacion],[estado]) "+
+                " VALUES "+
+                " (@id_Solicitud,@tipoSolicitud,@razon_social "+
+                " ,@correo,@nit,@telefono "+
+                " ,@fecha_creacion,@fecha_modificacion,@estado) ";
+
+            using (var conn = objConexion.Conectar())
+            {
+                var command = new SqlCommand(sql_query, conn);
+                command.Parameters.AddWithValue("id_solicitud", objCEVerificacion.ID_Solicitud);
+                command.Parameters.AddWithValue("tipoSolicitud", objCEVerificacion.TipoSolicitud);
+                command.Parameters.AddWithValue("razon_social", objCEVerificacion.RazonSocial_Ficha_Importador);
+                command.Parameters.AddWithValue("correo", objCEVerificacion.Correo_Ficha_Importador);
+                command.Parameters.AddWithValue("nit", objCEVerificacion.Nit_Ficha_Importador);
+                command.Parameters.AddWithValue("telefono", objCEVerificacion.Telefono_Ficha_Importador);
+                command.Parameters.AddWithValue("fecha_creacion", DateTime.Now);
+                command.Parameters.AddWithValue("fecha_modificacion", DateTime.Now);
+                command.Parameters.AddWithValue("estado", "A");
+
+                try
+                {
+                    conn.Open();
+                    command.ExecuteScalar();
+                    respuesta = true;
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+            return respuesta;
+        }
     }
 }
