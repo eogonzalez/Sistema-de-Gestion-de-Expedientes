@@ -303,7 +303,9 @@
 
                     <%--Tab de Productos--%>
                     <div role="tabpanel" class="tab-pane" id="tbProductos">
-
+                        <p class="text-danger">
+                            <asp:Literal runat="server" ID="ErrorTabProductos" />
+                        </p>
                         <div class="panel-body form-horizontal">
                             <div class="form-group">
                                 <asp:Label AssociatedControlID="cboRegimen_Producto" CssClass="control-label col-xs-2" Text="Regimen de Importacion: " runat="server" />
@@ -363,21 +365,25 @@
 
                     <%--Tab de Importadores--%>
                     <div role="tabpanel" class="tab-pane" id="tbImportadores">
-                        <div class="panel-body form-horizontal">
-                            <asp:LinkButton runat="server" ID="lkBtn_AgregarImportador" CssClass="btn btn-primary"><i aria-hidden="true" class="glyphicon glyphicon-pencil"></i>Agregar Importador</asp:LinkButton>
-                            <asp:LinkButton runat="server" ID="lkBtn_PanelImpo"></asp:LinkButton>
+                        <p class="text-danger">
+                            <asp:Literal runat="server" ID="ErrorTabImportadores" />
+                        </p>
 
-                            <cc1:ModalPopupExtender ID="lkBtn_AgregarImportador_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackgroupd"
-                                BehaviorID="lkBtn_AgregarImportador_ModalPopupExtender" PopupControlID="pnl_Importador" TargetControlID="lkBtn_AgregarImportador" CancelControlID="btnHide">
-                            </cc1:ModalPopupExtender>
-
-                            <cc1:ModalPopupExtender ID="lkBtn_PanelImpo_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackgroupd"
-                                BehaviorID="lkBtn_PanelImpo_ModalPopupExtender" PopupControlID="pnl_Importador" TargetControlID="lkBtn_PanelImpo">
-                            </cc1:ModalPopupExtender>
-                        </div>
-
-                        <asp:UpdatePanel runat="server" ID="up_Importadores">
+                        <asp:UpdatePanel runat="server" ID="up_Importadores" UpdateMode="Conditional">
                             <ContentTemplate>
+                                <div class="panel-body form-horizontal">
+                                    <asp:LinkButton runat="server" ID="lkBtn_AgregarImportador" CssClass="btn btn-primary"><i aria-hidden="true" class="glyphicon glyphicon-pencil"></i>Agregar Importador</asp:LinkButton>
+                                    <asp:LinkButton runat="server" ID="lkBtn_PanelImpo"></asp:LinkButton>
+
+                                    <cc1:ModalPopupExtender ID="lkBtn_AgregarImportador_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackgroupd"
+                                        BehaviorID="lkBtn_AgregarImportador_ModalPopupExtender" PopupControlID="pnl_Importador" TargetControlID="lkBtn_AgregarImportador" CancelControlID="btnHide">
+                                    </cc1:ModalPopupExtender>
+
+                                    <cc1:ModalPopupExtender ID="lkBtn_PanelImpo_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackgroupd"
+                                        BehaviorID="lkBtn_PanelImpo_ModalPopupExtender" PopupControlID="pnl_Importador" TargetControlID="lkBtn_PanelImpo">
+                                    </cc1:ModalPopupExtender>
+                                </div>
+
                                 <asp:GridView runat="server" ID="gvImportadores"
                                     CssClass="table table-hover table-striped"
                                     GridLines="None"
@@ -388,12 +394,24 @@
                                         <asp:BoundField DataField="razon_social" HeaderText="Razon Social" />
                                         <asp:BoundField DataField="correo" HeaderText="Correo" />
                                         <asp:BoundField DataField="telefono" HeaderText="Telefono" />
-                                        <asp:ButtonField ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />
+                                        <asp:ButtonField ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="ModificarImportador" ControlStyle-CssClass="btn btn-success" />
+
+                                        <asp:TemplateField HeaderText="Eliminar">
+                                            <ItemTemplate>
+                                                <asp:Button Text="Eliminar" runat="server" ID="btnEliminar"
+                                                    CausesValidation="false"
+                                                    CommandName="EliminarImportador"
+                                                    CommandArgument="<%# Container.DataItemIndex %>"
+                                                    CssClass="btn btn-danger"
+                                                    OnClientClick="return confirm(&quot;¿Esta seguro de borrar opcion seleccionada?&quot;)" />
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
                                     </Columns>
                                 </asp:GridView>
                             </ContentTemplate>
                             <Triggers>
                                 <asp:PostBackTrigger ControlID="btnGuardarImportador" />
+                                <asp:AsyncPostBackTrigger ControlID="gvImportadores" EventName="" />
                             </Triggers>
                         </asp:UpdatePanel>
                     </div>
@@ -503,21 +521,13 @@
                                 <div class="col-xs-4">
                                     <asp:TextBox runat="server" ID="txtDireccionImpoTab" CssClass="form-control input-sm" />
                                 </div>
-
-                                <asp:Label Text="Departamento" runat="server" AssociatedControlID="cboDeptoImpoTab" CssClass="control-label col-xs-2" />
-                                <div class="col-xs-4">
-                                    <asp:DropDownList runat="server" ID="cboDeptoImpoTab" CssClass="form-control input-sm">
-                                    </asp:DropDownList>
-                                </div>
-
-                            </div>
-
-                            <div class="form-group input-sm">
                                 <asp:Label Text="NIT" runat="server" CssClass="control-label col-xs-2" AssociatedControlID="txtNITImpoTab" />
                                 <div class="col-xs-4">
                                     <asp:TextBox runat="server" ID="txtNITImpoTab" CssClass="form-control input-sm" />
                                 </div>
+                            </div>
 
+                            <div class="form-group input-sm">
                                 <asp:Label Text="Telefono" runat="server" CssClass="control-label col-xs-2" AssociatedControlID="txtTelImpoTab" />
                                 <div class="col-xs-4">
                                     <asp:TextBox runat="server" ID="txtTelImpoTab" CssClass="form-control input-sm" />
@@ -527,7 +537,7 @@
 
                         <div class="panel-footer">
                             <asp:Button Text="Guardar Importador" runat="server" ID="btnGuardarImportador" CssClass="btn btn-primary" CommandName="GuardarImportador" OnClick="btnGuardarImportador_Click" />
-                            <asp:Button Text="Salir" runat="server" ID="btnSalirImpo" CssClass="btn btn-default" CausesValidation="false" />
+                            <asp:Button Text="Salir" runat="server" ID="btnSalirImpo" CssClass="btn btn-default" CausesValidation="false" OnClick="btnSalirImpo_Click" />
                         </div>
                     </asp:Panel>
                 </div>

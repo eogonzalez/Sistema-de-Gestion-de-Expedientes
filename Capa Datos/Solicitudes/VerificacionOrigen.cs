@@ -826,7 +826,7 @@ namespace Capa_Datos.Solicitudes
                     command.Parameters.AddWithValue("id_solicitud_anexo", id_solicitud);
                     command.ExecuteNonQuery();
 
-                    /*Query para insetar datos del producto */
+                    /*Query para insertar datos del producto */
                     command.CommandText = " INSERT INTO ExpedienteProductoImportacion "+
                         " ([id_expediente],[id_Solicitud],[id_regimen_importacion] "+
                         " ,[nombre_regimen_importacion],[idAduana],[clasificacion_arancelaria]"+
@@ -849,11 +849,30 @@ namespace Capa_Datos.Solicitudes
                     command.Parameters.AddWithValue("estado_producto", "E");
                     command.Parameters.AddWithValue("id_solicitud_producto", id_solicitud);
                     command.ExecuteNonQuery();
-
-                    transaccion.Commit();
-                    /*Cambio estatus en borrador*/
                     
 
+                    /*Query para insertar datos del importador*/
+                    command.CommandText = " INSERT INTO ExpedienteImportador "+
+                        " ([corr_BorradorImportador],[id_expediente],[id_solicitud] "+
+                        " ,[tipoSolicitud],[razon_social],[correo],[nit] "+
+                        " ,[telefono],[fecha_creacion],[estado],[fecha_modificacion]) "+
+                        " select "+
+                        " corr_BorradorImportador, @id_expediente_importador as id_expediente, id_Solicitud, "+
+                        " tipoSolicitud, razon_social, correo, nit, telefono, @fecha_creacion_importador as fecha_creacion, "+
+                        " @estado_importador as estado, @fecha_modificacion_importador as fecha_modificacion "+
+                        " from BorradorImportador "+
+                        " where id_solicitud = @id_solicitud_importador ";
+
+                    command.Parameters.AddWithValue("id_expediente_importador", id_expediente);
+                    command.Parameters.AddWithValue("fecha_creacion_importador", DateTime.Now);
+                    command.Parameters.AddWithValue("estado_importador", "E");
+                    command.Parameters.AddWithValue("fecha_modificacion_importador", DateTime.Now);
+                    command.Parameters.AddWithValue("id_solicitud_importador", id_solicitud);
+                    command.ExecuteNonQuery();
+
+                    transaccion.Commit();
+
+                    /*Cambio estatus en borrador*/                    
                     var sql_query = string.Empty;
                     sql_query = " UPDATE BorradorSolicitud_Enc " +
                         " SET " +
@@ -870,7 +889,11 @@ namespace Capa_Datos.Solicitudes
                         " UPDATE BorradorProductoImportacion "+
                         " SET "+
                         " [estado] = @estado_BS "+
-                        " WHERE id_solicitud = @id_solicitud_BS; ";
+                        " WHERE id_solicitud = @id_solicitud_BS; "+
+                        " UPDATE BorradorImportador "+
+                        " SET "+
+                        " [estado] = @estado_BS "+
+                        " WHERE id_solicitud = @id_solicitud_BS; " ;
 
                     command = new SqlCommand(sql_query, cn);
                     command.Parameters.AddWithValue("estado_BS", "E");
@@ -1215,7 +1238,7 @@ namespace Capa_Datos.Solicitudes
 
                 sql_query = " SELECT [corr_BorradorImportador],[razon_social],[correo],[telefono] "+
                     " FROM BorradorImportador "+
-                    " where id_Solicitud = @id_Solicitud ";                
+                    " where estado != 'B'  and id_Solicitud = @id_Solicitud ";                
 
                 try
                 {
@@ -1241,11 +1264,11 @@ namespace Capa_Datos.Solicitudes
 
             sql_query = " INSERT INTO BorradorImportador "+
                 " ([id_Solicitud],[tipoSolicitud],[razon_social] "+
-                " ,[correo],[nit],[telefono] "+
+                " ,[correo],[direccion],[nit],[telefono] "+
                 " ,[fecha_creacion],[fecha_modificacion],[estado]) "+
                 " VALUES "+
                 " (@id_Solicitud,@tipoSolicitud,@razon_social "+
-                " ,@correo,@nit,@telefono "+
+                " ,@correo,@direccion,@nit,@telefono "+
                 " ,@fecha_creacion,@fecha_modificacion,@estado) ";
 
             using (var conn = objConexion.Conectar())
@@ -1255,6 +1278,7 @@ namespace Capa_Datos.Solicitudes
                 command.Parameters.AddWithValue("tipoSolicitud", objCEVerificacion.TipoSolicitud);
                 command.Parameters.AddWithValue("razon_social", objCEVerificacion.RazonSocial_Ficha_Importador);
                 command.Parameters.AddWithValue("correo", objCEVerificacion.Correo_Ficha_Importador);
+                command.Parameters.AddWithValue("direccion", objCEVerificacion.Direccion_Ficha_Importador);
                 command.Parameters.AddWithValue("nit", objCEVerificacion.Nit_Ficha_Importador);
                 command.Parameters.AddWithValue("telefono", objCEVerificacion.Telefono_Ficha_Importador);
                 command.Parameters.AddWithValue("fecha_creacion", DateTime.Now);
@@ -1273,6 +1297,144 @@ namespace Capa_Datos.Solicitudes
                     throw;
                 }
             }
+            return respuesta;
+        }
+
+        public DataTable SelectImportador(int id_importador)
+        {
+            var dt_respuesta = new DataTable();
+
+            string sql_query = string.Empty;
+
+            using (var cn = objConexion.Conectar())
+            {
+
+                sql_query = " SELECT [razon_social],[correo],[direccion],[nit],[telefono] " +
+                    " FROM BorradorImportador " +
+                    " where corr_BorradorImportador = @corr_BorradorImportador ";
+
+                try
+                {
+                    var command = new SqlCommand(sql_query, cn);
+                    command.Parameters.AddWithValue("corr_BorradorImportador", id_importador);
+                    var da = new SqlDataAdapter(command);
+                    da.Fill(dt_respuesta);
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+
+
+            return dt_respuesta;
+        }
+
+        public Boolean DeleteImportador(int id_importador)
+        {
+            var respuesta = false;
+            var sql_query = string.Empty;
+
+            sql_query = " UPDATE BorradorImportador "+
+                " SET [fecha_modificacion] = @fecha_modificacion "+
+                " ,[estado] = @estado "+
+                " WHERE corr_BorradorImportador = @corr_BorradorImportador ";
+
+            using (var cn = objConexion.Conectar())
+            {
+                var command = new SqlCommand(sql_query, cn);
+                command.Parameters.AddWithValue("fecha_modificacion", DateTime.Now);
+                command.Parameters.AddWithValue("estado", "B");                                
+                command.Parameters.AddWithValue("corr_BorradorImportador", id_importador);
+
+                try
+                {
+                    cn.Open();
+                    command.ExecuteScalar();
+                    respuesta = true;
+                }
+                catch (SqlException)
+                {
+                    throw;
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+
+
+            return respuesta;
+        }
+
+        public Boolean UpdateImportador(CEVerificacionOrigen objCEImportador)
+        {
+            var respuesta = false;
+            var sql_query = string.Empty;
+
+            sql_query = " UPDATE BorradorImportador " +
+                " SET [razon_social] = @razon_social, "+
+                " [correo] = @correo, [direccion] = @direccion, "+
+                " [nit] = @nit, [telefono] = @telefono,"+
+                "[fecha_modificacion] = @fecha_modificacion " +                
+                " WHERE corr_BorradorImportador = @corr_BorradorImportador ";
+
+            using (var cn = objConexion.Conectar())
+            {
+                var command = new SqlCommand(sql_query, cn);
+                command.Parameters.AddWithValue("razon_social", objCEImportador.RazonSocial_Ficha_Importador);
+                command.Parameters.AddWithValue("correo", objCEImportador.Correo_Ficha_Importador);
+                command.Parameters.AddWithValue("direccion", objCEImportador.Direccion_Ficha_Importador);
+                command.Parameters.AddWithValue("nit", objCEImportador.Nit_Ficha_Importador);
+                command.Parameters.AddWithValue("telefono", objCEImportador.Telefono_Ficha_Importador);
+                command.Parameters.AddWithValue("fecha_modificacion", DateTime.Now);                
+                command.Parameters.AddWithValue("corr_BorradorImportador", objCEImportador.ID_Importador);
+
+                try
+                {
+                    cn.Open();
+                    command.ExecuteScalar();
+                    respuesta = true;
+                }
+                catch (SqlException)
+                {
+                    throw;
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+
+
+            return respuesta;
+        }
+
+        public Boolean ExistenImportadores(int id_solicitud)
+        {
+            var respuesta = false;
+            var sql_query = string.Empty;
+
+            sql_query = " SELECT COALESCE(count(1), 0)  as existe    " +
+                " FROM BorradorImportador " +
+                " where id_Solicitud = @id_solicitud ";
+
+            using (var cn = objConexion.Conectar())
+            {
+                var command = new SqlCommand(sql_query, cn);
+                command.Parameters.AddWithValue("id_solicitud", id_solicitud);
+
+                cn.Open();
+                if (Convert.ToInt32(command.ExecuteScalar()) > 0)
+                {
+                    respuesta = true;
+                }
+
+            }
+
             return respuesta;
         }
     }

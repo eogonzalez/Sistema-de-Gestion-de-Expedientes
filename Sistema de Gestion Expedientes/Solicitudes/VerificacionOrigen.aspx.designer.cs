@@ -463,6 +463,15 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes {
         protected global::System.Web.UI.WebControls.GridView gvAnexos;
         
         /// <summary>
+        /// Control ErrorTabProductos.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ErrorTabProductos;
+        
+        /// <summary>
         /// Control cboRegimen_Producto.
         /// </summary>
         /// <remarks>
@@ -544,6 +553,24 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes {
         protected global::System.Web.UI.WebControls.Button btnGuardarProducto;
         
         /// <summary>
+        /// Control ErrorTabImportadores.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ErrorTabImportadores;
+        
+        /// <summary>
+        /// Control up_Importadores.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel up_Importadores;
+        
+        /// <summary>
         /// Control lkBtn_AgregarImportador.
         /// </summary>
         /// <remarks>
@@ -578,15 +605,6 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::AjaxControlToolkit.ModalPopupExtender lkBtn_PanelImpo_ModalPopupExtender;
-        
-        /// <summary>
-        /// Control up_Importadores.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel up_Importadores;
         
         /// <summary>
         /// Control gvImportadores.
@@ -749,15 +767,6 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDireccionImpoTab;
-        
-        /// <summary>
-        /// Control cboDeptoImpoTab.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList cboDeptoImpoTab;
         
         /// <summary>
         /// Control txtNITImpoTab.

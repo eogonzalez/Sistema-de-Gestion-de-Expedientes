@@ -152,5 +152,25 @@ namespace Capa_Negocio.Solicitudes
         {
             return objCDVerificacionOrigen.InsertImportador(objCEVerificacion);
         }
+
+        public DataTable SelectImportador(int id_importador)
+        {
+            return objCDVerificacionOrigen.SelectImportador(id_importador);
+        }
+
+        public Boolean DeleteImportador(int id_importador)
+        {
+            return objCDVerificacionOrigen.DeleteImportador(id_importador);
+        }
+
+        public Boolean UpdateImportador(CEVerificacionOrigen objCEImportador)
+        {
+            return objCDVerificacionOrigen.UpdateImportador(objCEImportador);
+        }
+
+        public Boolean ExistenImportadores(int id_solicitud)
+        {
+            return objCDVerificacionOrigen.ExistenImportadores(id_solicitud);
+        }
     }
 }

@@ -463,7 +463,9 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                     }
                     else
                     {
-                        ErrorProducto.Text = "Ha ocurrido un error al guardar los datos del producto de importacion.";
+                        var mensaje = "Ha ocurrido un error al guardar los datos del producto de importacion.";
+                        ErrorProducto.Text = mensaje;
+                        ErrorTabProductos.Text = mensaje;
                     }
                 }
                 else
@@ -475,20 +477,48 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                     }
                     else
                     {
-                        ErrorProducto.Text = "Ha ocurrido un error al actualizar los datos del producto.";
+                        var mensaje = "Ha ocurrido un error al actualizar los datos del producto.";
+                        ErrorProducto.Text = mensaje;
+                        ErrorTabProductos.Text = mensaje;
                     }
                 }
 
             }
             else
             {
-                ErrorMotivo.Text = "Debe de Guardar los datos del encabezado antes de guardar los datos del producto de importacion de la solicitud.";
+                ErrorTabProductos.Text = "Debe de Guardar los datos del encabezado antes de guardar los datos del producto de importacion de la solicitud.";
             }
         }
 
         protected void gvImportadores_RowCommand(object sender, GridViewCommandEventArgs e)
         {
+            int index = Convert.ToInt32(e.CommandArgument);
+            GridViewRow row = gvImportadores.Rows[index];
+            int id_importador = Convert.ToInt32(row.Cells[0].Text);
+            Session.Add("IDImportador", id_importador);
+            var cmd = row.Cells[1].Text;
 
+            switch (e.CommandName)
+            {
+                case "ModificarImportador":
+                    MostrarDatosImportador(id_importador);
+                    //lkBtn_AgregarImportador_ModalPopupExtender.Show();
+                    lkBtn_PanelImpo_ModalPopupExtender.Show();
+                    break;
+
+                case "EliminarImportador":
+                    EliminarImportador(id_importador);
+                    if (Session["IDSolicitud"] != null)
+                    {
+                        int id_solicitud = 0;
+                        id_solicitud = (int)Session["IDSolicitud"];
+                        Llenar_gvImportadores(id_solicitud, cmd);    
+                    }
+                    
+                    break;
+                default:
+                    break;
+            }
         }
 
         protected void btnGuardarImportador_Click(object sender, EventArgs e)
@@ -514,27 +544,32 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                         }
                         else
                         {
-                            ErrorMessageImportaroTab.Text = "Ha ocurrido un error al almacenar datos del importador.";
-                            lkBtn_AgregarImportador_ModalPopupExtender.Show();                        
+                            var mensaje = "Ha ocurrido un error al almacenar datos del importador.";
+                            ErrorMessageImportaroTab.Text = mensaje;
+                            ErrorTabImportadores.Text = mensaje;
+                            lkBtn_PanelImpo_ModalPopupExtender.Show();
                         }
                         break;
                     case "ModificarImportador":
-                        //if (Session["IDANEXO"] != null)
-                        //{
-                        //    int id_anexo = 0;
-                        //    id_anexo = (int)Session["IDANEXO"];
-                        //    if (ActualizarDocumento(id_solicitud, cmd, id_anexo))
-                        //    {
-                        //        LimpiarPanelAnexos();
-                        //        Llenar_gvAnexos(id_solicitud, cmd);
-                        //    }
-                        //    else
-                        //    {
-                        //        ErrorMessage.Text = "Ha ocurrido un error al cargar archivo al servidor.";
-                        //        lkBtn_viewPanel_ModalPopupExtender.Show();
-                        //    }
-                        //}
-
+                        if (Session["IDImportador"] != null)
+                        {
+                            int id_importador = 0;
+                            id_importador = (int)Session["IDImportador"];
+                            if (ActualizarImportador(id_importador))
+                            {
+                                LimpiarPanelImportador();
+                                Llenar_gvImportadores(id_solicitud, cmd);
+                                btnGuardarImportador.Text = "Guardar";
+                                btnGuardarImportador.CommandName = "GuardarImportador";
+                            }
+                            else
+                            {
+                                var mensaje = "Ha ocurrido un error al actualizar importador.";
+                                ErrorMessageImportaroTab.Text = mensaje;
+                                ErrorTabImportadores.Text = mensaje;
+                                lkBtn_PanelImpo_ModalPopupExtender.Show();                        
+                            }
+                        }
 
                         break;
                     default:
@@ -546,9 +581,16 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             }
             else
             {
-                ErrorMessage.Text = "Debe de Guardar los datos del encabezado antes de guardar los Anexos de la solicitud.";
-                lkBtn_viewPanel_ModalPopupExtender.Show();
+                ErrorTabImportadores.Text = "Debe de Guardar los datos del encabezado antes de guardar importador.";
+                lkBtn_PanelImpo_ModalPopupExtender.Show();
             }
+        }
+
+        protected void btnSalirImpo_Click(object sender, EventArgs e)
+        {
+            LimpiarPanelImportador();
+            btnGuardarImportador.Text = "Guardar";
+            btnGuardarImportador.CommandName = "GuardarImportador";
         }
 
         #endregion
@@ -1103,10 +1145,23 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             if (ExistenProductos(id_solicitud))
             {
                 mensajeValidacionSi += " Productos Validados Correctamente";
+                respuesta = true;
             }
             else
             {
                 mensajeValidacionNo += " Debe de existir un producto de importacion.\n";
+                respuesta = false;
+            }
+
+            //Valido Importadores
+            if (ExistenImportadores(id_solicitud))
+            {
+                mensajeValidacionSi += " Importadores Validados Correctamente.";
+                respuesta = true;
+            }
+            else
+            {
+                mensajeValidacionNo += " Debe de existir al menos un importador.\n";
                 respuesta = false;
             }
 
@@ -1349,6 +1404,17 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             txtObservaciones_Producto.Enabled = false;
 
             btnGuardarProducto.Enabled = false;
+
+            //Bloqueo Importadores
+            btnGuardarImportador.Enabled = false;
+            lkBtn_AgregarImportador.Visible = false;
+
+            txtRazonSocialImpoTab.Enabled = false;
+            txtDireccionImpoTab.Enabled = false;
+            txtCorreoImpoTab.Enabled = false;
+            txtTelImpoTab.Enabled = false;
+            txtNITImpoTab.Enabled = false;
+            gvImportadores.Columns[5].Visible = false;
         }
 
         protected Boolean ExistenProductos(int id_solicitud)
@@ -1430,6 +1496,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             objCEVerificacion.ID_Solicitud = id_solicitud;
             objCEVerificacion.TipoSolicitud = cmd;
             objCEVerificacion.RazonSocial_Ficha_Importador = getRazonFichaImportador();
+            objCEVerificacion.Direccion_Ficha_Importador = getDireccionFichaImportador();
             objCEVerificacion.Correo_Ficha_Importador = getCorreoFichaImportador();
             objCEVerificacion.Nit_Ficha_Importador = getNitFichaImportador();
             objCEVerificacion.Telefono_Ficha_Importador = getTelefonoFichaImportador();
@@ -1443,8 +1510,51 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
         {
             txtRazonSocialImpoTab.Text = string.Empty;
             txtCorreoImpoTab.Text = string.Empty;
+            txtDireccionImpoTab.Text = string.Empty;
             txtNITImpoTab.Text = string.Empty;
             txtTelImpoTab.Text = string.Empty;
+        }
+
+        protected void MostrarDatosImportador(int id_importador)
+        {
+            var tbl = new DataTable();
+            btnGuardarImportador.Text = "Editar";
+            btnGuardarImportador.CommandName = "ModificarImportador";
+
+
+            tbl = objCNVerificacion.SelectImportador(id_importador);
+
+            DataRow row = tbl.Rows[0];
+
+            txtRazonSocialImpoTab.Text = row["razon_social"].ToString();
+            txtCorreoImpoTab.Text = row["correo"].ToString();
+            txtDireccionImpoTab.Text = row["direccion"].ToString();
+            txtNITImpoTab.Text = row["nit"].ToString();
+            txtTelImpoTab.Text = row["telefono"].ToString();            
+        }
+
+        protected void EliminarImportador(int id_importador)
+        {
+            objCNVerificacion.DeleteImportador(id_importador);
+        }
+
+        protected bool ActualizarImportador(int id_importador)
+        {
+            var respuesta = false;
+            objCEVerificacion.ID_Importador = id_importador;
+            objCEVerificacion.RazonSocial_Ficha_Importador = getRazonFichaImportador();
+            objCEVerificacion.Correo_Ficha_Importador = getCorreoFichaImportador();
+            objCEVerificacion.Direccion_Ficha_Importador = getDireccionFichaImportador();
+            objCEVerificacion.Nit_Ficha_Importador = getNitFichaImportador();
+            objCEVerificacion.Telefono_Ficha_Importador = getTelefonoFichaImportador();
+
+            respuesta = objCNVerificacion.UpdateImportador(objCEVerificacion);
+            return respuesta;
+        }
+
+        protected bool ExistenImportadores(int id_solicitud)
+        {
+            return objCNVerificacion.ExistenImportadores(id_solicitud);
         }
 
         #endregion
@@ -1750,6 +1860,11 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             return txtNITImpoTab.Text;
         }
 
+        protected string getDireccionFichaImportador()
+        {
+            return txtDireccionImpoTab.Text;
+        }
+
         protected string getTelefonoFichaImportador()
         {
             return txtTelImpoTab.Text;
@@ -1757,6 +1872,8 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
 
 
         #endregion
+
+
 
     }
 
