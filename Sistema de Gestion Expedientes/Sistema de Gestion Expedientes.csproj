@@ -42,7 +42,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AjaxControlToolkit.16.1.1.0\lib\net40\AjaxControlToolkit.dll</HintPath>
     </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -179,8 +184,20 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Account\Web.config" />
+    <Content Include="DSGEO\Administrador\DS_Paises.xsc">
+      <DependentUpon>DS_Paises.xsd</DependentUpon>
+    </Content>
+    <None Include="DSGEO\Administrador\DS_Paises.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DS_Paises.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DSGEO\Administrador\DS_Paises.xss">
+      <DependentUpon>DS_Paises.xsd</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\local86.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Reportes\Administracion\R_SelectPaises.aspx" />
     <Content Include="Requisitos\OpinionTecnica.aspx" />
     <Content Include="Requisitos\Verificacion.aspx" />
     <Content Include="Scripts\bootstrap.js" />
@@ -380,11 +397,23 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="DSGEO\Administrador\DS_Paises.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DS_Paises.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reportes\Administracion\R_SelectPaises.aspx.cs">
+      <DependentUpon>R_SelectPaises.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reportes\Administracion\R_SelectPaises.aspx.designer.cs">
+      <DependentUpon>R_SelectPaises.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Requisitos\OpinionTecnica.aspx.cs">
       <DependentUpon>OpinionTecnica.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -453,6 +482,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="doctos\" />
+    <Folder Include="Expedientes\" />
     <Folder Include="Inicio\" />
   </ItemGroup>
   <ItemGroup>
@@ -464,6 +494,12 @@
       <Project>{2abdebf6-f200-45dc-ab81-b227e9c6822f}</Project>
       <Name>Capa Negocio</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reportes\Administracion\RPaises.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -13,14 +13,14 @@ namespace Capa_Datos.Administracion
     {
         General.Conexion objConexion = new General.Conexion();
 
-        public DataTable SelectPaises()
+        public DataSet SelectPaises()
         {
-            var dt_respuesta = new DataTable();
+            var ds_respuesta = new DataSet();
             var sql_query = string.Empty;
 
             sql_query = " SELECT [IdPais] "+
                 " ,[Nombre] ,[ISO2] "+
-                " FROM [SGEODB].[dbo].[G_Paises] "+
+                " FROM G_Paises "+
                 " where estado = 'A' ";
 
             using (var cn = objConexion.Conectar())
@@ -29,7 +29,7 @@ namespace Capa_Datos.Administracion
                 {
                     var command = new SqlCommand(sql_query, cn);
                     var da = new SqlDataAdapter(command);
-                    da.Fill(dt_respuesta);
+                    da.Fill(ds_respuesta, "SelectPaises");
                 }
                 catch (Exception)
                 {
@@ -38,7 +38,7 @@ namespace Capa_Datos.Administracion
                 }    
             }
 
-            return dt_respuesta;
+            return ds_respuesta;
         }
 
         public Boolean SavePaises(CEPaises objCEPaises)

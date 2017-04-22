@@ -144,7 +144,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
         protected void Llenar_gvPermisosPerfiles(int id_usuarioPermiso = 0)
         {
-            var tbl = new DataSet();
+            var tbl = new System.Data.DataSet();
 
             tbl = objCNPermisosPerfiles.SelectPermisosPerfiles(id_usuarioPermiso);
 
