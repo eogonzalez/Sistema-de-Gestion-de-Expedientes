@@ -13,7 +13,7 @@ namespace Capa_Negocio.Administracion
     {
         Paises objCDPaises = new Paises();
 
-        public DataTable SelectPaises()
+        public DataSet SelectPaises()
         {
             return objCDPaises.SelectPaises();
         }

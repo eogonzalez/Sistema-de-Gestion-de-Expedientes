@@ -108,7 +108,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
         {
             var tbl = new DataTable();
 
-            tbl = objCNPaises.SelectPaises();
+            tbl = objCNPaises.SelectPaises().Tables[0];
 
             gvPaises.DataSource = tbl;
             gvPaises.DataBind();
