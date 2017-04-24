@@ -19,15 +19,12 @@
                         <asp:BoundField DataField="id_Solicitud" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
                         <asp:BoundField DataField="nombres" HeaderText="Usuario" />
                         <asp:BoundField DataField="tipoSolicitud" HeaderText="Tipo de Solicitud" />
-                        <asp:BoundField DataField="razonSocialImportador" HeaderText="Importador" />
-                        <%--<asp:BoundField DataField="correoImportador" HeaderText="Correo Importador" />--%>
+                        <asp:BoundField DataField="razonSocialImportador" HeaderText="Importador" />                        
                         <asp:BoundField DataField="razonSocialExportador" HeaderText="Exportador" />
-                        <%--<asp:BoundField DataField="pais" HeaderText="Pais" />--%>
-                        <%--<asp:BoundField DataField="correoExportador" HeaderText="Correo Exportador" />--%>
                         <asp:BoundField DataField="fecha_creacion" HeaderText="Fecha Creacion" />
                         <asp:BoundField DataField="fecha_modificacion" HeaderText="Fecha Modificacion" />
 
-                        <asp:ButtonField ButtonType="Button" Text="Revisar" HeaderText="Revisar" CommandName="revisar" ControlStyle-CssClass="btn btn-success" />                        
+                        <asp:ButtonField ButtonType="Button" Text="Asignar" HeaderText="Asignar" CommandName="Asignar" ControlStyle-CssClass="btn btn-success" />                        
                     </Columns>
 
                 </asp:GridView>

@@ -47,6 +47,7 @@
     <Compile Include="Administracion\Paises.cs" />
     <Compile Include="Administracion\PermisosPerfiles.cs" />
     <Compile Include="Administracion\TipoUsuarios.cs" />
+    <Compile Include="Expedientes\BandejaPersonal.cs" />
     <Compile Include="General\Conexion.cs" />
     <Compile Include="General\General.cs" />
     <Compile Include="General\Login.cs" />

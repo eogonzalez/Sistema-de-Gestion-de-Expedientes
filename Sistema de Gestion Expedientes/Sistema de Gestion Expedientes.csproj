@@ -176,6 +176,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Expedientes\BandejaPersonal.aspx" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Imagenes\calendar.png" />
     <Content Include="Imagenes\LogoM16.png" />
@@ -402,6 +403,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DS_Paises.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Expedientes\BandejaPersonal.aspx.cs">
+      <DependentUpon>BandejaPersonal.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Expedientes\BandejaPersonal.aspx.designer.cs">
+      <DependentUpon>BandejaPersonal.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -482,7 +490,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="doctos\" />
-    <Folder Include="Expedientes\" />
     <Folder Include="Inicio\" />
   </ItemGroup>
   <ItemGroup>
