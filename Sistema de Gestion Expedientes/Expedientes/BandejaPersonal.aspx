@@ -67,14 +67,24 @@
 
             </div>
 
+
+            <div>
+                <p class="text-success">
+                    <asp:Literal runat="server" ID="MensajeCorrecto" />
+                </p>
+                <p class="text-danger">
+                    <asp:Literal runat="server" ID="ErrorMensaje" />
+                </p>
+            </div>
             <h3><span class="label label-primary">Seleccion de expediente</span></h3>
             <div class="btn-group pull-right" role="group">
-                <asp:LinkButton ID="lkBtn_revisar" runat="server" CssClass="btn btn-primary"> <i aria-hidden="true" class="glyphicon glyphicon-folder-open"></i> Revisar Expediente </asp:LinkButton>
-                <asp:LinkButton ID="lkBtn_res_inicial" runat="server" CssClass="btn btn-success"> <i aria-hidden="true" class="glyphicon glyphicon-list-alt"></i> Resolucion Inicial </asp:LinkButton>
-                <asp:LinkButton ID="lkBtn_notificar" runat="server" CssClass="btn btn-info"> <i aria-hidden="true" class="glyphicon glyphicon-send"></i> Notificar </asp:LinkButton>
-                <asp:LinkButton ID="lkBtn_complemento" runat="server" CssClass="btn btn-warning"> <i aria-hidden="true" class="glyphicon glyphicon-book"></i> Completar </asp:LinkButton>
-                <asp:LinkButton ID="lkBtn_salir_bandeja" runat="server" CssClass="btn btn-danger"> <i aria-hidden="true" class="glyphicon glyphicon-share"></i> Salir </asp:LinkButton>
+                <asp:LinkButton ID="lkBtn_revisar" runat="server" CssClass="btn btn-primary" OnClick="lkBtn_revisar_Click"> <i aria-hidden="true" class="glyphicon glyphicon-folder-open"></i> Revisar Expediente </asp:LinkButton>
+                <asp:LinkButton ID="lkBtn_res_inicial" runat="server" CssClass="btn btn-success" OnClick="lkBtn_res_inicial_Click"> <i aria-hidden="true" class="glyphicon glyphicon-list-alt"></i> Resolucion Inicial </asp:LinkButton>
+                <asp:LinkButton ID="lkBtn_notificar" runat="server" CssClass="btn btn-info" OnClick="lkBtn_notificar_Click"> <i aria-hidden="true" class="glyphicon glyphicon-send"></i> Notificar </asp:LinkButton>
+                <asp:LinkButton ID="lkBtn_complemento" runat="server" CssClass="btn btn-warning" OnClick="lkBtn_complemento_Click"> <i aria-hidden="true" class="glyphicon glyphicon-book"></i> Completar </asp:LinkButton>
+                <asp:LinkButton ID="lkBtn_salir_bandeja" runat="server" CssClass="btn btn-danger" OnClick="lkBtn_salir_bandeja_Click"> <i aria-hidden="true" class="glyphicon glyphicon-share"></i> Salir </asp:LinkButton>
             </div>
+
             <div>
                 <asp:GridView runat="server" ID="gvBandeja"
                     CssClass="table table-hover table-striped"

@@ -172,6 +172,7 @@
     <Content Include="Administracion\PermisosPerfiles.aspx" />
     <Content Include="Administracion\TipoUsuarios.aspx" />
     <Content Include="Administracion\Usuarios.aspx" />
+    <Content Include="Administracion\WFTiempos.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -196,9 +197,23 @@
     <Content Include="DSGEO\Administrador\DS_Paises.xss">
       <DependentUpon>DS_Paises.xsd</DependentUpon>
     </Content>
+    <Content Include="DSGEO\Expedientes\ds_resolucion_inicial.xsc">
+      <DependentUpon>ds_resolucion_inicial.xsd</DependentUpon>
+    </Content>
+    <None Include="DSGEO\Expedientes\ds_resolucion_inicial.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ds_resolucion_inicial.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DSGEO\Expedientes\ds_resolucion_inicial.xss">
+      <DependentUpon>ds_resolucion_inicial.xsd</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\local86.pubxml" />
+    <Content Include="Reportes\Administracion\Notifica_1.rdl" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Reportes\Administracion\R_Notifica.aspx" />
     <Content Include="Reportes\Administracion\R_SelectPaises.aspx" />
+    <Content Include="Reportes\Expedientes\R_ResolucionInicial.aspx" />
     <Content Include="Requisitos\OpinionTecnica.aspx" />
     <Content Include="Requisitos\Verificacion.aspx" />
     <Content Include="Scripts\bootstrap.js" />
@@ -374,6 +389,13 @@
     <Compile Include="Administracion\Usuarios.aspx.designer.cs">
       <DependentUpon>Usuarios.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Administracion\WFTiempos.aspx.cs">
+      <DependentUpon>WFTiempos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Administracion\WFTiempos.aspx.designer.cs">
+      <DependentUpon>WFTiempos.aspx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>
@@ -403,6 +425,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DS_Paises.xsd</DependentUpon>
     </Compile>
+    <Compile Include="DSGEO\Expedientes\ds_resolucion_inicial.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ds_resolucion_inicial.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Expedientes\BandejaPersonal.aspx.cs">
       <DependentUpon>BandejaPersonal.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -415,12 +442,26 @@
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reportes\Administracion\R_Notifica.aspx.cs">
+      <DependentUpon>R_Notifica.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reportes\Administracion\R_Notifica.aspx.designer.cs">
+      <DependentUpon>R_Notifica.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Reportes\Administracion\R_SelectPaises.aspx.cs">
       <DependentUpon>R_SelectPaises.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Reportes\Administracion\R_SelectPaises.aspx.designer.cs">
       <DependentUpon>R_SelectPaises.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes\Expedientes\R_ResolucionInicial.aspx.cs">
+      <DependentUpon>R_ResolucionInicial.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reportes\Expedientes\R_ResolucionInicial.aspx.designer.cs">
+      <DependentUpon>R_ResolucionInicial.aspx</DependentUpon>
     </Compile>
     <Compile Include="Requisitos\OpinionTecnica.aspx.cs">
       <DependentUpon>OpinionTecnica.aspx</DependentUpon>
@@ -506,7 +547,9 @@
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Reportes\Administracion\Notifica.rdlc" />
     <EmbeddedResource Include="Reportes\Administracion\RPaises.rdlc" />
+    <EmbeddedResource Include="Reportes\Expedientes\rpt_resolucion_inicial.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

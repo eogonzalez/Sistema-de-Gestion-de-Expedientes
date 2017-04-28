@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ds_resolucion_inicial" targetNamespace="http://tempuri.org/ds_resolucion_inicial.xsd" xmlns:mstns="http://tempuri.org/ds_resolucion_inicial.xsd" xmlns="http://tempuri.org/ds_resolucion_inicial.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ds_resolucion_inicial" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ds_resolucion_inicial" msprop:Generator_UserDSName="ds_resolucion_inicial">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="SelectDatosResolucionInicial" msprop:Generator_TableClassName="SelectDatosResolucionInicialDataTable" msprop:Generator_TableVarName="tableSelectDatosResolucionInicial" msprop:Generator_TablePropName="SelectDatosResolucionInicial" msprop:Generator_RowDeletingName="SelectDatosResolucionInicialRowDeleting" msprop:Generator_RowChangingName="SelectDatosResolucionInicialRowChanging" msprop:Generator_RowEvHandlerName="SelectDatosResolucionInicialRowChangeEventHandler" msprop:Generator_RowDeletedName="SelectDatosResolucionInicialRowDeleted" msprop:Generator_UserTableName="SelectDatosResolucionInicial" msprop:Generator_RowChangedName="SelectDatosResolucionInicialRowChanged" msprop:Generator_RowEvArgName="SelectDatosResolucionInicialRowChangeEvent" msprop:Generator_RowClassName="SelectDatosResolucionInicialRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="IdExpediente" msprop:Generator_ColumnVarNameInTable="columnIdExpediente" msprop:Generator_ColumnPropNameInRow="IdExpediente" msprop:Generator_ColumnPropNameInTable="IdExpedienteColumn" msprop:Generator_UserColumnName="IdExpediente" type="xs:int" minOccurs="0" />
+              <xs:element name="Año" msprop:Generator_ColumnVarNameInTable="columnAño" msprop:Generator_ColumnPropNameInRow="Año" msprop:Generator_ColumnPropNameInTable="AñoColumn" msprop:Generator_UserColumnName="Año" type="xs:int" minOccurs="0" />
+              <xs:element name="descripcion_producto" msprop:Generator_ColumnVarNameInTable="columndescripcion_producto" msprop:Generator_ColumnPropNameInRow="descripcion_producto" msprop:Generator_ColumnPropNameInTable="descripcion_productoColumn" msprop:Generator_UserColumnName="descripcion_producto" type="xs:string" minOccurs="0" />
+              <xs:element name="inciso_producto" msprop:Generator_ColumnVarNameInTable="columninciso_producto" msprop:Generator_ColumnPropNameInRow="inciso_producto" msprop:Generator_ColumnPropNameInTable="inciso_productoColumn" msprop:Generator_UserColumnName="inciso_producto" type="xs:string" minOccurs="0" />
+              <xs:element name="pais_empresa_expo" msprop:Generator_ColumnVarNameInTable="columnpais_empresa_expo" msprop:Generator_ColumnPropNameInRow="pais_empresa_expo" msprop:Generator_ColumnPropNameInTable="pais_empresa_expoColumn" msprop:Generator_UserColumnName="pais_empresa_expo" type="xs:string" minOccurs="0" />
+              <xs:element name="nombre_empresa_expo" msprop:Generator_ColumnVarNameInTable="columnnombre_empresa_expo" msprop:Generator_ColumnPropNameInRow="nombre_empresa_expo" msprop:Generator_ColumnPropNameInTable="nombre_empresa_expoColumn" msprop:Generator_UserColumnName="nombre_empresa_expo" type="xs:string" minOccurs="0" />
+              <xs:element name="direccion_empresa_expo" msprop:Generator_ColumnVarNameInTable="columndireccion_empresa_expo" msprop:Generator_ColumnPropNameInRow="direccion_empresa_expo" msprop:Generator_ColumnPropNameInTable="direccion_empresa_expoColumn" msprop:Generator_UserColumnName="direccion_empresa_expo" type="xs:string" minOccurs="0" />
+              <xs:element name="nombre_empresa_impo" msprop:Generator_ColumnVarNameInTable="columnnombre_empresa_impo" msprop:Generator_ColumnPropNameInRow="nombre_empresa_impo" msprop:Generator_ColumnPropNameInTable="nombre_empresa_impoColumn" msprop:Generator_UserColumnName="nombre_empresa_impo" type="xs:string" minOccurs="0" />
+              <xs:element name="direccion_empresa_impo" msprop:Generator_ColumnVarNameInTable="columndireccion_empresa_impo" msprop:Generator_ColumnPropNameInRow="direccion_empresa_impo" msprop:Generator_ColumnPropNameInTable="direccion_empresa_impoColumn" msprop:Generator_UserColumnName="direccion_empresa_impo" type="xs:string" minOccurs="0" />
+              <xs:element name="nombre_solicitante" msprop:Generator_ColumnVarNameInTable="columnnombre_solicitante" msprop:Generator_ColumnPropNameInRow="nombre_solicitante" msprop:Generator_ColumnPropNameInTable="nombre_solicitanteColumn" msprop:Generator_UserColumnName="nombre_solicitante" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -198,5 +198,39 @@ namespace Capa_Datos.Solicitudes
 
             return dt_respuesta;
         }
+
+        public DataTable SelectUsuariosDACE()
+        {            
+            var dt_respuesta = new DataTable();
+            var sql_query = string.Empty;
+
+            sql_query = " select gu.id_usuario, gu.nombres+' '+gu.apellidos as nombres " +
+            " from g_usuarios gu, G_UsuarioPermiso gup " +
+            " where gu.estado = 'A' " +
+            " and gu.id_usuario = gup.id_usuario " +
+            " and gup.id_tipousuario = 2;";
+
+            using (var cn = objConexion.Conectar())
+            {
+                try
+                {
+                    var command = new SqlCommand(sql_query, cn);                    
+                    var da = new SqlDataAdapter(command);
+                    da.Fill(dt_respuesta);
+                }
+                catch (SqlException)
+                {
+                    throw;
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+
+            return dt_respuesta;
+
+        }
     }
 }

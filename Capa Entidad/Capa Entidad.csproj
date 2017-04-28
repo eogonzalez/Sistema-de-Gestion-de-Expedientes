@@ -46,6 +46,7 @@
     <Compile Include="Administracion\CEPaises.cs" />
     <Compile Include="Administracion\CEPermisosPerfiles.cs" />
     <Compile Include="Administracion\CETipoUsuarios.cs" />
+    <Compile Include="Administracion\CEWFTiempos.cs" />
     <Compile Include="Expedientes\CEExpedientes.cs" />
     <Compile Include="General\CEUsuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

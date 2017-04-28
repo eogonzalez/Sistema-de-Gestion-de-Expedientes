@@ -175,8 +175,9 @@
 
                 <div class="text-center">
                     <div class="btn-group">
-                        <asp:Button Text="Guardar Datos de Identificacion " ID="btnGuardar" runat="server" CssClass="btn btn-primary" OnClick="btnGuardar_Click" />
-                        <asp:Button Text="Enviar Solicitud" ID="btnEnviar" runat="server" CssClass="btn btn-success" OnClick="btnEnviar_Click" />
+                        <asp:Button Text="Guardar Datos de Identificacion " ID="btnGuardar" runat="server" CommandName="GuardarIdentificacion" CssClass="btn btn-primary" OnClick="btnGuardar_Click" />
+                        <asp:Button Text="Enviar Solicitud" ID="btnEnviar" runat="server" CommandName="EnviarSolicitud" CssClass="btn btn-success" OnClick="btnEnviar_Click" />
+                        <asp:Button Text="Aclarar" ID="btnAclarar" runat="server" CommandName="Aclarar" CssClass="btn btn-warning" OnClick="btnAclarar_Click" />
                         <asp:Button Text="Salir" ID="btnCancelar" runat="server" CssClass="btn btn-info" OnClick="btnCancelar_Click" />
                     </div>
                 </div>

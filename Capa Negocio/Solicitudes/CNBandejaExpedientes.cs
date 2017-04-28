@@ -31,5 +31,10 @@ namespace Capa_Negocio.Solicitudes
         {
             return objCDBandeja.SelectEstadoMinimo(tipo_solicitud);
         }
+
+        public DataTable SelectUsuariosDACE()
+        {
+            return objCDBandeja.SelectUsuariosDACE();
+        }
     }
 }

@@ -19,6 +19,7 @@
             display: none;
         }
     </style>
+    <link href="Content/bootstrap.css" rel="stylesheet" />
 </head>
 <body>
     <form runat="server">

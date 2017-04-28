@@ -27,6 +27,49 @@ namespace Sistema_de_Gestion_Expedientes.Expedientes
             }
         }
 
+        protected void lkBtn_revisar_Click(object sender, EventArgs e)
+        {
+            var id_solicitud = 0;
+            id_solicitud = getExpedienteGridView();
+
+            if (id_solicitud == 0)
+            {
+                ErrorMensaje.Text = "Debe de Seleccionar un expediente primero.";
+            }
+            else
+            {
+                var cmd = string.Empty;
+                if (Session["CMD"] != null)
+                {
+                    cmd = Session["CMD"].ToString();    
+                }
+                
+                //Cambio de Estado
+
+                Response.Redirect("~/Solicitudes/VerificacionOrigen.aspx?cmd=" + cmd + "&idex=" + id_solicitud+"&st=R");
+            }
+        }
+
+        protected void lkBtn_res_inicial_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/doctos/Inicia_Resol_1.pdf");  
+        }
+
+        protected void lkBtn_notificar_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void lkBtn_complemento_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void lkBtn_salir_bandeja_Click(object sender, EventArgs e)
+        {
+
+        }
+
         #endregion
 
         #region Funciones
@@ -38,8 +81,28 @@ namespace Sistema_de_Gestion_Expedientes.Expedientes
             gvBandeja.DataSource = dt;
             gvBandeja.DataBind();
         }
-        
+
+        protected int getExpedienteGridView()
+        {
+            var id_expediente = 0;
+            var cmd = string.Empty;
+
+            for (int i = 0; i < gvBandeja.Rows.Count; i++)
+            {
+                RadioButton rbuttom = (RadioButton)gvBandeja.Rows[i].FindControl("rb_expediente");
+                if (rbuttom.Checked)
+                {
+                    id_expediente = Convert.ToInt32(gvBandeja.Rows[i].Cells[4].Text);
+                    cmd = gvBandeja.Rows[i].Cells[3].Text;
+                    Session.Add("CMD", cmd);
+                }
+            }
+
+            return id_expediente;
+        }
         #endregion
+
+
 
     }
 }

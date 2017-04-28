@@ -139,6 +139,24 @@ namespace Sistema_de_Gestion_Expedientes.Expedientes {
         protected global::System.Web.UI.WebControls.LinkButton LinkButton1;
         
         /// <summary>
+        /// Control MensajeCorrecto.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal MensajeCorrecto;
+        
+        /// <summary>
+        /// Control ErrorMensaje.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ErrorMensaje;
+        
+        /// <summary>
         /// Control lkBtn_revisar.
         /// </summary>
         /// <remarks>

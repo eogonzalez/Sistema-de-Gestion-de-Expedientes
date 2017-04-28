@@ -39,6 +39,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
 
                     divAlertCorrecto.Visible = false;
                     divAlertError.Visible = false;
+                    btnAclarar.Visible = false;
 
                     BloqueoControlesIniciales();
                     Llenar_cboInstrumento();
@@ -94,6 +95,19 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                         Llenar_Productos(idSolicitud);
                         Llenar_gvImportadores(idSolicitud, cmd);
                         BloqueoGeneral();
+                    }
+
+                    if (Request.QueryString["st"] != null)
+                    {
+                        btnGuardar.Text = "Aprobar";
+                        btnGuardar.CommandName = "Aprobar";
+                        btnGuardar.Enabled = true;
+
+                        btnEnviar.Text = "Rechazar";
+                        btnEnviar.CommandName = "Rechazar";
+                        btnEnviar.Enabled = true;
+
+                        btnAclarar.Visible = true;
                     }
 
                     /*Envento de guardar informacion primaria*/
@@ -190,39 +204,53 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             }
         }
 
+        /*Metodo que sirve para Guardar encabezado de formulario y para Aprobar Solicitud*/
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
             //Guarda datos primarios
 
-             if (Session["IDSolicitud"] != null)
+            switch (btnGuardar.CommandName)
             {
-                int id_solicitud = (int)Session["IDSolicitud"];
+                case "GuardarIdentificacion":
 
-                if (ActualizarDatosPrimarios(id_solicitud))
-                {
-                    MensajeCorrectoPrincipal.Text = "Datos Primarios han sido Actualizados.";
-                    divAlertCorrecto.Visible = true;
-                }
-                else
-                {
-                    ErrorMessagePrincipal.Text = "Ha ocurrido un error al Actualizar Datos Primarios";
-                    divAlertError.Visible = true;
-                }
+                    if (Session["IDSolicitud"] != null)
+                    {
+                        int id_solicitud = (int)Session["IDSolicitud"];
+
+                        if (ActualizarDatosPrimarios(id_solicitud))
+                        {
+                            MensajeCorrectoPrincipal.Text = "Datos Primarios han sido Actualizados.";
+                            divAlertCorrecto.Visible = true;
+                        }
+                        else
+                        {
+                            ErrorMessagePrincipal.Text = "Ha ocurrido un error al Actualizar Datos Primarios";
+                            divAlertError.Visible = true;
+                        }
+                    }
+                    else
+                    {
+                        if (GuardarDatosPrimarios())
+                        {
+                            MensajeCorrectoPrincipal.Text = "Datos Primarios han sido Guardados, su solicitud esta ahora en bandeja de borradores.";
+                            divAlertCorrecto.Visible = true;
+                            //Envia mensaje a usuario de nuevo borrador de solictud
+                        }
+                        else
+                        {
+                            ErrorMessagePrincipal.Text = "Ha ocurrido un error al Guardar Datos Primarios";
+                            divAlertError.Visible = true;
+                        }
+                    }
+
+                    break;
+                case "":
+                    break;
+                default:
+                    break;
             }
-            else
-            {
-                if (GuardarDatosPrimarios())
-                {
-                    MensajeCorrectoPrincipal.Text = "Datos Primarios han sido Guardados, su solicitud esta ahora en bandeja de borradores.";
-                    divAlertCorrecto.Visible = true;
-                    //Envia mensaje a usuario de nuevo borrador de solictud
-                }
-                else
-                {
-                    ErrorMessagePrincipal.Text = "Ha ocurrido un error al Guardar Datos Primarios";
-                    divAlertError.Visible = true;
-                }
-            }
+
+
 
             
         }
@@ -232,104 +260,114 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             divAlertCorrecto.Visible = false;
             divAlertCorrecto.Visible = false;
 
-            //Envia Solicitud
-            var cmd = string.Empty;
-            if (Request.QueryString["cmd"] != null)
+            switch (btnEnviar.CommandName)
             {
-                cmd = Request.QueryString["cmd"].ToString();
-            }
-
-            if (Session["IDSolicitud"] != null)
-            {
-                int id_solicitud = (int)Session["IDSolicitud"];
-                
-                if (CumpleRequisitos(id_solicitud, cmd))
-                {
-                    MensajeCorrectoPrincipal.Text = Session["SIVALIDA"].ToString();
-                    divAlertCorrecto.Visible = true;
-
-                    //Genero expediente
-                    var idExpediente = GeneroExpediente(id_solicitud);
-                    if ( idExpediente > 0)
+                case "EnviarSolicitud":
+                    //Envia Solicitud
+                    var cmd = string.Empty;
+                    if (Request.QueryString["cmd"] != null)
                     {
-                        
-                        MensajeCorrectoPrincipal.Text = "Se ha generado correctamente el expediente.";
-                        divAlertCorrecto.Visible = true;
+                        cmd = Request.QueryString["cmd"].ToString();
+                    }
 
-                        /*Envio mensaje a Usuario*/
-                        
-                        var correoUsuario = string.Empty;
-                        var nombreUsuario = string.Empty;
-                        var apellidoUsuario = string.Empty;
+                    if (Session["IDSolicitud"] != null)
+                    {
+                        int id_solicitud = (int)Session["IDSolicitud"];
 
-                        if (Session["CorreoUsuarioLogin"] != null)
+                        if (CumpleRequisitos(id_solicitud, cmd))
                         {
-                            correoUsuario = Session["CorreoUsuarioLogin"].ToString();
-                        }
-                        if (Session["NombresUsuarioLogin"] != null)
-                        {
-                            nombreUsuario = Session["NombresUsuarioLogin"].ToString();
-                        }
-                        if (Session["ApellidosUsuarioLogin"] != null)
-                        {
-                            apellidoUsuario = Session["ApellidosUsuarioLogin"].ToString();
-                        }
-
-                        var mensaje = new MailMessage();
-                        mensaje.Subject = "Expediente Enviado -Unidad Origen DACE-";
-                        mensaje.Body = "Apreciable usuario "+nombreUsuario+" "+apellidoUsuario+", \n"+
-                            "se ha generado expediente y enviado a la unidad de origen, para verificar el estado puede consultar con el numero "+idExpediente.ToString()+". \n"+
-                            "NOTA: Favor no responder este correo. ";
-
-                        if (EnvioMensajeUsuario(nombreUsuario, apellidoUsuario, correoUsuario, mensaje))
-                        {
-                            MensajeCorrectoPrincipal.Text += " Se ha enviado correo de notificacion al usuario.";
+                            MensajeCorrectoPrincipal.Text = Session["SIVALIDA"].ToString();
                             divAlertCorrecto.Visible = true;
+
+                            //Genero expediente
+                            var idExpediente = GeneroExpediente(id_solicitud);
+                            if (idExpediente > 0)
+                            {
+
+                                MensajeCorrectoPrincipal.Text = "Se ha generado correctamente el expediente.";
+                                divAlertCorrecto.Visible = true;
+
+                                /*Envio mensaje a Usuario*/
+
+                                var correoUsuario = string.Empty;
+                                var nombreUsuario = string.Empty;
+                                var apellidoUsuario = string.Empty;
+
+                                if (Session["CorreoUsuarioLogin"] != null)
+                                {
+                                    correoUsuario = Session["CorreoUsuarioLogin"].ToString();
+                                }
+                                if (Session["NombresUsuarioLogin"] != null)
+                                {
+                                    nombreUsuario = Session["NombresUsuarioLogin"].ToString();
+                                }
+                                if (Session["ApellidosUsuarioLogin"] != null)
+                                {
+                                    apellidoUsuario = Session["ApellidosUsuarioLogin"].ToString();
+                                }
+
+                                var mensaje = new MailMessage();
+                                mensaje.Subject = "Expediente Enviado -Unidad Origen DACE-";
+                                mensaje.Body = "Apreciable usuario " + nombreUsuario + " " + apellidoUsuario + ", \n" +
+                                    "se ha generado expediente y enviado a la unidad de origen, para verificar el estado puede consultar con el numero " + idExpediente.ToString() + ". \n" +
+                                    "NOTA: Favor no responder este correo. ";
+
+                                if (EnvioMensajeUsuario(nombreUsuario, apellidoUsuario, correoUsuario, mensaje))
+                                {
+                                    MensajeCorrectoPrincipal.Text += " Se ha enviado correo de notificacion al usuario.";
+                                    divAlertCorrecto.Visible = true;
+                                }
+                                else
+                                {
+                                    ErrorMessagePrincipal.Text += " Ha ocurrido un error al enviar mensaje de notificacion al usuario.";
+                                    divAlertError.Visible = true;
+                                }
+
+                                mensaje.Subject = "Nuevo Expediente";
+                                mensaje.Body = "Ha ingresado nuevo expediente numero " + idExpediente.ToString() + ", favor revisar bandeja de expedientes. \n" +
+                                    "NOTA: Favor no responder este correo.";
+
+                                /*envio Mensaje usuarios DACE */
+                                if (EnvioMensajeFuncionariosDACE(mensaje))
+                                {
+                                    MensajeCorrectoPrincipal.Text += " Se ha enviado correo de notificacion a los funcionarios DACE.";
+                                    divAlertCorrecto.Visible = true;
+                                }
+                                else
+                                {
+                                    ErrorMessagePrincipal.Text += " Ha ocurrido un error al enviar mensaje de notificacion a los funcionarios DACE.";
+                                    divAlertError.Visible = true;
+                                }
+                            }
+                            else
+                            {
+                                //Error al generar expediente
+                                ErrorMessagePrincipal.Text += " Ha ocurrido un error al generar expediente.";
+                                divAlertError.Visible = true;
+                            }
                         }
                         else
                         {
-                            ErrorMessagePrincipal.Text += " Ha ocurrido un error al enviar mensaje de notificacion al usuario.";
-                            divAlertError.Visible = true;
-                        }
-
-                        mensaje.Subject = "Nuevo Expediente";
-                        mensaje.Body = "Ha ingresado nuevo expediente numero "+idExpediente.ToString()+", favor revisar bandeja de expedientes. \n" +
-                            "NOTA: Favor no responder este correo.";
-
-                        /*envio Mensaje usuarios DACE */
-                        if (EnvioMensajeFuncionariosDACE(mensaje))
-                        {
-                            MensajeCorrectoPrincipal.Text += " Se ha enviado correo de notificacion a los funcionarios DACE.";
+                            //Muestro mensaje correcto si valido algo correctamente
+                            MensajeCorrectoPrincipal.Text = Session["SIVALIDA"].ToString();
                             divAlertCorrecto.Visible = true;
-                        }
-                        else
-                        {
-                            ErrorMessagePrincipal.Text += " Ha ocurrido un error al enviar mensaje de notificacion a los funcionarios DACE.";
+
+                            ErrorMessagePrincipal.Text = "ERROR: " + Session["NOVALIDA"].ToString();
                             divAlertError.Visible = true;
                         }
                     }
                     else
                     {
-                        //Error al generar expediente
-                        ErrorMessagePrincipal.Text += " Ha ocurrido un error al generar expediente.";
+                        ErrorMessagePrincipal.Text = "ERROR: Debe de Guardar los datos del encabezado y llenar los requerimientos minimos antes de enviar Solicitud.";
                         divAlertError.Visible = true;
                     }
-                }
-                else
-                {
-                    //Muestro mensaje correcto si valido algo correctamente
-                    MensajeCorrectoPrincipal.Text = Session["SIVALIDA"].ToString();
-                    divAlertCorrecto.Visible = true;
 
-                    ErrorMessagePrincipal.Text = "ERROR: "+Session["NOVALIDA"].ToString();
-                    divAlertError.Visible = true;
-                }
+                    break;
+                default:
+                    break;
             }
-            else
-            {
-                ErrorMessagePrincipal.Text = "ERROR: Debe de Guardar los datos del encabezado y llenar los requerimientos minimos antes de enviar Solicitud.";
-                divAlertError.Visible = true;
-            }
+
+           
             
 
         }
@@ -591,6 +629,11 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             LimpiarPanelImportador();
             btnGuardarImportador.Text = "Guardar";
             btnGuardarImportador.CommandName = "GuardarImportador";
+        }
+
+        protected void btnAclarar_Click(object sender, EventArgs e)
+        {
+
         }
 
         #endregion
@@ -1872,6 +1915,8 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
 
 
         #endregion
+
+
 
 
 
