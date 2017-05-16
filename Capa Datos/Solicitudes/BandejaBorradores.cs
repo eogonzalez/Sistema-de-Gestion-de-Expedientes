@@ -26,10 +26,12 @@ namespace Capa_Datos.Solicitudes
                 " ,bse.correoExportador "+
                 " ,bse.fecha_creacion "+
                 " ,bse.fecha_modificacion "+
+                " ,CASE bse.estado WHEN 'T' THEN 'Borrador' ELSE 'Aclaracion' END as descripcion_estado "+
+                " ,bse.estado as estado "+
                 " FROM BorradorSolicitud_Enc BSE, G_Paises GP "+
                 " where  "+
                 " gp.IdPais = BSE.idPaisExportador and "+
-                " BSE.id_usuarioSolicita = @idUsuario and BSE.estado = 'T' ";
+                " BSE.id_usuarioSolicita = @idUsuario and (BSE.estado = 'T' or BSE.estado = 'AC') ";
 
             using (var cn = objConexion.Conectar())
             {

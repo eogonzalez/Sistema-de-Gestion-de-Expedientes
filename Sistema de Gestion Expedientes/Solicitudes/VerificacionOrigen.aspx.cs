@@ -10,6 +10,8 @@ using Capa_Negocio.Solicitudes;
 using Capa_Entidad.Solicitudes;
 using System.IO;
 using System.Net.Mail;
+using Capa_Entidad.Expedientes;
+using Capa_Negocio.Expedientes;
 
 namespace Sistema_de_Gestion_Expedientes.Solicitudes
 {
@@ -18,6 +20,8 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
         CNLogin objCNLogin = new CNLogin();
         CNVerificacionOrigen objCNVerificacion = new CNVerificacionOrigen();
         CEVerificacionOrigen objCEVerificacion = new CEVerificacionOrigen();
+        CEExpedientes objCEExpediente = new CEExpedientes();
+        CNBandejaPersonal objCNBandeja = new CNBandejaPersonal();
 
         #region Eventos del formulario
 
@@ -28,6 +32,14 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                 if (Session["UsuarioID"] != null)
                 {
                     //Page.Form.Attributes.Add("enctype", "multipart/form-data");
+                    /*El formulario por defecto tiene estado temporal*/
+                    Session.Add("STDEX", "T");
+                    
+                    if (Request.QueryString["st"] != null)
+                    {//Si se envia de query string se reasigna el valor
+                        Session["STDEX"] = Request.QueryString["st"];
+                    }
+
                     int anio = DateTime.Now.Year;
                     int mes = DateTime.Now.Month;
                     int dia = DateTime.Now.Day;
@@ -87,28 +99,85 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                     
                     if (Request.QueryString["idex"] != null)
                     {
-                        idSolicitud = Convert.ToInt32(Request.QueryString["idex"].ToString());
-                        Session["IDSolicitud"] = idSolicitud;
-                        Llenar_DatosPrimarios(idSolicitud);
-                        Llenar_Motivos(idSolicitud);
-                        Llenar_gvAnexos(idSolicitud, cmd);
-                        Llenar_Productos(idSolicitud);
-                        Llenar_gvImportadores(idSolicitud, cmd);
-                        BloqueoGeneral();
+                        var id_expediente = Convert.ToInt32(Request.QueryString["idex"].ToString());
+                        Session.Add("IDExpediente", id_expediente);
+
+                        if (Request.QueryString["wf_ids"] != null)
+                        {
+                            idSolicitud = Convert.ToInt32(Request.QueryString["wf_ids"].ToString());
+                            Session["IDSolicitud"] = idSolicitud;
+
+                            if (Request.QueryString["idwf"] != null)
+                            {
+                                var id_wf_expediente = Convert.ToInt32(Request.QueryString["idwf"].ToString());
+                                
+                                Session["IDWF_Expediente"] = id_wf_expediente;
+                                VerificaUltimoEstadoExpediente(id_wf_expediente, id_expediente);
+
+                                if (Request.QueryString["estp"] != null)
+                                {
+                                    var estadoPrincipal = Convert.ToInt32(Request.QueryString["estp"].ToString());
+                                    Session.Add("EstadoPrincipal", estadoPrincipal);
+                                }
+
+                                Llenar_DatosPrimarios(idSolicitud);
+                                Llenar_Motivos(idSolicitud);
+                                Llenar_gvAnexos(idSolicitud, cmd);
+                                Llenar_Productos(idSolicitud);
+                                Llenar_gvImportadores(idSolicitud, cmd);
+                                BloqueoGeneral();
+                            }                            
+                        }                        
                     }
 
                     if (Request.QueryString["st"] != null)
                     {
-                        btnGuardar.Text = "Aprobar";
-                        btnGuardar.CommandName = "Aprobar";
-                        btnGuardar.Enabled = true;
+                        if (Request.QueryString["st"] == "AC")
+                        {//Si esta en estado de aclaracion
+                            btnEnviar.Text = "Reenviar Solicitud";
+                            btnEnviar.CommandName = "reenviar";
+                            btnEnviar.Enabled = true;
+                        }
+                        else if (Request.QueryString["st"] == "R")
+                        {//Si esta en estado de revision
 
-                        btnEnviar.Text = "Rechazar";
-                        btnEnviar.CommandName = "Rechazar";
-                        btnEnviar.Enabled = true;
+                            btnGuardar.Text = "Aprobar";
+                            btnGuardar.CommandName = "Aprobar";
+                            btnGuardar.Enabled = true;
 
-                        btnAclarar.Visible = true;
+                            btnEnviar.Text = "Rechazar";
+                            btnEnviar.CommandName = "Rechazar";
+                            btnEnviar.Enabled = true;
+
+                            btnAclarar.Visible = true;
+
+                            var estadoPrincipal = 0;
+                            if (Session["EstadoPrincipal"] !=null)
+                            {
+                                estadoPrincipal = (int)Session["EstadoPrincipal"];
+                                if (estadoPrincipal == 300 || estadoPrincipal == 1000)
+                                {
+                                    btnGuardar.Enabled = false;
+                                    btnEnviar.Enabled = false;
+                                    btnAclarar.Enabled = false;
+
+                                    if (estadoPrincipal == 300 )
+                                    {
+                                        MensajeCorrectoPrincipal.Text = "Expediente Aprobado";
+                                        divAlertCorrecto.Visible = true;    
+                                    }
+                                    else if (estadoPrincipal == 1000)
+                                    {
+                                        ErrorMessagePrincipal.Text = "Expediente Rechazado";
+                                        divAlertError.Visible = true;
+                                    }
+
+                                }
+                            }
+                        }
                     }
+
+
 
                     /*Envento de guardar informacion primaria*/
                     btnGuardar.Attributes.Add("onclick", "this.value='Procesando Espere...';this.disabled=true;" + ClientScript.GetPostBackEventReference(btnGuardar, ""));
@@ -204,172 +273,90 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             }
         }
 
-        /*Metodo que sirve para Guardar encabezado de formulario y para Aprobar Solicitud*/
+        /*Metodo para Guardar encabezado de formulario y para Aprobar Solicitud*/
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
-            //Guarda datos primarios
-
+            
             switch (btnGuardar.CommandName)
             {
                 case "GuardarIdentificacion":
+                    //Guarda datos principales del formulario
+                    GuardarEncabezadoSolicitud();
+                    break;
+                case "Aprobar":
 
-                    if (Session["IDSolicitud"] != null)
+                    var estadoPrincipal = 0;
+
+                    if (Session["EstadoPrincipal"] != null)
                     {
-                        int id_solicitud = (int)Session["IDSolicitud"];
+                        estadoPrincipal = (int)Session["EstadoPrincipal"];
 
-                        if (ActualizarDatosPrimarios(id_solicitud))
+                        if (estadoPrincipal == 300)
                         {
-                            MensajeCorrectoPrincipal.Text = "Datos Primarios han sido Actualizados.";
+                            MensajeCorrectoPrincipal.Text = "El expediente ya ha sido aprobado.";
                             divAlertCorrecto.Visible = true;
+                        }
+                        else if (estadoPrincipal == 200)
+                        {
+                            AprobarExpediente();
                         }
                         else
                         {
-                            ErrorMessagePrincipal.Text = "Ha ocurrido un error al Actualizar Datos Primarios";
+                            ErrorMessagePrincipal.Text = "No es posible realizar proceso de aprobacion, el estado actual no permite realizarlo.";
                             divAlertError.Visible = true;
-                        }
-                    }
-                    else
-                    {
-                        if (GuardarDatosPrimarios())
-                        {
-                            MensajeCorrectoPrincipal.Text = "Datos Primarios han sido Guardados, su solicitud esta ahora en bandeja de borradores.";
-                            divAlertCorrecto.Visible = true;
-                            //Envia mensaje a usuario de nuevo borrador de solictud
-                        }
-                        else
-                        {
-                            ErrorMessagePrincipal.Text = "Ha ocurrido un error al Guardar Datos Primarios";
-                            divAlertError.Visible = true;
-                        }
-                    }
-
-                    break;
-                case "":
-                    break;
-                default:
-                    break;
+                        } 
+                    }                       
+                    break;                
             }
-
-
-
             
         }
 
+        /*Metodo para Enviar Solicitud y Rechar Solicitud*/
         protected void btnEnviar_Click(object sender, EventArgs e)
         {
             divAlertCorrecto.Visible = false;
             divAlertCorrecto.Visible = false;
+            
+            var estadoPrincipal = 0;
 
             switch (btnEnviar.CommandName)
             {
                 case "EnviarSolicitud":
-                    //Envia Solicitud
-                    var cmd = string.Empty;
-                    if (Request.QueryString["cmd"] != null)
-                    {
-                        cmd = Request.QueryString["cmd"].ToString();
-                    }
 
-                    if (Session["IDSolicitud"] != null)
-                    {
-                        int id_solicitud = (int)Session["IDSolicitud"];
+                    EnviaSolicitud();
+                    break;
 
-                        if (CumpleRequisitos(id_solicitud, cmd))
-                        {
-                            MensajeCorrectoPrincipal.Text = Session["SIVALIDA"].ToString();
+                case "Rechazar":
+                   
+                    if (Session["EstadoPrincipal"] != null)
+                    {
+                        estadoPrincipal = (int)Session["EstadoPrincipal"];
+
+                        if (estadoPrincipal == 1000)
+                        {//Si esta en estado de rechazado
+                            MensajeCorrectoPrincipal.Text = "El expediente ya ha sido rechazado.";
                             divAlertCorrecto.Visible = true;
-
-                            //Genero expediente
-                            var idExpediente = GeneroExpediente(id_solicitud);
-                            if (idExpediente > 0)
-                            {
-
-                                MensajeCorrectoPrincipal.Text = "Se ha generado correctamente el expediente.";
-                                divAlertCorrecto.Visible = true;
-
-                                /*Envio mensaje a Usuario*/
-
-                                var correoUsuario = string.Empty;
-                                var nombreUsuario = string.Empty;
-                                var apellidoUsuario = string.Empty;
-
-                                if (Session["CorreoUsuarioLogin"] != null)
-                                {
-                                    correoUsuario = Session["CorreoUsuarioLogin"].ToString();
-                                }
-                                if (Session["NombresUsuarioLogin"] != null)
-                                {
-                                    nombreUsuario = Session["NombresUsuarioLogin"].ToString();
-                                }
-                                if (Session["ApellidosUsuarioLogin"] != null)
-                                {
-                                    apellidoUsuario = Session["ApellidosUsuarioLogin"].ToString();
-                                }
-
-                                var mensaje = new MailMessage();
-                                mensaje.Subject = "Expediente Enviado -Unidad Origen DACE-";
-                                mensaje.Body = "Apreciable usuario " + nombreUsuario + " " + apellidoUsuario + ", \n" +
-                                    "se ha generado expediente y enviado a la unidad de origen, para verificar el estado puede consultar con el numero " + idExpediente.ToString() + ". \n" +
-                                    "NOTA: Favor no responder este correo. ";
-
-                                if (EnvioMensajeUsuario(nombreUsuario, apellidoUsuario, correoUsuario, mensaje))
-                                {
-                                    MensajeCorrectoPrincipal.Text += " Se ha enviado correo de notificacion al usuario.";
-                                    divAlertCorrecto.Visible = true;
-                                }
-                                else
-                                {
-                                    ErrorMessagePrincipal.Text += " Ha ocurrido un error al enviar mensaje de notificacion al usuario.";
-                                    divAlertError.Visible = true;
-                                }
-
-                                mensaje.Subject = "Nuevo Expediente";
-                                mensaje.Body = "Ha ingresado nuevo expediente numero " + idExpediente.ToString() + ", favor revisar bandeja de expedientes. \n" +
-                                    "NOTA: Favor no responder este correo.";
-
-                                /*envio Mensaje usuarios DACE */
-                                if (EnvioMensajeFuncionariosDACE(mensaje))
-                                {
-                                    MensajeCorrectoPrincipal.Text += " Se ha enviado correo de notificacion a los funcionarios DACE.";
-                                    divAlertCorrecto.Visible = true;
-                                }
-                                else
-                                {
-                                    ErrorMessagePrincipal.Text += " Ha ocurrido un error al enviar mensaje de notificacion a los funcionarios DACE.";
-                                    divAlertError.Visible = true;
-                                }
-                            }
-                            else
-                            {
-                                //Error al generar expediente
-                                ErrorMessagePrincipal.Text += " Ha ocurrido un error al generar expediente.";
-                                divAlertError.Visible = true;
-                            }
+                        }
+                        else if (estadoPrincipal == 200)
+                        {//Si esta en estado de revision
+                            lkBtn_RechazarExpediente_ModalPopupExtender.Show();        
                         }
                         else
-                        {
-                            //Muestro mensaje correcto si valido algo correctamente
-                            MensajeCorrectoPrincipal.Text = Session["SIVALIDA"].ToString();
-                            divAlertCorrecto.Visible = true;
-
-                            ErrorMessagePrincipal.Text = "ERROR: " + Session["NOVALIDA"].ToString();
+                        {//Si esta fuera del estado para rechazar
+                            ErrorMessagePrincipal.Text = "No es posible realizar proceso de rechazo de expediente, el estado actual no permite realizarlo.";
                             divAlertError.Visible = true;
-                        }
-                    }
-                    else
-                    {
-                        ErrorMessagePrincipal.Text = "ERROR: Debe de Guardar los datos del encabezado y llenar los requerimientos minimos antes de enviar Solicitud.";
-                        divAlertError.Visible = true;
-                    }
+                        } 
+                    }     
+                    
+                    break;                
 
-                    break;
-                default:
+                case "reenviar":
+                    
+                    RegresoExpediente();   
+
                     break;
             }
-
-           
-            
-
+                       
         }
 
         protected void btnCancelar_Click(object sender, EventArgs e)
@@ -633,7 +620,64 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
 
         protected void btnAclarar_Click(object sender, EventArgs e)
         {
+            lkBtn_AclararExpediente_ModalPopupExtender.Show();
+        }
 
+        protected void cb_motivo_obs_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cb_motivo_obs.Checked)
+            {                
+                txt_motivo_obs.Enabled = true;
+            }
+            else
+            {
+                txt_motivo_obs.Enabled = false;
+            }
+        }
+
+        protected void cb_motivo_otros_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cb_motivo_otros.Checked)
+            {
+                txt_motivo_otros.Enabled = true;
+            }
+            else
+            {
+                txt_motivo_otros.Enabled = false;
+            }
+        }
+
+        protected void btn_rechazo_expediente_Click(object sender, EventArgs e)
+        {
+            //Metodo para rechazar expediente
+            RechazarExpediente();
+        }
+
+        protected void btn_solicito_aclaracion_Click(object sender, EventArgs e)
+        {
+
+            var estadoPrincipal = 0;
+
+            if (Session["EstadoPrincipal"] != null)
+            {
+                estadoPrincipal = (int)Session["EstadoPrincipal"];
+
+                if (estadoPrincipal == 1000)
+                {//Si esta en estado de rechazado
+                    MensajeCorrectoPrincipal.Text = "El expediente ya ha sido rechazado.";
+                    divAlertCorrecto.Visible = true;
+                }
+                else if (estadoPrincipal > 200)
+                {//Si esta en estado de revision
+                    AclaracionExpediente();
+                }
+                else
+                {//Si esta fuera del estado para rechazar
+                    ErrorMessagePrincipal.Text = "No es posible realizar proceso de rechazo de expediente, el estado actual no permite realizarlo.";
+                    divAlertError.Visible = true;
+                }
+            }   
+                        
         }
 
         #endregion
@@ -787,6 +831,10 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             cb_CorrelativoSAT.Enabled = false;
             txtNumeroOficioSAT.Enabled = false;
             txtAnioOficioSAT.Enabled = false;
+
+            //Panel de Motivos de Rechazo de expediente
+            txt_motivo_obs.Enabled = false;
+            txt_motivo_otros.Enabled = false;
         }
 
         protected Boolean GuardarDatosPrimarios()
@@ -797,6 +845,8 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             {
                 cmd = Request.QueryString["cmd"].ToString();
             }
+
+            objCEVerificacion.Estado = Session["STDEX"].ToString();
 
             objCEVerificacion.ID_UsuarioSolicita = Convert.ToInt32(Session["UsuarioID"].ToString());
             objCEVerificacion.TipoSolicitud = cmd;
@@ -841,7 +891,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
         protected Boolean GuardarMotivos(int id_solicitud)
         {
             var respuesta = false;
-
+            objCEVerificacion.Estado = Session["STDEX"].ToString();
             objCEVerificacion.ID_Solicitud = id_solicitud;
             objCEVerificacion.Motivo_1 = getMotivo_1();
             objCEVerificacion.Motivo_2 = getMotivo_2();
@@ -864,6 +914,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
         {
             var respuesta = false;
 
+            
             objCEVerificacion.ID_Solicitud = id_solicitud;
             objCEVerificacion.Motivo_1 = getMotivo_1();
             objCEVerificacion.Motivo_2 = getMotivo_2();
@@ -1045,7 +1096,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
         protected Boolean GuardarFichaDocumentoAnexo(int id_solicitud, string cmd, string DocumentoOriginal, string DocumentoSistema, string Path)
         {
             var respuesta = false;
-
+            objCEVerificacion.Estado = Session["STDEX"].ToString();
             objCEVerificacion.ID_Solicitud = id_solicitud;
             objCEVerificacion.TipoSolicitud = cmd;
             objCEVerificacion.IdRequisito = getTipoRequisito();
@@ -1468,7 +1519,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
         protected Boolean GuardarProducto(int id_solicitud)
         {
             var respuesta = false;
-
+            objCEVerificacion.Estado = Session["STDEX"].ToString();
             objCEVerificacion.ID_Solicitud = id_solicitud;
             objCEVerificacion.ID_Regimem_Importacion = getRegimenImportacion();
             objCEVerificacion.Nombre_Regimen_Importacion = getNombreRegimenImportacion();
@@ -1536,6 +1587,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
         protected Boolean GuardarImportador(int id_solicitud, string cmd)
         {
             var respuesta = false;
+            objCEVerificacion.Estado = Session["STDEX"].ToString();
             objCEVerificacion.ID_Solicitud = id_solicitud;
             objCEVerificacion.TipoSolicitud = cmd;
             objCEVerificacion.RazonSocial_Ficha_Importador = getRazonFichaImportador();
@@ -1563,7 +1615,6 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             var tbl = new DataTable();
             btnGuardarImportador.Text = "Editar";
             btnGuardarImportador.CommandName = "ModificarImportador";
-
 
             tbl = objCNVerificacion.SelectImportador(id_importador);
 
@@ -1598,6 +1649,466 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
         protected bool ExistenImportadores(int id_solicitud)
         {
             return objCNVerificacion.ExistenImportadores(id_solicitud);
+        }
+
+        protected void GuardarEncabezadoSolicitud()
+        {
+            if (Session["IDSolicitud"] != null)
+            {
+                int id_solicitud = (int)Session["IDSolicitud"];
+
+                if (ActualizarDatosPrimarios(id_solicitud))
+                {
+                    MensajeCorrectoPrincipal.Text = "Datos Primarios han sido Actualizados.";
+                    divAlertCorrecto.Visible = true;
+                }
+                else
+                {
+                    ErrorMessagePrincipal.Text = "Ha ocurrido un error al Actualizar Datos Primarios";
+                    divAlertError.Visible = true;
+                }
+            }
+            else
+            {
+                if (GuardarDatosPrimarios())
+                {
+                    MensajeCorrectoPrincipal.Text = "Datos Primarios han sido Guardados, su solicitud esta ahora en bandeja de borradores.";
+                    divAlertCorrecto.Visible = true;
+                    //Envia mensaje a usuario de nuevo borrador de solictud
+                }
+                else
+                {
+                    ErrorMessagePrincipal.Text = "Ha ocurrido un error al Guardar Datos Primarios";
+                    divAlertError.Visible = true;
+                }
+            }
+        }
+
+        protected void EnviaSolicitud()
+        {
+            //Envia Solicitud
+            var cmd = string.Empty;
+            if (Request.QueryString["cmd"] != null)
+            {
+                cmd = Request.QueryString["cmd"].ToString();
+            }
+
+            if (Session["IDSolicitud"] != null)
+            {
+                int id_solicitud = (int)Session["IDSolicitud"];
+
+                if (CumpleRequisitos(id_solicitud, cmd))
+                {
+                    MensajeCorrectoPrincipal.Text = Session["SIVALIDA"].ToString();
+                    divAlertCorrecto.Visible = true;
+
+                    //if (Session["STDEX"] != null)
+                    //{
+                        //string stdex = Session["STDEX"].ToString();
+
+                        //if (stdex == "T")
+                        //{//Si tiene estado temporal
+                            GeneracionExpediente(id_solicitud);
+                        //}
+                        //else
+                        //{//Si tiene estado 'AC'
+                        //    RegresoExpediente(id_solicitud);
+                        //}
+                    //}
+
+                }
+                else
+                {
+                    //Muestro mensaje correcto si valido algo correctamente
+                    MensajeCorrectoPrincipal.Text = Session["SIVALIDA"].ToString();
+                    divAlertCorrecto.Visible = true;
+
+                    ErrorMessagePrincipal.Text = "ERROR: " + Session["NOVALIDA"].ToString();
+                    divAlertError.Visible = true;
+                }
+            }
+            else
+            {
+                ErrorMessagePrincipal.Text = "ERROR: Debe de Guardar los datos del encabezado y llenar los requerimientos minimos antes de enviar Solicitud.";
+                divAlertError.Visible = true;
+            }
+        }
+
+        protected void AprobarExpediente(){
+            
+            string cmd = string.Empty;
+            if (Request.QueryString["cmd"] != null)
+            {
+                cmd = Request.QueryString["cmd"].ToString();
+            }
+
+            objCEExpediente.ID_WF_Expediente = (int)Session["IDWF_Expediente"];
+            objCEExpediente.ID_Expediente = (int)Session["IDExpediente"];
+            objCEExpediente.ID_Usuario_DACE = (int)Session["UsuarioID"];
+
+            //Obtengo datos del siguiente estado
+            var dt = new DataTable();
+            dt = objCNBandeja.SelectEstado(cmd, 300);
+            
+
+            if (dt.Rows.Count != 0)
+            {
+                var row = dt.Rows[0];
+
+                objCEExpediente.Sigla_Estado = row["descripcion"].ToString();
+                objCEExpediente.Estado_Principal = 300;
+                objCEExpediente.Dias_Maximos = (int)row["dias_max"];
+                objCEExpediente.Dias_Minimos = (int)row["dias_min"];
+
+                if (objCNBandeja.Update_WF_Estado(objCEExpediente))
+                {
+                    MensajeCorrectoPrincipal.Text = "Se ha 'Aprobado' el expediente correctamente.";
+                    divAlertCorrecto.Visible = true;
+
+                    Session["EstadoPrincipal"] = 300;
+
+                    btnGuardar.Enabled = false;
+                    btnEnviar.Enabled = false;
+                    btnAclarar.Enabled = false;
+                }
+                else
+                {
+                    ErrorMessagePrincipal.Text = "Ha ocurrido un error al 'Aprobar' el expediente.";
+                    divAlertError.Visible = true;
+                }
+
+            }
+            else
+            {
+                ErrorMessagePrincipal.Text = "Ha ocurrido un error al 'Consultar' el siguiente estado.";
+                divAlertError.Visible = true;
+            }
+        }
+
+        protected void RechazarExpediente()
+        {
+            
+            /*
+             * Obtengo datos de motivos de rechazo
+             */
+            objCEExpediente.Motivo_1 = getMotivo_Rechazo_Uno();
+            objCEExpediente.Motivo_2 = getMotivo_Rechazo_Dos();
+            objCEExpediente.Motivo_3 = getMotivo_Rechazo_Tres();
+            objCEExpediente.Motivo_4 = getMotivo_Rechazo_Cuatro();
+
+            objCEExpediente.Check_Observaciones = getCheck_Rechazo_Observaciones();
+            objCEExpediente.Observaciones_Motivo = getRechazo_Observaciones();
+
+            objCEExpediente.Check_Otros_Motivos = getCheck_Rechazo_OtrosMotivos();
+            objCEExpediente.Otros_Motivos = getRechazo_OtrosMotivos();
+
+
+            string cmd = string.Empty;
+            if (Request.QueryString["cmd"] != null)
+            {
+                cmd = Request.QueryString["cmd"].ToString();
+            }
+
+            objCEExpediente.ID_WF_Expediente = (int)Session["IDWF_Expediente"];
+            objCEExpediente.ID_Expediente = (int)Session["IDExpediente"];
+            objCEExpediente.ID_Usuario_DACE = (int)Session["UsuarioID"];
+
+            //Obtengo datos del siguiente estado
+            var dt = new DataTable();
+            dt = objCNBandeja.SelectEstado(cmd, 1000);
+
+
+            if (dt.Rows.Count != 0)
+            {
+                var row = dt.Rows[0];
+
+                objCEExpediente.Sigla_Estado = row["descripcion"].ToString();
+                objCEExpediente.Estado_Principal = 1000;
+                objCEExpediente.Dias_Maximos = (int)row["dias_max"];
+                objCEExpediente.Dias_Minimos = (int)row["dias_min"];
+
+
+                if (objCNBandeja.RechazoExpediente(objCEExpediente))
+                {
+                    MensajeCorrectoPrincipal.Text = "El proceso de 'Rechazo' se ejecuto correctamente.";
+                    divAlertCorrecto.Visible = true;
+
+                    Session["EstadoPrincipal"] = 1000;
+
+                    btnGuardar.Enabled = false;
+                    btnEnviar.Enabled = false;
+                    btnAclarar.Enabled = false;
+                }
+                else
+                {
+                    ErrorMessagePrincipal.Text = "Ha ocurrido un error al 'Rechazar' el expediente.";
+                    divAlertError.Visible = true;
+                }
+
+            }
+            else
+            {
+                ErrorMessagePrincipal.Text = "Ha ocurrido un error al 'Consultar' el siguiente estado.";
+                divAlertError.Visible = true;
+            }
+        }
+
+        protected void AclaracionExpediente()
+        {
+            string cmd = string.Empty;
+            if (Request.QueryString["cmd"] != null)
+            {
+                cmd = Request.QueryString["cmd"].ToString();
+            }
+
+            objCEExpediente.ID_WF_Expediente = (int)Session["IDWF_Expediente"];
+            objCEExpediente.ID_Expediente = (int)Session["IDExpediente"];
+            objCEExpediente.ID_Usuario_DACE = (int)Session["UsuarioID"];
+            objCEExpediente.ID_Solicitud = (int)Session["IDSolicitud"];
+
+            //Obtengo datos del siguiente estado
+            var dt = new DataTable();
+            dt = objCNBandeja.SelectEstado(cmd, 210);
+
+
+            if (dt.Rows.Count != 0)
+            {
+                var row = dt.Rows[0];
+
+                objCEExpediente.Sigla_Estado = row["descripcion"].ToString();
+                objCEExpediente.Estado_Principal = 210;
+                objCEExpediente.Dias_Maximos = (int)row["dias_max"];
+                objCEExpediente.Dias_Minimos = (int)row["dias_min"];
+
+                if (objCNBandeja.SolicitoAclaracionExpediente(objCEExpediente))
+                {
+                    MensajeCorrectoPrincipal.Text = "Se ha cambiado el estado 'Aclaracion' del expediente correctamente.";
+                    divAlertCorrecto.Visible = true;
+
+                    Session["EstadoPrincipal"] = 210;
+
+                    btnGuardar.Enabled = false;
+                    btnEnviar.Enabled = false;
+                    btnAclarar.Enabled = false;
+
+                    /*Envio mensaje a Usuario*/
+
+                    var correoUsuario = string.Empty;
+                    var nombreUsuario = string.Empty;
+                    var apellidoUsuario = string.Empty;
+
+                    if (Session["CorreoUsuarioLogin"] != null)
+                    {
+                        correoUsuario = Session["CorreoUsuarioLogin"].ToString();
+                    }
+                    if (Session["NombresUsuarioLogin"] != null)
+                    {
+                        nombreUsuario = Session["NombresUsuarioLogin"].ToString();
+                    }
+                    if (Session["ApellidosUsuarioLogin"] != null)
+                    {
+                        apellidoUsuario = Session["ApellidosUsuarioLogin"].ToString();
+                    }
+
+                    var mensaje = new MailMessage();
+                    mensaje.Subject = "Aclaracion de Expediente ["+objCEExpediente.ID_Expediente+"] -Unidad Origen DACE-";
+                    mensaje.Body = txt_mensaje_aclaracion.Text;
+
+                    if (EnvioMensajeUsuario(nombreUsuario, apellidoUsuario, correoUsuario, mensaje))
+                    {
+                        MensajeCorrectoPrincipal.Text += " Se ha enviado correo de notificacion al usuario.";
+                        divAlertCorrecto.Visible = true;
+                    }
+                    else
+                    {
+                        ErrorMessagePrincipal.Text += " Ha ocurrido un error al enviar mensaje de notificacion al usuario.";
+                        divAlertError.Visible = true;
+                    }
+                }
+                else
+                {
+                    ErrorMessagePrincipal.Text = "Ha ocurrido un error cambiar el estado 'Aclaracion' del expediente.";
+                    divAlertError.Visible = true;
+                }
+
+            }
+            else
+            {
+                ErrorMessagePrincipal.Text = "Ha ocurrido un error al 'Consultar' el siguiente estado.";
+                divAlertError.Visible = true;
+            }
+        }
+
+        protected void VerificaUltimoEstadoExpediente(int id_wf_expediente, int id_expediente)
+        {
+            var idwfExpediente = objCNBandeja.Ultimo_ID_Estado_WF_Expediente(id_expediente);
+            if (id_wf_expediente != idwfExpediente)
+            {
+                Session["IDWF_Expediente"] = idwfExpediente;
+            }
+        }
+
+        protected void GeneracionExpediente(int id_solicitud)
+        {
+            //Genero expediente
+            var idExpediente = GeneroExpediente(id_solicitud);
+            if (idExpediente > 0)
+            {
+                MensajeCorrectoPrincipal.Text = "Se ha generado correctamente el expediente.";
+                divAlertCorrecto.Visible = true;
+
+                /*Envio mensaje a Usuario*/
+
+                var correoUsuario = string.Empty;
+                var nombreUsuario = string.Empty;
+                var apellidoUsuario = string.Empty;
+
+                if (Session["CorreoUsuarioLogin"] != null)
+                {
+                    correoUsuario = Session["CorreoUsuarioLogin"].ToString();
+                }
+                if (Session["NombresUsuarioLogin"] != null)
+                {
+                    nombreUsuario = Session["NombresUsuarioLogin"].ToString();
+                }
+                if (Session["ApellidosUsuarioLogin"] != null)
+                {
+                    apellidoUsuario = Session["ApellidosUsuarioLogin"].ToString();
+                }
+
+                var mensaje = new MailMessage();
+                mensaje.Subject = "Expediente Enviado -Unidad Origen DACE-";
+                mensaje.Body = "Apreciable usuario " + nombreUsuario + " " + apellidoUsuario + ", \n" +
+                    "se ha generado expediente y enviado a la unidad de origen, para verificar el estado puede consultar con el numero " + idExpediente.ToString() + ". \n" +
+                    "NOTA: Favor no responder este correo. ";
+
+                if (EnvioMensajeUsuario(nombreUsuario, apellidoUsuario, correoUsuario, mensaje))
+                {
+                    MensajeCorrectoPrincipal.Text += " Se ha enviado correo de notificacion al usuario.";
+                    divAlertCorrecto.Visible = true;
+                }
+                else
+                {
+                    ErrorMessagePrincipal.Text += " Ha ocurrido un error al enviar mensaje de notificacion al usuario.";
+                    divAlertError.Visible = true;
+                }
+
+                mensaje.Subject = "Nuevo Expediente";
+                mensaje.Body = "Ha ingresado nuevo expediente numero " + idExpediente.ToString() + ", favor revisar bandeja de expedientes. \n" +
+                    "NOTA: Favor no responder este correo.";
+
+                /*envio Mensaje usuarios DACE */
+                if (EnvioMensajeFuncionariosDACE(mensaje))
+                {
+                    MensajeCorrectoPrincipal.Text += " Se ha enviado correo de notificacion a los funcionarios DACE.";
+                    divAlertCorrecto.Visible = true;
+                }
+                else
+                {
+                    ErrorMessagePrincipal.Text += " Ha ocurrido un error al enviar mensaje de notificacion a los funcionarios DACE.";
+                    divAlertError.Visible = true;
+                }
+
+                BloqueoGeneral();
+            }
+            else
+            {
+                //Error al generar expediente
+                ErrorMessagePrincipal.Text += " Ha ocurrido un error al generar expediente.";
+                divAlertError.Visible = true;
+            }
+        }
+
+        protected void RegresoExpediente()
+        {
+            string cmd = string.Empty;
+            if (Request.QueryString["cmd"] != null)
+            {
+                cmd = Request.QueryString["cmd"].ToString();
+            }
+
+            var dt_respuesta = objCNVerificacion.SelectDatosSolicitudWF((int)Session["IDSolicitud"]);
+            if (dt_respuesta.Rows.Count != 0)
+            {
+                var row = dt_respuesta.Rows[0];
+                objCEExpediente.ID_WF_Expediente = (int)row["estado_maximo"];
+                objCEExpediente.ID_Expediente = (int)row["id_expediente"];
+            }
+            
+            objCEExpediente.ID_Usuario_DACE = (int)Session["UsuarioID"];
+            objCEExpediente.ID_Solicitud = (int)Session["IDSolicitud"];
+
+            //Obtengo datos del siguiente estado
+            var dt = new DataTable();
+            dt = objCNBandeja.SelectEstado(cmd, 220);
+
+
+            if (dt.Rows.Count != 0)
+            {
+                var row = dt.Rows[0];
+
+                objCEExpediente.Sigla_Estado = row["descripcion"].ToString();
+                objCEExpediente.Estado_Principal = 220;
+                objCEExpediente.Dias_Maximos = (int)row["dias_max"];
+                objCEExpediente.Dias_Minimos = (int)row["dias_min"];
+
+                if (objCNBandeja.RegresoExpediente(objCEExpediente))
+                {
+                    MensajeCorrectoPrincipal.Text = "Se ha cambiado el estado 'Aclaracion' del expediente correctamente.";
+                    divAlertCorrecto.Visible = true;
+
+                    Session["EstadoPrincipal"] = 220;
+
+                    btnGuardar.Enabled = false;
+                    btnEnviar.Enabled = false;
+                    btnAclarar.Enabled = false;
+
+                    /*Envio mensaje a Usuario*/
+
+                    var correoUsuario = string.Empty;
+                    var nombreUsuario = string.Empty;
+                    var apellidoUsuario = string.Empty;
+
+                    if (Session["CorreoUsuarioLogin"] != null)
+                    {
+                        correoUsuario = Session["CorreoUsuarioLogin"].ToString();
+                    }
+                    if (Session["NombresUsuarioLogin"] != null)
+                    {
+                        nombreUsuario = Session["NombresUsuarioLogin"].ToString();
+                    }
+                    if (Session["ApellidosUsuarioLogin"] != null)
+                    {
+                        apellidoUsuario = Session["ApellidosUsuarioLogin"].ToString();
+                    }
+
+                    var mensaje = new MailMessage();
+                    mensaje.Subject = "Aclaracion de Expediente [" + objCEExpediente.ID_Expediente + "] -Unidad Origen DACE-";
+                    mensaje.Body = txt_mensaje_aclaracion.Text;
+
+                    if (EnvioMensajeUsuario(nombreUsuario, apellidoUsuario, correoUsuario, mensaje))
+                    {
+                        MensajeCorrectoPrincipal.Text += " Se ha enviado correo de notificacion al usuario.";
+                        divAlertCorrecto.Visible = true;
+                    }
+                    else
+                    {
+                        ErrorMessagePrincipal.Text += " Ha ocurrido un error al enviar mensaje de notificacion al usuario.";
+                        divAlertError.Visible = true;
+                    }
+                }
+                else
+                {
+                    ErrorMessagePrincipal.Text = "Ha ocurrido un error cambiar el estado 'Aclaracion' del expediente.";
+                    divAlertError.Visible = true;
+                }
+
+            }
+            else
+            {
+                ErrorMessagePrincipal.Text = "Ha ocurrido un error al 'Consultar' el siguiente estado.";
+                divAlertError.Visible = true;
+            }
         }
 
         #endregion
@@ -1916,10 +2427,50 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
 
         #endregion
 
+        #region Obtengo valores de motivos de rechazo de expediente
 
+        protected bool getMotivo_Rechazo_Uno()
+        {
+            return cb_motivo_uno.Checked;
+        }
 
+        protected bool getMotivo_Rechazo_Dos()
+        {
+            return cb_motivo_dos.Checked;
+        }
 
+        protected bool getMotivo_Rechazo_Tres()
+        {
+            return cb_motivo_tres.Checked;
+        }
 
+        protected bool getMotivo_Rechazo_Cuatro()
+        {
+            return cb_motivo_cuatro.Checked;
+        }
+
+        protected bool getCheck_Rechazo_Observaciones()
+        {
+            return cb_motivo_obs.Checked;
+        }
+
+        protected string getRechazo_Observaciones()
+        {
+            return txt_motivo_obs.Text;
+        }
+
+        protected bool getCheck_Rechazo_OtrosMotivos()
+        {
+            return cb_motivo_otros.Checked;
+        }
+
+        protected string getRechazo_OtrosMotivos()
+        {
+            return txt_motivo_otros.Text;
+        }
+
+        #endregion
+       
     }
 
 }

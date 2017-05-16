@@ -172,5 +172,10 @@ namespace Capa_Negocio.Solicitudes
         {
             return objCDVerificacionOrigen.ExistenImportadores(id_solicitud);
         }
+
+        public DataTable SelectDatosSolicitudWF(int id_solicitud)
+        {
+            return objCDVerificacionOrigen.SelectDatosSolicitudWF(id_solicitud);
+        }
     }
 }

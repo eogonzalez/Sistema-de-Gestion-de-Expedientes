@@ -152,6 +152,7 @@ namespace Capa_Datos.Solicitudes
                     command.ExecuteNonQuery();
 
                     transaccion.Commit();
+                    respuesta = true;
                 }
                 catch (Exception)
                 {
@@ -232,5 +233,6 @@ namespace Capa_Datos.Solicitudes
             return dt_respuesta;
 
         }
+
     }
 }

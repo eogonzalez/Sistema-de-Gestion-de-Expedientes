@@ -11,6 +11,7 @@ namespace Capa_Entidad.Solicitudes
         
         #region Datos Primarios
 
+        public string Estado { get; set; }
         public DateTime fecha_periodo_inicial { get; set; }
         public DateTime fecha_periodo_final { get; set; }
         public int ID_Tratado { get; set; }

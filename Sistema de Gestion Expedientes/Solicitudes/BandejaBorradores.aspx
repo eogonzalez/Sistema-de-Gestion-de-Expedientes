@@ -3,7 +3,7 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="panel panel-primary">
-        <div class="panel-heading"><%: Title %><asp:Label runat="server" ID="lblCantidadBandeja"  CssClass="label label-info"/></div>
+        <div class="panel-heading"><%: Title %><asp:Label runat="server" ID="lblCantidadBandeja" CssClass="label label-info" /></div>
         <br />
         <div class="panel-body form-vertical">
             <div class="btn-group" role="group">
@@ -20,6 +20,11 @@
                 </cc1:ModalPopupExtender>--%>
             </div>
             <br />
+            <div id="divAlertError" runat="server">
+                <p class="alert alert-danger" id="pAlertError" runat="server">
+                    <asp:Literal runat="server" ID="ErrorMessagePrincipal" />
+                </p>
+            </div>
             <div>
                 <asp:GridView runat="server" ID="gvBorradores"
                     CssClass="table table-hover table-striped"
@@ -38,7 +43,8 @@
                         <%--<asp:BoundField DataField="correoExportador" HeaderText="Correo Exportador" />--%>
                         <asp:BoundField DataField="fecha_creacion" HeaderText="Fecha Creacion" />
                         <asp:BoundField DataField="fecha_modificacion" HeaderText="Fecha Modificacion" />
-
+                        <asp:BoundField DataField="descripcion_estado" HeaderText="Estado" />
+                        <asp:BoundField DataField="estado"  ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
                         <asp:ButtonField ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />
 
                         <asp:TemplateField HeaderText="Eliminar">

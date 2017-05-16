@@ -17,5 +17,19 @@ namespace Capa_Entidad.Expedientes
         public int Dias_Maximos { get; set; }
         public int Dias_Minimos { get; set; }
         public string Observaciones { get; set; }
+
+        /*propiedades para motivos de rechazo de expediente*/
+        public bool Motivo_1 { get; set; }
+        public bool Motivo_2 { get; set; }
+        public bool Motivo_3 { get; set; }
+        public bool Motivo_4 { get; set; }
+        public bool Check_Observaciones { get; set; }
+        public string Observaciones_Motivo { get; set; }
+        public bool Check_Otros_Motivos { get; set; }
+        public string Otros_Motivos { get; set; }
+
+        /*propiedades para solicitar aclaracion*/
+        public int ID_Solicitud { get; set; }
     }
+
 }

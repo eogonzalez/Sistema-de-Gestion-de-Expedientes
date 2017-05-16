@@ -190,7 +190,7 @@ namespace Capa_Datos.Solicitudes
 
                 command.Parameters.AddWithValue("fecha_creacion", DateTime.Now);
                 command.Parameters.AddWithValue("fecha_modificacion", DateTime.Now);
-                command.Parameters.AddWithValue("estado", "T");
+                command.Parameters.AddWithValue("estado", objCEVerificacion.Estado);
 
                 try
                 {
@@ -325,7 +325,7 @@ namespace Capa_Datos.Solicitudes
 
                 command.Parameters.AddWithValue("fecha_creacion", DateTime.Now);
                 command.Parameters.AddWithValue("fecha_modificacion", DateTime.Now);
-                command.Parameters.AddWithValue("estado", "T");
+                command.Parameters.AddWithValue("estado", objCEVerificacion.Estado);
 
                 try
                 {
@@ -461,7 +461,7 @@ namespace Capa_Datos.Solicitudes
                 command.Parameters.AddWithValue("path", objCEVerificacion.Path);
                 command.Parameters.AddWithValue("observaciones", objCEVerificacion.ObservacionesAnexo);                
                 command.Parameters.AddWithValue("fecha_creacion", DateTime.Now);
-                command.Parameters.AddWithValue("estado", "T");
+                command.Parameters.AddWithValue("estado", objCEVerificacion.Estado);
                 command.Parameters.AddWithValue("fecha_modificacion", DateTime.Now);
                 
 
@@ -1136,7 +1136,7 @@ namespace Capa_Datos.Solicitudes
                 command.Parameters.AddWithValue("observaciones", objCEVerificacion.ObservacionesProducto);
                 command.Parameters.AddWithValue("fecha_creacion", DateTime.Now);
                 command.Parameters.AddWithValue("fecha_modificacion", DateTime.Now);
-                command.Parameters.AddWithValue("estado", "A");
+                command.Parameters.AddWithValue("estado", objCEVerificacion.Estado);
 
                 try
                 {
@@ -1283,7 +1283,7 @@ namespace Capa_Datos.Solicitudes
                 command.Parameters.AddWithValue("telefono", objCEVerificacion.Telefono_Ficha_Importador);
                 command.Parameters.AddWithValue("fecha_creacion", DateTime.Now);
                 command.Parameters.AddWithValue("fecha_modificacion", DateTime.Now);
-                command.Parameters.AddWithValue("estado", "A");
+                command.Parameters.AddWithValue("estado", objCEVerificacion.Estado);
 
                 try
                 {
@@ -1436,6 +1436,42 @@ namespace Capa_Datos.Solicitudes
             }
 
             return respuesta;
+        }
+
+        public DataTable SelectDatosSolicitudWF(int id_solicitud)
+        {
+            var dt_respuesta = new DataTable();
+            var sql_query = string.Empty;
+
+            sql_query = " select "+
+	            " max(WF.idwf_expediente) as estado_maximo, ese.id_expediente "+
+                " from  "+
+	            " WF_Expediente WF, "+
+	            " ExpedienteSolicitud_Enc ESE "+
+                " where  "+
+	            " wf.id_expediente = ESE.id_expediente "+
+	            " and ese.id_Solicitud = @id_solicitud "+
+                " group by ese.id_expediente ";
+
+            using (var con = objConexion.Conectar())
+            {
+                var command = new SqlCommand(sql_query, con);
+                command.Parameters.AddWithValue("id_solicitud", id_solicitud);
+
+                try
+                {
+                    con.Open();
+                    var da = new SqlDataAdapter(command);
+                    da.Fill(dt_respuesta);
+                }
+                catch (Exception)
+                {
+                    
+                    throw;
+                }
+            }
+
+            return dt_respuesta;
         }
     }
 }

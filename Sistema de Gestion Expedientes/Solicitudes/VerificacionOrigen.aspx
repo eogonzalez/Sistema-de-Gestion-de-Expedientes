@@ -56,8 +56,6 @@
                 </div>
 
                 <div class="form-group input-sm">
-
-
                     <asp:Label Text="E-Mail" runat="server" CssClass="control-label col-xs-2" AssociatedControlID="txtCorreo" />
                     <div class="col-xs-4">
                         <asp:TextBox runat="server" ID="txtCorreo" CssClass="form-control input-sm" />
@@ -73,7 +71,6 @@
             <h3><span class="label label-primary">Datos de Identificacion del Importador</span></h3>
             <div class="thumbnail">
                 <div class="form-group input-sm">
-
                     <asp:Label Text="Nombre o Razon Social" runat="server" CssClass="control-label col-xs-2" AssociatedControlID="txtRazonSocialImpo" />
                     <div class="col-xs-4">
                         <asp:TextBox runat="server" ID="txtRazonSocialImpo" CssClass="form-control input-sm" />
@@ -100,8 +97,6 @@
                 </div>
 
                 <div class="form-group input-sm">
-
-
                     <asp:Label Text="NIT" runat="server" CssClass="control-label col-xs-2" AssociatedControlID="txtNITImpo" />
                     <div class="col-xs-4">
                         <asp:TextBox runat="server" ID="txtNITImpo" CssClass="form-control input-sm" />
@@ -111,14 +106,11 @@
                     <div class="col-xs-4">
                         <asp:TextBox runat="server" ID="txtTelImpo" CssClass="form-control input-sm" />
                     </div>
-
                 </div>
-
             </div>
 
             <h3><span class="label label-primary">Datos de Identificacion del Exportador</span></h3>
             <div class="thumbnail">
-
                 <div class="form-group input-sm">
                     <asp:Label Text="Nombre o Razon Social" runat="server" CssClass="control-label col-xs-2" AssociatedControlID="txtRazonSocialImpo" />
                     <div class="col-xs-4">
@@ -129,7 +121,6 @@
                     <div class="col-xs-4">
                         <asp:TextBox runat="server" ID="txtCorreoExpo" CssClass="form-control input-sm" />
                     </div>
-
                 </div>
 
                 <div class="form-group input-sm">
@@ -145,10 +136,7 @@
                     </div>
                 </div>
 
-
                 <div class="form-group input-sm">
-
-
                     <asp:Label Text="Numero de Identificación" runat="server" CssClass="control-label col-xs-2" AssociatedControlID="txtNITExpo" />
                     <div class="col-xs-4">
                         <asp:TextBox runat="server" ID="txtNITExpo" CssClass="form-control input-sm" />
@@ -167,6 +155,7 @@
                         <asp:Literal runat="server" ID="MensajeCorrectoPrincipal" />
                     </p>
                 </div>
+
                 <div id="divAlertError" runat="server">
                     <p class="alert alert-danger" id="pAlertError" runat="server">
                         <asp:Literal runat="server" ID="ErrorMessagePrincipal" />
@@ -179,6 +168,16 @@
                         <asp:Button Text="Enviar Solicitud" ID="btnEnviar" runat="server" CommandName="EnviarSolicitud" CssClass="btn btn-success" OnClick="btnEnviar_Click" />
                         <asp:Button Text="Aclarar" ID="btnAclarar" runat="server" CommandName="Aclarar" CssClass="btn btn-warning" OnClick="btnAclarar_Click" />
                         <asp:Button Text="Salir" ID="btnCancelar" runat="server" CssClass="btn btn-info" OnClick="btnCancelar_Click" />
+                        <asp:LinkButton runat="server" ID="lkBtn_RechazarExpediente"></asp:LinkButton>
+                        <asp:LinkButton runat="server" ID="lkBtn_AclararExpediente"></asp:LinkButton>
+
+                        <cc1:ModalPopupExtender ID="lkBtn_RechazarExpediente_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackgroupd"
+                            BehaviorID="lkBtn_RechazarExpediente_ModalPopupExtender" PopupControlID="pnl_RechazoExpediente" TargetControlID="lkBtn_RechazarExpediente">
+                        </cc1:ModalPopupExtender>
+
+                        <cc1:ModalPopupExtender ID="lkBtn_AclararExpediente_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackgroupd"
+                            BehaviorID="lkBtn_AclararExpediente_ModalPopupExtender" PopupControlID="pnl_AclaracionExpediente" TargetControlID="lkBtn_AclararExpediente">
+                        </cc1:ModalPopupExtender>
                     </div>
                 </div>
             </div>
@@ -541,6 +540,92 @@
                             <asp:Button Text="Salir" runat="server" ID="btnSalirImpo" CssClass="btn btn-default" CausesValidation="false" OnClick="btnSalirImpo_Click" />
                         </div>
                     </asp:Panel>
+
+                    <%--Panel de Rechazo de expediente--%>
+                    <asp:Panel runat="server" ID="pnl_RechazoExpediente" CssClass="panel panel-primary" BorderColor="Black" BackColor="White"
+                        BorderStyle="Inset" BorderWidth="1px" Style="display: none; overflow: auto; max-height: 445px; width: 75%;">
+
+                        <div class="panel-heading">Motivos de Rechazo de Expediente</div>
+                        <div class="panel-body form-horizontal">
+                            <div class="form-group input-sm">
+                                <asp:Label runat="server" CssClass="control-label col-xs-5 " Text="1. Datos Incorrectos:" AssociatedControlID="cb_motivo_uno"></asp:Label>
+                                <div class="col-xs-1">
+                                    <asp:CheckBox runat="server" ID="cb_motivo_uno" />
+                                </div>
+
+                                <asp:Label CssClass="control-label col-xs-5" Text="3. Solicitante Improcedente:" runat="server" AssociatedControlID="cb_motivo_tres" />
+                                <div class="col-xs-1">
+                                    <asp:CheckBox ID="cb_motivo_tres" runat="server" />
+                                </div>
+                            </div>
+
+                            <div class="form-group input-sm">
+                                <asp:Label runat="server" CssClass="control-label col-xs-5 " Text="2. Falta de documentos:" AssociatedControlID="cb_motivo_dos"></asp:Label>
+                                <div class="col-xs-1">
+                                    <asp:CheckBox runat="server" ID="cb_motivo_dos" />
+                                </div>
+
+                                <asp:Label runat="server" CssClass="control-label col-xs-5" Text="4. xxxxx:" AssociatedControlID="cb_motivo_cuatro"></asp:Label>
+                                <div class="col-xs-1">
+                                    <asp:CheckBox ID="cb_motivo_cuatro" runat="server" />
+                                </div>
+                            </div>
+
+                            <div class="form-group input-sm">
+                                <asp:Label CssClass="control-label col-xs-5" Text="Observaciones o Comentarios:" runat="server" AssociatedControlID="cb_motivo_obs"></asp:Label>
+                                <div class="col-xs-1">
+                                    <asp:CheckBox ID="cb_motivo_obs" runat="server" AutoPostBack="True" OnCheckedChanged="cb_motivo_obs_CheckedChanged" />
+                                </div>
+
+                                <asp:Label Text="5. Otros Motivos:" runat="server" CssClass="control-label col-xs-5" AssociatedControlID="cb_motivo_otros" />
+                                <div class="col-xs-1">
+                                    <asp:CheckBox ID="cb_motivo_otros" runat="server" AutoPostBack="True" OnCheckedChanged="cb_motivo_otros_CheckedChanged" />
+                                </div>
+
+                            </div>
+
+                            <div class="form-group input-sm">
+                                <div class="col-xs-6">
+                                    <asp:TextBox runat="server" TextMode="MultiLine" ID="txt_motivo_obs" CssClass="form-control input-sm" />
+                                </div>
+                                <div class="col-xs-6">
+                                    <asp:TextBox runat="server" TextMode="MultiLine" ID="txt_motivo_otros" CssClass="form-control"></asp:TextBox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <asp:Button Text="Rechazar Expediente" runat="server" ID="btn_rechazo_expediente" CssClass="btn btn-primary" OnClick="btn_rechazo_expediente_Click" />
+                            <asp:Button Text="Salir" runat="server" ID="btn_salir_rechazo_expediente" CssClass="btn btn-default" />
+                        </div>
+                    </asp:Panel>
+
+                    <%--Panel de aclaracion--%>
+                    <asp:Panel runat="server" ID="pnl_AclaracionExpediente" CssClass="panel panel-primary" BorderColor="Black" BackColor="White"
+                        BorderStyle="Inset" BorderWidth="1px" Style="display: none; overflow: auto; max-height: 445px; width: 50%;">
+
+                        <div class="panel-heading">Aclaracion de Expediente</div>
+                        <div class="panel-body form-horizontal">
+                            <p class="alert alert-info">
+                                ¡Escriba el mensaje de solicitud de aclaración, el cual será enviado al usuario que realizo la solicitud de expediente.
+                            </p>
+
+                            <div class="form-group input-sm">
+                                <asp:Label CssClass="control-label col-xs-1" Text="Mensaje:" runat="server"></asp:Label>
+                            </div>
+
+                            <div class="form-group input-sm">
+                                <div class="col-xs-12">
+                                    <asp:TextBox runat="server" TextMode="MultiLine" ID="txt_mensaje_aclaracion" CssClass="form-control input-sm" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="panel-footer">
+                            <asp:Button Text="Envio Solicitud de Aclaracion" runat="server" ID="btn_solicito_aclaracion" CssClass="btn btn-primary" OnClick="btn_solicito_aclaracion_Click" />
+                            <asp:Button Text="Salir" runat="server" ID="btn_salir_aclaracion" CssClass="btn btn-default" />
+                        </div>
+                    </asp:Panel>
+
                 </div>
 
             </div>

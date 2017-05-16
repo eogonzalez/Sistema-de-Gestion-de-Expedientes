@@ -102,6 +102,8 @@
                         <asp:BoundField DataField="id_expediente" HeaderText="#Expediente" SortExpression="id_expediente" />
                         <asp:BoundField DataField="cmd" HeaderText="cmd" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
                         <asp:BoundField DataField="id_Solicitud" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
+                        <asp:BoundField DataField="idWF_Expediente" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
+                        <asp:BoundField DataField="estado_principal" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
                         <asp:BoundField DataField="tipoSolicitud" HeaderText="Tipo de Solicitud" />
                         <asp:BoundField DataField="razonSocialImportador" HeaderText="Importador" />
                         <asp:BoundField DataField="razonSocialExportador" HeaderText="Exportador" />
