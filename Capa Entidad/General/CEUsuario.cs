@@ -8,6 +8,10 @@ namespace Capa_Entidad.General
 {
     public class CEUsuario
     {
+        public int ID_Usuario { get; set; }
+
+        public int CE_IDDepto { get; set; }
+
         public string CE_Nombres { get; set; }
 
         public string CE_Apellidos { get; set; }
@@ -16,13 +20,16 @@ namespace Capa_Entidad.General
 
         public string CE_Telefono { get; set; }
 
-        public int CE_IDDepto { get; set; }
-
         public string CE_Direccion { get; set; }
 
         public string CE_Correo { get; set; }
 
         public string CE_Password { get; set; }
 
+        public int ID_TipoUsuario { get; set; }
+
+        public int ID_UsuarioAutoriza { get; set; }
+
+        public string CE_Estado { get; set; }
     }
 }

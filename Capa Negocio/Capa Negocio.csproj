@@ -48,6 +48,7 @@
     <Compile Include="Administracion\CNTipoUsuarios.cs" />
     <Compile Include="Administracion\CNWFTiempos.cs" />
     <Compile Include="Expedientes\CNBandejaPersonal.cs" />
+    <Compile Include="General\CNUsuario.cs" />
     <Compile Include="General\Correo.cs" />
     <Compile Include="General\CNLogin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
