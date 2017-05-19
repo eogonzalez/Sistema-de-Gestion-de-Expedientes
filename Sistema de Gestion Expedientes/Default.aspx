@@ -4,7 +4,7 @@
 
     <div class="jumbotron">
         <h1>Unidad de Origen</h1>
-        <p class="lead">Fue creada a través del surgimiento de la administración de los Acuerdos Comerciales Internacionales, para dar cumplimiento en lo referente a lo que se establece en los capítulos de Reglas de Origen y Procedimientos Aduaneros de cada tratado o acuerdo comercial.</p>
+        <p class="lead">Fue creada a través del surgimiento de la administración de los Acuerdos Comerciales Internacionales, para dar cumplimiento en lo referente a lo que se establece en los capítulos de Reglas de Origen y Procedimientos Aduaneros de cada acuerdo comercial internacional.</p>
         <p><a href="http://www.asp.net" class="btn btn-primary btn-large">Más acerca de Origen &raquo;</a></p>
     </div>
 

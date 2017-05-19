@@ -72,5 +72,10 @@ namespace Capa_Negocio.General
         {
             return objCDUsuario.UpdateRegistro(correo);
         }
+
+        public DataTable SelectComboDepartamentos()
+        {
+            return objCDUsuario.SelectComboDepartamentos();
+        }
     }
 }

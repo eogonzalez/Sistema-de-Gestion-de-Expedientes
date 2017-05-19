@@ -1473,5 +1473,24 @@ namespace Capa_Datos.Solicitudes
 
             return dt_respuesta;
         }
+
+        public int SelectUltimoCorrelativoAdjunto()
+        {
+            int respuesta = 0;
+            var sql_query = string.Empty;
+
+            sql_query = " select max(BorradorAdjunto.corr_BorradorAnexo) as ultimo "+
+                " from BorradorAdjunto ";
+
+            using (var con = objConexion.Conectar())
+            {
+                var command = new SqlCommand(sql_query, con);
+                con.Open();
+                respuesta = Convert.ToInt32(command.ExecuteScalar());
+            }
+
+
+            return respuesta;
+        }
     }
 }

@@ -139,6 +139,15 @@ namespace Sistema_de_Gestion_Expedientes.Administracion {
         protected global::System.Web.UI.WebControls.TextBox txtNumero;
         
         /// <summary>
+        /// Control cbo_departamento.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList cbo_departamento;
+        
+        /// <summary>
         /// Control txtDireccion.
         /// </summary>
         /// <remarks>

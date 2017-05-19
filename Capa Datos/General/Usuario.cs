@@ -131,7 +131,7 @@ namespace Capa_Datos.General
                     */
                     command.CommandText = " INSERT INTO g_usuarios " +
                         " (nombres,apellidos,cui,telefono " +
-                        " ,direccion,correo " +
+                        " ,idDepartamento, direccion,correo " +
                         " ,password,fecha_registro,estado " +
                         " ,id_usuarioAutoriza) " +
                         " VALUES " +
@@ -145,6 +145,7 @@ namespace Capa_Datos.General
                     command.Parameters.AddWithValue("@apellidos", objCEUsuario.CE_Apellidos);
                     command.Parameters.AddWithValue("@cui", objCEUsuario.CE_CUI);
                     command.Parameters.AddWithValue("@telefono", objCEUsuario.CE_Telefono);
+                    command.Parameters.AddWithValue("@idDepartamento", objCEUsuario.CE_IDDepto);
                     command.Parameters.AddWithValue("@direccion", objCEUsuario.CE_Direccion);
                     command.Parameters.AddWithValue("@correo", objCEUsuario.CE_Correo);
                     command.Parameters.AddWithValue("@fecha_registro", DateTime.Now);
@@ -211,7 +212,7 @@ namespace Capa_Datos.General
             var dt_respuesta = new DataTable();
             var sql_query = string.Empty;
             sql_query = "select gu.nombres, gu.apellidos, gu.cui, " +
-                " gu.telefono, gu.direccion, gu.correo, gup.id_tipousuario " +
+                " gu.telefono, gu.idDepartamento, gu.direccion, gu.correo, gup.id_tipousuario " +
                 " from g_usuarios gu, g_usuariopermiso gup " +
                 " where gu.id_usuario = @id_usuario " +
                 " and gu.id_usuario = gup.id_usuario; ";
@@ -238,6 +239,7 @@ namespace Capa_Datos.General
                 " ,[apellidos] = @apellidos "+
                 " ,[cui] = @cui "+
                 " ,[telefono] = @telefono "+
+                " ,[idDepartamento] = @idDepartamento "+
                 " ,[direccion] = @direccion "+
                 " ,[id_usuarioAutoriza] = @id_usuarioAutoriza "+
                 " WHERE id_usuario = @id_usuario; "+
@@ -255,6 +257,7 @@ namespace Capa_Datos.General
                 command.Parameters.AddWithValue("apellidos", objCEUsuario.CE_Apellidos);
                 command.Parameters.AddWithValue("cui", objCEUsuario.CE_CUI);
                 command.Parameters.AddWithValue("telefono", objCEUsuario.CE_Telefono);
+                command.Parameters.AddWithValue("idDepartamento", objCEUsuario.CE_IDDepto);
                 command.Parameters.AddWithValue("direccion", objCEUsuario.CE_Direccion);
                 command.Parameters.AddWithValue("id_usuarioAutoriza", objCEUsuario.ID_UsuarioAutoriza);
                 command.Parameters.AddWithValue("id_usuario", objCEUsuario.ID_Usuario);
@@ -653,6 +656,32 @@ namespace Capa_Datos.General
             }
 
             return respuesta;
+        }
+
+        public DataTable SelectComboDepartamentos()
+        {
+            var dt_respuesta = new DataTable();
+            string sql_query = string.Empty;
+
+            using (var cn = objCDConexion.Conectar())
+            {
+                sql_query = " SELECT idDepartamento " +
+                    " ,nombre,descripcion " +
+                    " FROM G_Departamento " +
+                    " where estado = 'A' ";
+                try
+                {
+                    var command = new SqlCommand(sql_query, cn);
+                    var da = new SqlDataAdapter(command);
+                    da.Fill(dt_respuesta);
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+            return dt_respuesta;
         }
     }
 }

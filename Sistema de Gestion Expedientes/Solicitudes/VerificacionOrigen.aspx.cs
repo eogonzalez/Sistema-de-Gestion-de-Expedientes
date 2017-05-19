@@ -22,6 +22,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
         CEVerificacionOrigen objCEVerificacion = new CEVerificacionOrigen();
         CEExpedientes objCEExpediente = new CEExpedientes();
         CNBandejaPersonal objCNBandeja = new CNBandejaPersonal();
+        
 
         #region Eventos del formulario
 
@@ -414,6 +415,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             if (Session["IDSolicitud"] != null)
             {
                 int id_solicitud = 0;
+                
                 id_solicitud = (int)Session["IDSolicitud"];
 
                 var cmd = string.Empty;
@@ -422,10 +424,12 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                     cmd = Request.QueryString["cmd"].ToString();
                 }
 
+                int _correlativo = objCNVerificacion.SelectUltimoCorrelativoAdjunto();
+
                 switch (btnGuardarAnexo.CommandName)
                 {
                     case "GuardarAnexo":
-                        if (GuardarDocumento(id_solicitud, cmd))
+                        if (GuardarDocumento(id_solicitud, cmd, ref _correlativo))
                         {
                             LimpiarPanelAnexos();
                             Llenar_gvAnexos(id_solicitud, cmd);
@@ -441,7 +445,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                         {
                             int id_anexo = 0;
                             id_anexo = (int)Session["IDANEXO"];
-                            if (ActualizarDocumento(id_solicitud, cmd, id_anexo))
+                            if (ActualizarDocumento(id_solicitud, cmd, id_anexo, ref _correlativo))
                             {
                                 LimpiarPanelAnexos();
                                 Llenar_gvAnexos(id_solicitud, cmd);
@@ -667,7 +671,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                     MensajeCorrectoPrincipal.Text = "El expediente ya ha sido rechazado.";
                     divAlertCorrecto.Visible = true;
                 }
-                else if (estadoPrincipal > 200)
+                else if (estadoPrincipal >= 200 && estadoPrincipal < 300)
                 {//Si esta en estado de revision
                     AclaracionExpediente();
                 }
@@ -697,10 +701,10 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                 cboDepartamento.DataSource = dt;
                 cboDepartamento.DataBind();
 
-                cboDeptoImpo.DataTextField = dt.Columns["nombre"].ToString();
-                cboDeptoImpo.DataValueField = dt.Columns["idDepartamento"].ToString();
-                cboDeptoImpo.DataSource = dt;
-                cboDeptoImpo.DataBind();
+                //cboDeptoImpo.DataTextField = dt.Columns["nombre"].ToString();
+                //cboDeptoImpo.DataValueField = dt.Columns["idDepartamento"].ToString();
+                //cboDeptoImpo.DataSource = dt;
+                //cboDeptoImpo.DataBind();
 
 
 
@@ -865,7 +869,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             objCEVerificacion.NombreRazonSocialImportador = getNombreRazonImportador();
             objCEVerificacion.DireccionImportador = getDireccionImportador();
             objCEVerificacion.CorreoImportador = getCorreoImportador();
-            objCEVerificacion.ID_DepartamentoImportador = getIdDepartamentoImportador();
+            //objCEVerificacion.ID_DepartamentoImportador = getIdDepartamentoImportador();
             objCEVerificacion.NITImportador = getNitImportador();
             objCEVerificacion.TelefonoImportador = getTelefonoImportador();
 
@@ -968,7 +972,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             objCEVerificacion.NombreRazonSocialImportador = getNombreRazonImportador();
             objCEVerificacion.DireccionImportador = getDireccionImportador();
             objCEVerificacion.CorreoImportador = getCorreoImportador();
-            objCEVerificacion.ID_DepartamentoImportador = getIdDepartamentoImportador();
+            //objCEVerificacion.ID_DepartamentoImportador = getIdDepartamentoImportador();
             objCEVerificacion.NITImportador = getNitImportador();
             objCEVerificacion.TelefonoImportador = getTelefonoImportador();
 
@@ -984,12 +988,12 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             return respuesta;
         }
 
-        protected Boolean GuardarDocumento(int id_solicitud, string cmd)
+        protected Boolean GuardarDocumento(int id_solicitud, string cmd, ref int correlativo)
         {
             var respuesta = false;
-
+            correlativo++;
             string carpeta = Path.Combine(Request.PhysicalApplicationPath, "doctos");
-            string prefijo = id_solicitud.ToString() + "_" + cmd + "_" + cboTipoRequisito.SelectedValue.ToString() + "_";
+            string prefijo = id_solicitud.ToString() + "_" + cmd + "_" + cboTipoRequisito.SelectedValue.ToString() + "_"+correlativo.ToString();
 
             if (FileUpload_Anexo.PostedFile.FileName == "")
             {
@@ -1012,13 +1016,13 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                 try
                 {
                     string archivo = Path.GetFileName(FileUpload_Anexo.PostedFile.FileName);
-                    string carpeta_final = Path.Combine(carpeta, prefijo + archivo);
+                    string carpeta_final = Path.Combine(carpeta, prefijo /*+ archivo*/+".pdf");
                     FileUpload_Anexo.PostedFile.SaveAs(carpeta_final);
                     //Archivo copiado correctamente
                     respuesta = true;
                     
                     //Guardarficha de documento
-                    respuesta = GuardarFichaDocumentoAnexo(id_solicitud, cmd, archivo, prefijo + archivo, carpeta_final);
+                    respuesta = GuardarFichaDocumentoAnexo(id_solicitud, cmd, archivo, prefijo /*+ archivo*/+".pdf", carpeta_final);
                     
                     
                 }
@@ -1033,12 +1037,12 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             return respuesta;
         }
 
-        protected Boolean ActualizarDocumento(int id_solicitud, string cmd, int id_anexo)
+        protected Boolean ActualizarDocumento(int id_solicitud, string cmd, int id_anexo, ref int correlativo)
         {
             var respuesta = false;
-
+            correlativo++;
             string carpeta = Path.Combine(Request.PhysicalApplicationPath, "doctos");
-            string prefijo = id_solicitud.ToString() + "_" + cmd + "_" + cboTipoRequisito.SelectedValue.ToString() + "_";
+            string prefijo = id_solicitud.ToString() + "_" + cmd + "_" + cboTipoRequisito.SelectedValue.ToString() + "_"+correlativo.ToString();
 
             string documentoOriginal = string.Empty;
             string carpeta_final = string.Empty;
@@ -1049,7 +1053,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
 
             if (!FileUpload_Anexo.HasFile)
             {
-                documentoOriginal = null;
+                //documentoOriginal = null;
                 carpeta_final = null;
                 documentoSistema = null;
             }
@@ -1070,12 +1074,12 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                 {
                     
                     documentoOriginal = Path.GetFileName(FileUpload_Anexo.PostedFile.FileName);
-                    carpeta_final = Path.Combine(carpeta, prefijo + documentoOriginal);
+                    carpeta_final = Path.Combine(carpeta, prefijo + /*documentoOriginal*/".pdf");
                     FileUpload_Anexo.PostedFile.SaveAs(carpeta_final);
                     //Archivo copiado correctamente
                     respuesta = true;
                     
-                    documentoSistema = prefijo+documentoOriginal;
+                    documentoSistema = prefijo+".pdf";
                 }
                 catch (Exception ex)
                 {
@@ -1144,7 +1148,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
                 txtRazonSocialImpo.Text = row["razonSocialImportador"].ToString();
                 txtDireccionImpo.Text = row["direccionImportador"].ToString();
                 txtCorreoImpo.Text = row["correoImportador"].ToString();
-                cboDeptoImpo.SelectedValue = row["idDepartamentoImportador"].ToString();
+                //cboDeptoImpo.SelectedValue = row["idDepartamentoImportador"].ToString();
                 txtNITImpo.Text = row["nitImportador"].ToString();
                 txtTelImpo.Text = row["telefonoImportador"].ToString();
 
@@ -1455,7 +1459,7 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             txtDireccionImpo.Enabled = false;
             txtNITImpo.Enabled = false;
             txtCorreoImpo.Enabled = false;            
-            cboDeptoImpo.Enabled = false;
+            //cboDeptoImpo.Enabled = false;
             txtTelImpo.Enabled = false;
 
             txtRazonSocialExpo.Enabled = false;
@@ -2181,14 +2185,14 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
             return txtDireccionImpo.Text;
         }
 
-        protected int getIdDepartamentoImportador()
-        {
-            var respuesta = 0;
+        //protected int getIdDepartamentoImportador()
+        //{
+        //    var respuesta = 0;
 
-            respuesta = Convert.ToInt32(cboDeptoImpo.SelectedValue.ToString());
+        //    respuesta = Convert.ToInt32(cboDeptoImpo.SelectedValue.ToString());
 
-            return respuesta;
-        }
+        //    return respuesta;
+        //}
 
         protected string getNitImportador()
         {

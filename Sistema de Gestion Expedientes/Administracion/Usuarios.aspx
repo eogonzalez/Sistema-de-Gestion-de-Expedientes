@@ -105,6 +105,15 @@
                 </div>
 
                 <div class="form-group input-sm">
+                    <asp:Label runat="server" AssociatedControlID="cbo_departamento" CssClass="control-label col-md-2">Departamento</asp:Label>
+                    <div class="col-md-10">
+                        <asp:DropDownList runat="server" ID="cbo_departamento" CssClass="form-control" />
+                        <asp:RequiredFieldValidator runat="server" ControlToValidate="cbo_departamento"
+                            CssClass="text-danger" ErrorMessage="El campo de permiso es obligatorio." />
+                    </div>
+                </div>
+
+                <div class="form-group input-sm">
                     <asp:Label runat="server" AssociatedControlID="txtDireccion" CssClass="col-md-2 control-label">Direccion</asp:Label>
                     <div class="col-md-10">
                         <asp:TextBox runat="server" ID="txtDireccion" CssClass="form-control input-sm" />

@@ -49,7 +49,7 @@
                         <asp:TextBox runat="server" ID="txtDireccion" CssClass="form-control input-sm"></asp:TextBox>
                     </div>
 
-                    <asp:Label runat="server" CssClass="control-label col-xs-2" Text="Departamento:" AssociatedControlID="cboDepartamento"></asp:Label>
+                    <asp:Label runat="server" CssClass="control-label col-xs-2" Text="Departamento SAT:" AssociatedControlID="cboDepartamento"></asp:Label>
                     <div class="col-xs-4">
                         <asp:DropDownList runat="server" ID="cboDepartamento" CssClass="form-control input-sm"></asp:DropDownList>
                     </div>
@@ -84,15 +84,15 @@
 
                 <div class="form-group input-sm">
                     <asp:Label Text="Direccion:" runat="server" AssociatedControlID="txtDireccionImpo" CssClass="control-label col-xs-2" />
-                    <div class="col-xs-4">
+                    <div class="col-xs-10">
                         <asp:TextBox runat="server" ID="txtDireccionImpo" CssClass="form-control input-sm" />
                     </div>
 
-                    <asp:Label Text="Departamento" runat="server" AssociatedControlID="cboDeptoImpo" CssClass="control-label col-xs-2" />
+<%--                    <asp:Label Text="Departamento" runat="server" AssociatedControlID="cboDeptoImpo" CssClass="control-label col-xs-2" />
                     <div class="col-xs-4">
                         <asp:DropDownList runat="server" ID="cboDeptoImpo" CssClass="form-control input-sm">
                         </asp:DropDownList>
-                    </div>
+                    </div>--%>
 
                 </div>
 

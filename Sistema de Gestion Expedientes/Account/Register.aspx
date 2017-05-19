@@ -44,7 +44,7 @@
         </div>
 
         <div class="form-group">
-            <asp:Label runat="server" AssociatedControlID="cboDepto" CssClass="col-md-2 control-label">Departamento</asp:Label>
+            <asp:Label runat="server" AssociatedControlID="cboDepto" CssClass="col-md-2 control-label">Departamento SAT</asp:Label>
             <div class="col-md-10">
                 <asp:DropDownList runat="server" ID="cboDepto" CssClass="form-control">
                 </asp:DropDownList>

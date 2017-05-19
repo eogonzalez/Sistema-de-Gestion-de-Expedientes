@@ -22,6 +22,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             {
                 Llenar_gvUsuarios();
                 Llenar_ddlTipoPermiso();
+                Llenar_cbo_departamento();
                 cb_generarContrasenia.Visible = false;
 
                 btnGuardar.Attributes.Add("onclick", "this.value='Procesando Espere...';this.disabled=true;" + ClientScript.GetPostBackEventReference(btnGuardar, ""));
@@ -69,6 +70,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
                             {
                                 Llenar_gvUsuarios();
                                 LimpiarPanel();
+                                Email.Enabled = true;
                             }
                             else
                             {
@@ -110,6 +112,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
         protected void btnSalir_Click(object sender, EventArgs e)
         {
             LimpiarPanel();
+            Email.Enabled = true;
             btnGuardar.Text = "Guardar";
             btnGuardar.CommandName = "Guardar";
 
@@ -183,6 +186,21 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             }
         }
 
+        protected void Llenar_cbo_departamento()
+        {
+            var dt = new DataTable();
+
+            dt = objCNUsuario.SelectComboDepartamentos();
+
+            if (dt.Rows.Count > 0)
+            {
+                cbo_departamento.DataTextField = dt.Columns["nombre"].ToString();
+                cbo_departamento.DataValueField = dt.Columns["idDepartamento"].ToString();
+                cbo_departamento.DataSource = dt;
+                cbo_departamento.DataBind();
+            }
+        }
+
         protected bool GuardarUsuario()
         {
             var respuesta = false;
@@ -190,6 +208,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             objCEUsuario.CE_Apellidos = getApellido();
             objCEUsuario.CE_CUI = getCUI();
             objCEUsuario.CE_Telefono = getNumero();
+            objCEUsuario.CE_IDDepto = getID_Departamento();
             objCEUsuario.CE_Direccion = getDirecion();
             objCEUsuario.CE_Correo = getCorreo();
             objCEUsuario.CE_Password = getPassword();
@@ -231,6 +250,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             ApellidoUsuario.Text = row["apellidos"].ToString();
             CuiUsuario.Text = row["cui"].ToString();
             txtNumero.Text = row["telefono"].ToString();
+            cbo_departamento.SelectedValue = row["idDepartamento"].ToString();
             txtDireccion.Text = row["direccion"].ToString();
             Email.Text = row["correo"].ToString();
             ddlTipoPermiso.SelectedValue = row["id_tipousuario"].ToString();
@@ -257,6 +277,7 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             objCEUsuario.CE_Apellidos = getApellido();
             objCEUsuario.CE_CUI = getCUI();
             objCEUsuario.CE_Telefono = getNumero();
+            objCEUsuario.CE_IDDepto = getID_Departamento();
             objCEUsuario.CE_Direccion = getDirecion();
             objCEUsuario.ID_TipoUsuario = getId_TipoUsuario();
             objCEUsuario.ID_UsuarioAutoriza = (int)Session["UsuarioID"];
@@ -337,6 +358,10 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             return Convert.ToInt32(ddlTipoPermiso.SelectedValue);
         }
 
+        protected int getID_Departamento()
+        {
+            return Convert.ToInt32(cbo_departamento.SelectedValue);
+        }
 
         #endregion
 

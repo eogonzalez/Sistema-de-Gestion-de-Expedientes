@@ -177,5 +177,10 @@ namespace Capa_Negocio.Solicitudes
         {
             return objCDVerificacionOrigen.SelectDatosSolicitudWF(id_solicitud);
         }
+
+        public int SelectUltimoCorrelativoAdjunto()
+        {
+            return objCDVerificacionOrigen.SelectUltimoCorrelativoAdjunto();
+        }
     }
 }
