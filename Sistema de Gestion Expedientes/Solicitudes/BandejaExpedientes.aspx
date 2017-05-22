@@ -6,9 +6,9 @@
         <div class="panel-heading"><%: Title %><asp:Label runat="server" ID="lblCantidadBandeja" CssClass="label label-info" /></div>
         <br />
         <asp:LinkButton runat="server" ID="lkBtn_Hidden_Autorizar" Style="display: hidden"></asp:LinkButton>
-        <cc1:modalpopupextender id="lkBtn_Autorizar_ModalPopupExtender" runat="server" backgroundcssclass="modalBackground"
-            behaviorid="lkBtn_Autorizar_ModalPopupExtender" popupcontrolid="pnl_nuevo" targetcontrolid="lkBtn_Hidden_Autorizar">
-        </cc1:modalpopupextender>
+        <cc1:ModalPopupExtender ID="lkBtn_Autorizar_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackground"
+            BehaviorID="lkBtn_Autorizar_ModalPopupExtender" PopupControlID="pnl_nuevo" TargetControlID="lkBtn_Hidden_Autorizar">
+        </cc1:ModalPopupExtender>
 
         <div class="panel-body form-vertical">
 
@@ -17,7 +17,19 @@
                     CssClass="table table-hover table-striped"
                     GridLines="None"
                     EmptyDataText="No existen registros."
-                    AutoGenerateColumns="false" OnRowCommand="gvBandeja_RowCommand">
+                    AutoGenerateColumns="false" 
+                    AllowPaging="true"
+                    OnPageIndexChanging="gvBandeja_PageIndexChanging"
+                    OnRowCommand="gvBandeja_RowCommand">
+
+                    <PagerSettings Mode="Numeric"
+                        Position="Bottom"
+                        PageButtonCount="10" />
+
+                    <PagerStyle BackColor="LightBlue"
+                        Height="30px"
+                        VerticalAlign="Bottom"
+                        HorizontalAlign="Center" />
 
                     <Columns>
                         <asp:BoundField DataField="id_expediente" HeaderText="#Expediente" SortExpression="id_expediente" />

@@ -76,36 +76,40 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
         protected void gvMenu_RowCommand(Object sender, GridViewCommandEventArgs e)
         {
-            int index = Convert.ToInt32(e.CommandArgument);
-
-            GridViewRow row = gvMenu.Rows[index];
-            int id_menu = Convert.ToInt32(row.Cells[0].Text);
-
-            /*
-             * Agrego a la variable de sesion el id de menu seleccionado
-             * para las acciones de editar o eliminar
-             */
-
-            Session.Add("IDMenuOpcion", id_menu);
-
-            switch (e.CommandName)
+            if (e.CommandName != "Page")
             {
-                case "submenu":
-                    Response.Redirect("~/Administracion/MenuOpcion.aspx?id_om=" + id_menu.ToString());
-                    break;
 
-                case "modificar":
-                    MostrarDatos(id_menu);
-                    this.lkBtn_viewPanel_ModalPopupExtender.Show();
-                    break;
+                int index = Convert.ToInt32(e.CommandArgument);
 
-                case "eliminar":
-                    EliminaMenuOpcion(id_menu);
-                    Llenar_gvMenu();
-                    break;
+                GridViewRow row = gvMenu.Rows[index];
+                int id_menu = Convert.ToInt32(row.Cells[0].Text);
 
-                default:
-                    break;
+                /*
+                 * Agrego a la variable de sesion el id de menu seleccionado
+                 * para las acciones de editar o eliminar
+                 */
+
+                Session.Add("IDMenuOpcion", id_menu);
+
+                switch (e.CommandName)
+                {
+                    case "submenu":
+                        Response.Redirect("~/Administracion/MenuOpcion.aspx?id_om=" + id_menu.ToString());
+                        break;
+
+                    case "modificar":
+                        MostrarDatos(id_menu);
+                        this.lkBtn_viewPanel_ModalPopupExtender.Show();
+                        break;
+
+                    case "eliminar":
+                        EliminaMenuOpcion(id_menu);
+                        Llenar_gvMenu();
+                        break;
+
+                    default:
+                        break;
+                }
             }
 
         }
@@ -115,6 +119,12 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             LimpiarPanel();
             btnGuardar.Text = "Guardar";
             btnGuardar.CommandName = "Guardar";
+        }
+
+        protected void gvMenu_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvMenu.PageIndex = e.NewPageIndex;
+            Llenar_gvMenu();
         }
 
         #endregion

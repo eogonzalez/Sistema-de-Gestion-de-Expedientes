@@ -32,20 +32,31 @@
                             CssClass="table table-hover table-striped"
                             GridLines="None"
                             EmptyDataText="No existen registros."
+                            AllowPaging="true"
+                            OnPageIndexChanging="gvTipoUsuario_PageIndexChanging"
                             OnRowCommand="gvTipoUsuario_RowCommand"
                             AutoGenerateColumns="false">
 
+                            <PagerSettings Mode="Numeric"
+                                Position="Bottom"
+                                PageButtonCount="10" />
+
+                            <PagerStyle BackColor="LightBlue"
+                                Height="30px"
+                                VerticalAlign="Bottom"
+                                HorizontalAlign="Center" />
+
                             <Columns>
-                                <asp:BoundField DataField="id_tipousuario" SortExpression="id_tipousuario" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
+                                <asp:BoundField DataField="id_tipousuario" SortExpression="id_tipousuario" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
                                 <asp:BoundField DataField="nombre" HeaderText="Nombre" />
                                 <%--<asp:BoundField DataField="tipo_permiso" HeaderText="Tipo Permiso" />--%>
                                 <asp:BoundField DataField="fecha_creacion" HeaderText="Fecha Registro" />
 
                                 <asp:ButtonField ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />
-                                
+
                                 <asp:TemplateField HeaderText="Eliminar">
                                     <ItemTemplate>
-                                        <asp:Button runat="server" ID="btnEliminar" CausesValidation="false" CommandName="eliminar" CommandArgument="<%# Container.DataItemIndex %>" Text="Eliminar" CssClass="btn btn-danger" OnClientClick="return confirm(&quot;¿Esta seguro de borrar el perfil seleccionado?&quot;)"/>
+                                        <asp:Button runat="server" ID="btnEliminar" CausesValidation="false" CommandName="eliminar" CommandArgument="<%# Container.DataItemIndex %>" Text="Eliminar" CssClass="btn btn-danger" OnClientClick="return confirm(&quot;¿Esta seguro de borrar el perfil seleccionado?&quot;)" />
                                     </ItemTemplate>
                                 </asp:TemplateField>
 

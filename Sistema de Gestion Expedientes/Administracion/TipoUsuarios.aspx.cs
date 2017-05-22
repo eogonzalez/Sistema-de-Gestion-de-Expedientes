@@ -95,33 +95,36 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
         protected void gvTipoUsuario_RowCommand(Object sender, GridViewCommandEventArgs e)
         {
-
-            int index = Convert.ToInt32(e.CommandArgument);
-
-            GridViewRow row = gvTipoUsuario.Rows[index];
-            int id_tipousuario = Convert.ToInt32(row.Cells[0].Text);
-
-            /*
-             * Agrego a la variable de sesion el perfil seleccionado
-             * para las acciones de editar o eliminar
-             */
-
-            Session.Add("IDTipoUsuario", id_tipousuario);
-
-            switch (e.CommandName)
+            if (e.CommandName != "Page")
             {
-                case "permisos":
-                    Response.Redirect("~/Administracion/PermisosPerfiles.aspx?id=" + id_tipousuario.ToString());
-                    break;
-                case "modificar":
-                    Mostrardatos(id_tipousuario);
-                    break;
-                case "eliminar":
-                    EliminaTipoUsuario(id_tipousuario);
-                    LLenar_gvTipoUsuario();
-                    break;
-                default:
-                    break;
+
+                int index = Convert.ToInt32(e.CommandArgument);
+
+                GridViewRow row = gvTipoUsuario.Rows[index];
+                int id_tipousuario = Convert.ToInt32(row.Cells[0].Text);
+
+                /*
+                 * Agrego a la variable de sesion el perfil seleccionado
+                 * para las acciones de editar o eliminar
+                 */
+
+                Session.Add("IDTipoUsuario", id_tipousuario);
+
+                switch (e.CommandName)
+                {
+                    case "permisos":
+                        Response.Redirect("~/Administracion/PermisosPerfiles.aspx?id=" + id_tipousuario.ToString());
+                        break;
+                    case "modificar":
+                        Mostrardatos(id_tipousuario);
+                        break;
+                    case "eliminar":
+                        EliminaTipoUsuario(id_tipousuario);
+                        LLenar_gvTipoUsuario();
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -130,6 +133,12 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             LimpiarTipoUsuario();
             btnGuardar.CommandName = "Guardar";
             btnGuardar.Text = "Guardar";
+        }
+
+        protected void gvTipoUsuario_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvTipoUsuario.PageIndex = e.NewPageIndex;
+            LLenar_gvTipoUsuario();
         }
 
         #endregion
@@ -206,11 +215,6 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
         }
 
         #endregion
-        
-
-
-
-
 
     }
 }

@@ -6,7 +6,7 @@
         <div class="panel-heading"><%: Title %></div>
         <br />
         <div class="panel-body form-vertical">
-            <div class="btn" >
+            <div class="btn">
                 <asp:LinkButton runat="server" ID="lkBtn_nuevo" CssClass="btn btn-primary"><i aria-hidden="true" class="glyphicon glyphicon-pencil"></i> Nuevo </asp:LinkButton>
                 <asp:LinkButton runat="server" ID="lkBtn_viewPanel"></asp:LinkButton>
 
@@ -26,10 +26,21 @@
                     GridLines="None"
                     EmptyDataText="No existen registros."
                     AutoGenerateColumns="false"
+                    AllowPaging="true"
+                    OnPageIndexChanging="gvRequisitosVerificacion_PageIndexChanging"
                     OnRowCommand="gvRequisitosVerificacion_RowCommand">
 
+                    <PagerSettings Mode="Numeric"
+                        Position="Bottom"
+                        PageButtonCount="10" />
+
+                    <PagerStyle BackColor="LightBlue"
+                        Height="30px"
+                        VerticalAlign="Bottom"
+                        HorizontalAlign="Center" />
+
                     <Columns>
-                        <asp:BoundField DataField="idRequisito" SortExpression="idDepartamento" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
+                        <asp:BoundField DataField="idRequisito" SortExpression="idDepartamento" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
                         <asp:BoundField DataField="nombre" HeaderText="Requisito" />
                         <asp:BoundField DataField="descripcion" HeaderText="Descripcion" />
 

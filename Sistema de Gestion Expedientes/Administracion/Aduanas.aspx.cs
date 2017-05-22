@@ -28,27 +28,31 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
         protected void gvAduanas_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            int index = Convert.ToInt32(e.CommandArgument);
-
-            GridViewRow row = gvAduanas.Rows[index];
-            int id_aduana = Convert.ToInt32(row.Cells[0].Text);
-
-            Session.Add("IDAduana", id_aduana);
-
-            switch (e.CommandName)
+            if (e.CommandName != "Page")
             {
-                case "modificar":
-                    MostrarDatos(id_aduana);
-                    lkBtn_viewPanel_ModalPopupExtender.Show();
-                    break;
 
-                case "eliminar":
-                    EliminarAduana(id_aduana);
-                    Llenar_gvAduanas();
-                    break;
+                int index = Convert.ToInt32(e.CommandArgument);
 
-                default:
-                    break;
+                GridViewRow row = gvAduanas.Rows[index];
+                int id_aduana = Convert.ToInt32(row.Cells[0].Text);
+
+                Session.Add("IDAduana", id_aduana);
+
+                switch (e.CommandName)
+                {
+                    case "modificar":
+                        MostrarDatos(id_aduana);
+                        lkBtn_viewPanel_ModalPopupExtender.Show();
+                        break;
+
+                    case "eliminar":
+                        EliminarAduana(id_aduana);
+                        Llenar_gvAduanas();
+                        break;
+
+                    default:
+                        break;
+                }
             }
         }
 
@@ -98,6 +102,12 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             LimpiarPanel();
             btnGuardar.Text = "Guardar";
             btnGuardar.CommandName = "Guardar";
+        }
+
+        protected void gvAduanas_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvAduanas.PageIndex = e.NewPageIndex;
+            Llenar_gvAduanas();
         }
 
         #endregion

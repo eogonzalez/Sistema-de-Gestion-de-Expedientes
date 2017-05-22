@@ -77,24 +77,33 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
         protected void gvTiempos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            int index = Convert.ToInt32(e.CommandArgument);
-
-            GridViewRow row = gvTiempos.Rows[index];
-            int id_estado = Convert.ToInt32(row.Cells[0].Text);
-
-            Session.Add("IdEstado", id_estado);
-
-            switch (e.CommandName)
+            if (e.CommandName != "Page")
             {
-                case "modificar":
-                    MostrarDatos(id_estado);
-                    lkBtn_viewPanel_ModalPopupExtender.Show();
-                    break;
-                case "eliminar":
-                    EliminaEstado(id_estado);
-                    Llenar_gvTiempos();
-                    break;
+                int index = Convert.ToInt32(e.CommandArgument);
+
+                GridViewRow row = gvTiempos.Rows[index];
+                int id_estado = Convert.ToInt32(row.Cells[0].Text);
+
+                Session.Add("IdEstado", id_estado);
+
+                switch (e.CommandName)
+                {
+                    case "modificar":
+                        MostrarDatos(id_estado);
+                        lkBtn_viewPanel_ModalPopupExtender.Show();
+                        break;
+                    case "eliminar":
+                        EliminaEstado(id_estado);
+                        Llenar_gvTiempos();
+                        break;
+                }
             }
+        }
+
+        protected void gvTiempos_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvTiempos.PageIndex = e.NewPageIndex;
+            Llenar_gvTiempos();
         }
 
         #endregion
@@ -205,5 +214,6 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
         }
 
         #endregion
+
     }
 }

@@ -14,7 +14,7 @@
                     BehaviorID="lkBtn_nuevo_ModalPopupExtender" PopupControlID="pnl_nuevo" TargetControlID="lkBtn_nuevo" CancelControlID="btnHide">
                 </cc1:ModalPopupExtender>
 
-                <cc1:ModalPopupExtender id="lkBtn_viewPanel_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackground"
+                <cc1:ModalPopupExtender ID="lkBtn_viewPanel_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackground"
                     BehaviorID="lkBtn_viewPanel_ModalPopupExtender" PopupControlID="pnl_nuevo" TargetControlID="lkBtn_viewPanel">
                 </cc1:ModalPopupExtender>
 
@@ -25,11 +25,22 @@
                     CssClass="table table-hover table-striped"
                     GridLines="None"
                     EmptyDataText="No existen registros."
+                    AllowPaging="true"
+                    OnPageIndexChanging="gvMenu_PageIndexChanging"
                     OnRowCommand="gvMenu_RowCommand"
-                    AutoGenerateColumns="false" >
+                    AutoGenerateColumns="false">
+
+                    <PagerSettings Mode="Numeric"
+                        Position="Bottom"
+                        PageButtonCount="10" />
+
+                    <PagerStyle BackColor="LightBlue"
+                        Height="30px"
+                        VerticalAlign="Bottom"
+                        HorizontalAlign="Center" />
 
                     <Columns>
-                        <asp:BoundField DataField="id_opcion" SortExpression="id_opcion" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
+                        <asp:BoundField DataField="id_opcion" SortExpression="id_opcion" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
                         <asp:BoundField DataField="nombre" HeaderText="Nombre" />
                         <asp:BoundField DataField="descripcion" HeaderText="Descripcion" />
                         <asp:BoundField DataField="url" HeaderText="URL" />
@@ -37,16 +48,16 @@
                         <asp:BoundField DataField="obligatorio" HeaderText="Obligatorio" />
                         <asp:BoundField DataField="visible" HeaderText="Visible" />
                         <asp:BoundField DataField="login" HeaderText="Login" />
-                        
-                        <asp:ButtonField  ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />
+
+                        <asp:ButtonField ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />
                         <asp:TemplateField HeaderText="Eliminar">
                             <ItemTemplate>
-                                <asp:Button Text="Eliminar" runat="server" id="btnEliminar" CausesValidation="false" CommandName="eliminar" CommandArgument="<%# Container.DataItemIndex %>" CssClass="btn btn-danger" OnClientClick="return confirm(&quot;¿Esta seguro de borrar opcion seleccionada?&quot;)"/>
+                                <asp:Button Text="Eliminar" runat="server" ID="btnEliminar" CausesValidation="false" CommandName="eliminar" CommandArgument="<%# Container.DataItemIndex %>" CssClass="btn btn-danger" OnClientClick="return confirm(&quot;¿Esta seguro de borrar opcion seleccionada?&quot;)" />
                             </ItemTemplate>
                         </asp:TemplateField>
-                        
-                        <asp:ButtonField  ButtonType="Button" Text="Sub Menu" HeaderText="Sub Menu" CommandName="submenu" ControlStyle-CssClass="btn btn-primary" />
-                    
+
+                        <asp:ButtonField ButtonType="Button" Text="Sub Menu" HeaderText="Sub Menu" CommandName="submenu" ControlStyle-CssClass="btn btn-primary" />
+
                     </Columns>
 
                 </asp:GridView>
@@ -89,9 +100,9 @@
                 </div>
 
                 <div class="form-group">
-                    <asp:Label Text="Comando:" AssociatedControlID="txtComando" runat ="server" CssClass="control-label col-xs-2" />
+                    <asp:Label Text="Comando:" AssociatedControlID="txtComando" runat="server" CssClass="control-label col-xs-2" />
                     <div class="col-xs-10">
-                        <asp:TextBox runat="server" id="txtComando" CssClass="form-control" />
+                        <asp:TextBox runat="server" ID="txtComando" CssClass="form-control" />
                     </div>
                 </div>
 
@@ -128,7 +139,7 @@
 
                 <div class="panel-footer">
                     <asp:Button runat="server" ID="btnGuardar" CssClass="btn btn-primary" Text="Guardar" OnClick="btnGuardar_Click" CommandName="Guardar" />
-                    <asp:Button runat="server" ID="btnSalir" CssClass="btn btn-default" Text="Salir" CausesValidation="false" OnClick="btnSalir_Click"/>
+                    <asp:Button runat="server" ID="btnSalir" CssClass="btn btn-default" Text="Salir" CausesValidation="false" OnClick="btnSalir_Click" />
                 </div>
             </div>
         </asp:Panel>

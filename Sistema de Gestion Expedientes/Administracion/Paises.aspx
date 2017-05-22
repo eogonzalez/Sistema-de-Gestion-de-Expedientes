@@ -10,14 +10,14 @@
                 <asp:LinkButton runat="server" ID="lkBtn_nuevo" CssClass="btn btn-primary"><i aria-hidden="true" class="glyphicon glyphicon-pencil"></i> Nuevo </asp:LinkButton>
                 <asp:LinkButton runat="server" ID="lkBtn_viewPanel"></asp:LinkButton>
 
-                <cc1:modalpopupextender id="lkBtn_nuevo_ModalPopupExtender" runat="server" backgroundcssclass="modalBackground"
-                    behaviorid="lkBtn_nuevo_ModalPopupExtender" popupcontrolid="pnl_nuevo" targetcontrolid="lkBtn_nuevo" cancelcontrolid="btnHide">
-                </cc1:modalpopupextender>
+                <cc1:ModalPopupExtender ID="lkBtn_nuevo_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackground"
+                    BehaviorID="lkBtn_nuevo_ModalPopupExtender" PopupControlID="pnl_nuevo" TargetControlID="lkBtn_nuevo" CancelControlID="btnHide">
+                </cc1:ModalPopupExtender>
 
 
-                <cc1:modalpopupextender id="lkBtn_viewPanel_ModalPopupExtender" runat="server" backgroundcssclass="modalBackground"
-                    behaviorid="lkBtn_viewPanel_ModalPopupExtender" popupcontrolid="pnl_nuevo" targetcontrolid="lkBtn_viewPanel">
-                </cc1:modalpopupextender>
+                <cc1:ModalPopupExtender ID="lkBtn_viewPanel_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackground"
+                    BehaviorID="lkBtn_viewPanel_ModalPopupExtender" PopupControlID="pnl_nuevo" TargetControlID="lkBtn_viewPanel">
+                </cc1:ModalPopupExtender>
 
             </div>
             <br />
@@ -26,10 +26,22 @@
                     CssClass="table table-hover table-striped"
                     GridLines="None"
                     EmptyDataText="No existen registros."
-                    AutoGenerateColumns="false" OnRowCommand="gvPaises_RowCommand">
+                    AutoGenerateColumns="false"
+                    AllowPaging="true"
+                    OnPageIndexChanging="gvPaises_PageIndexChanging"
+                    OnRowCommand="gvPaises_RowCommand">
+
+                    <PagerSettings Mode="Numeric"
+                        Position="Bottom"
+                        PageButtonCount="10" />
+
+                    <PagerStyle BackColor="LightBlue"
+                        Height="30px"
+                        VerticalAlign="Bottom"
+                        HorizontalAlign="Center" />
 
                     <Columns>
-                        <asp:BoundField DataField="idPais" SortExpression="idPais" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
+                        <asp:BoundField DataField="idPais" SortExpression="idPais" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
                         <asp:BoundField DataField="nombre" HeaderText="Pais" />
                         <asp:BoundField DataField="iso2" HeaderText="ISO2" />
 
@@ -76,8 +88,8 @@
 
 
                 <div class="panel-footer">
-                    <asp:Button runat="server" ID="btnGuardar" CssClass="btn btn-primary" Text="Guardar"  CommandName="Guardar" OnClick="btnGuardar_Click" />
-                    <asp:Button runat="server" ID="btnSalir" CssClass="btn btn-default" Text="Salir" CausesValidation="false" OnClick="btnSalir_Click"  />
+                    <asp:Button runat="server" ID="btnGuardar" CssClass="btn btn-primary" Text="Guardar" CommandName="Guardar" OnClick="btnGuardar_Click" />
+                    <asp:Button runat="server" ID="btnSalir" CssClass="btn btn-default" Text="Salir" CausesValidation="false" OnClick="btnSalir_Click" />
                 </div>
             </div>
         </asp:Panel>

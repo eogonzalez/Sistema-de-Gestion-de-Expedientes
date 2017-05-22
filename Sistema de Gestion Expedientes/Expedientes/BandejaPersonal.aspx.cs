@@ -91,6 +91,12 @@ namespace Sistema_de_Gestion_Expedientes.Expedientes
 
         }
 
+        protected void gvBandeja_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvBandeja.PageIndex = e.NewPageIndex;
+            Llenar_gvBandeja((int)Session["UsuarioID"]);
+        }
+
         #endregion
 
         #region Funciones
@@ -179,8 +185,6 @@ namespace Sistema_de_Gestion_Expedientes.Expedientes
         }
 
         #endregion
-
-
 
     }
 }

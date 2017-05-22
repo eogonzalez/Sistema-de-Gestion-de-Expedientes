@@ -15,7 +15,7 @@
 
         <asp:LinkButton runat="server" ID="lkBtn_Hidden_Motivo" Style="display: hidden"></asp:LinkButton>
 
-        <cc1:ModalPopupExtender id="lkBtn_Motivo_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackground"
+        <cc1:ModalPopupExtender ID="lkBtn_Motivo_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackground"
             BehaviorID="lkBtn_Motivo_ModalPopupExtender" PopupControlID="pnl_Motivo" TargetControlID="lkBtn_Hidden_Motivo">
         </cc1:ModalPopupExtender>
 
@@ -26,8 +26,19 @@
                     CssClass="table table-hover table-striped"
                     GridLines="None"
                     EmptyDataText="No existen solicitudes de registro."
+                    AllowPaging="true"
+                    OnPageIndexChanging="gvSolicitudRegistro_PageIndexChanging"
                     OnRowCommand="gvSolicitudRegistro_RowCommand"
                     AutoGenerateColumns="false">
+
+                    <PagerSettings Mode="Numeric"
+                        Position="Bottom"
+                        PageButtonCount="10" />
+
+                    <PagerStyle BackColor="LightBlue"
+                        Height="30px"
+                        VerticalAlign="Bottom"
+                        HorizontalAlign="Center" />
 
                     <Columns>
                         <asp:BoundField DataField="id_usuario" SortExpression="id_usuario">
@@ -95,12 +106,12 @@
                 <div class="form-group">
                     <asp:Label runat="server" AssociatedControlID="txtMotivo" CssClass="control-label col-xs-2" Text="Motivo: "></asp:Label>
                     <div class="col-xs-10">
-                        <asp:TextBox ID="txtMotivo" runat="server" TextMode="MultiLine" CssClass="form-control"/>                        
+                        <asp:TextBox ID="txtMotivo" runat="server" TextMode="MultiLine" CssClass="form-control" />
                     </div>
                 </div>
 
                 <div class="panel-footer">
-                    <asp:Button runat="server" ID="btnEnviar" CssClass="btn btn-success" Text="Enviar" OnClick="btnEnviar_Click"/>
+                    <asp:Button runat="server" ID="btnEnviar" CssClass="btn btn-success" Text="Enviar" OnClick="btnEnviar_Click" />
                     <asp:Button runat="server" ID="btnSalirMotivo" CssClass="btn btn-default" Text="Salir" CausesValidation="false" />
                 </div>
             </div>

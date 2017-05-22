@@ -71,25 +71,27 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos
 
         protected void gvRequisitosVerificacion_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            int index = Convert.ToInt32(e.CommandArgument);
-
-            GridViewRow row = gvRequisitosVerificacion.Rows[index];
-            int id_requisito = Convert.ToInt32(row.Cells[0].Text);
-
-            Session.Add("IDRequisitoVO", id_requisito);
-
-            switch (e.CommandName)
+            if (e.CommandName != "Page")
             {
-                case "modificar":
-                    MostrarDatos(id_requisito);
-                    lkBtn_viewPanel_ModalPopupExtender.Show();
-                    break;
-                case "eliminar":
-                    EliminarRequisito(id_requisito);
-                    Llenar_gvRequisitosVerificacion();
-                    break;
-                default:
-                    break;
+
+                int index = Convert.ToInt32(e.CommandArgument);
+
+                GridViewRow row = gvRequisitosVerificacion.Rows[index];
+                int id_requisito = Convert.ToInt32(row.Cells[0].Text);
+
+                Session.Add("IDRequisitoVO", id_requisito);
+
+                switch (e.CommandName)
+                {
+                    case "modificar":
+                        MostrarDatos(id_requisito);
+                        lkBtn_viewPanel_ModalPopupExtender.Show();
+                        break;
+                    case "eliminar":
+                        EliminarRequisito(id_requisito);
+                        Llenar_gvRequisitosVerificacion();
+                        break;                    
+                }
             }
         }
 
@@ -98,6 +100,12 @@ namespace Sistema_de_Gestion_Expedientes.Requisitos
             LimpiarPanel();
             btnGuardar.Text = "Guardar";
             btnGuardar.CommandName = "Guardar";
+        }
+
+        protected void gvRequisitosVerificacion_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvRequisitosVerificacion.PageIndex = e.NewPageIndex;
+            Llenar_gvRequisitosVerificacion();
         }
 
         #endregion

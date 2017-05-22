@@ -81,26 +81,36 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
         protected void gvInstrumentos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            int index = Convert.ToInt32(e.CommandArgument);
-
-            GridViewRow row = gvInstrumentos.Rows[index];
-            int id_instrumento = Convert.ToInt32(row.Cells[0].Text);
-
-            Session.Add("IDInstrumento", id_instrumento);
-
-            switch (e.CommandName)
+            if (e.CommandName != "Page")
             {
-                case "modificar":
-                    MostrarDatos(id_instrumento);
-                    lkBtn_viewPanel_ModalPopupExtender.Show();
-                    break;
-                case "eliminar":
-                    EliminarInstrumento(id_instrumento);
-                    Llenar_gvInstrumentos();
-                    break;
-                default:
-                    break;
+
+                int index = Convert.ToInt32(e.CommandArgument);
+
+                GridViewRow row = gvInstrumentos.Rows[index];
+                int id_instrumento = Convert.ToInt32(row.Cells[0].Text);
+
+                Session.Add("IDInstrumento", id_instrumento);
+
+                switch (e.CommandName)
+                {
+                    case "modificar":
+                        MostrarDatos(id_instrumento);
+                        lkBtn_viewPanel_ModalPopupExtender.Show();
+                        break;
+                    case "eliminar":
+                        EliminarInstrumento(id_instrumento);
+                        Llenar_gvInstrumentos();
+                        break;
+                    default:
+                        break;
+                }
             }
+        }
+
+        protected void gvInstrumentos_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvInstrumentos.PageIndex = e.NewPageIndex;
+            Llenar_gvInstrumentos();
         }
         
         #endregion
@@ -178,10 +188,6 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
         }
 
         #endregion
-
-
-
-
 
     }
 }

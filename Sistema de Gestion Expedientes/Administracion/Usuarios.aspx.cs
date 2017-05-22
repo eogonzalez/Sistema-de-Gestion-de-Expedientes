@@ -31,29 +31,33 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
         protected void gvUsuarios_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            int index = Convert.ToInt32(e.CommandArgument);
-
-            GridViewRow row = gvUsuarios.Rows[index];
-            int id_usuarioManager = Convert.ToInt32(row.Cells[0].Text);
-            string correoUsuarioManager = row.Cells[4].Text;
-            Session.Add("IDUsuarioManager", id_usuarioManager);
-            Session.Add("CorreoUsuarioManager", correoUsuarioManager);
-
-            switch (e.CommandName)
+            if (e.CommandName != "Page")
             {
-                case "modificar":
-                    MostrarUsuario(id_usuarioManager);
-                    lkBtn_viewPanel_ModalPopupExtender.Show();
-                    break;
-                case "eliminar":
-                    EliminarUsuario(id_usuarioManager);
-                    Llenar_gvUsuarios();
-                    break;
-                case "generarpassword":
-                    lkBtn_ModificarContraseña_ModalPopupExtender.Show();
-                    break;
-                default:
-                    break;
+
+                int index = Convert.ToInt32(e.CommandArgument);
+
+                GridViewRow row = gvUsuarios.Rows[index];
+                int id_usuarioManager = Convert.ToInt32(row.Cells[0].Text);
+                string correoUsuarioManager = row.Cells[4].Text;
+                Session.Add("IDUsuarioManager", id_usuarioManager);
+                Session.Add("CorreoUsuarioManager", correoUsuarioManager);
+
+                switch (e.CommandName)
+                {
+                    case "modificar":
+                        MostrarUsuario(id_usuarioManager);
+                        lkBtn_viewPanel_ModalPopupExtender.Show();
+                        break;
+                    case "eliminar":
+                        EliminarUsuario(id_usuarioManager);
+                        Llenar_gvUsuarios();
+                        break;
+                    case "generarpassword":
+                        lkBtn_ModificarContraseña_ModalPopupExtender.Show();
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -154,6 +158,12 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             {
                 ErrorPanelContraseña.Text = "Contraseña no coincide, verifique.";
             }
+        }
+
+        protected void gvUsuarios_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvUsuarios.PageIndex = e.NewPageIndex;
+            Llenar_gvUsuarios();
         }
 
         #endregion
@@ -364,6 +374,8 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
         }
 
         #endregion
+
+
 
     }
 }

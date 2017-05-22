@@ -89,8 +89,19 @@
                 <asp:GridView runat="server" ID="gvBandeja"
                     CssClass="table table-hover table-striped"
                     GridLines="None"
+                    AllowPaging="true"
+                    OnPageIndexChanging="gvBandeja_PageIndexChanging"
                     EmptyDataText="No existen registros."
                     AutoGenerateColumns="false">
+
+                    <PagerSettings Mode="Numeric"
+                        Position="Bottom"
+                        PageButtonCount="10" />
+
+                    <PagerStyle BackColor="LightBlue"
+                        Height="30px"
+                        VerticalAlign="Bottom"
+                        HorizontalAlign="Center" />
 
                     <Columns>
                         <asp:TemplateField>

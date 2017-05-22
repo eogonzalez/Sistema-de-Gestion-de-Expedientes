@@ -102,32 +102,36 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
         protected void gvPermisosPerfiles_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            int index = Convert.ToInt32(e.CommandArgument);
-
-            GridViewRow row = gvPermisosPerfiles.Rows[index];
-            int id_permisoPerfil = Convert.ToInt32(row.Cells[0].Text);
-
-            Session.Add("IDPermisoPerfil", id_permisoPerfil);
-
-            int id_usuarioPermiso = 0;
-
-            if (Request.QueryString["id"] != null)
+            if (e.CommandName != "Page")
             {
-                id_usuarioPermiso = Convert.ToInt32(Request.QueryString["id"].ToString());
-            }
 
-            switch (e.CommandName)
-            {   
-                case "modificar":
-                    MostrarDatos(id_permisoPerfil);
-                    lkBtn_viewPanel_ModalPopupExtender.Show();
-                    break;
-                case "eliminar":
-                    EliminarPermiso(id_permisoPerfil);
-                    Llenar_gvPermisosPerfiles(id_usuarioPermiso);
-                    break;
-                default:
-                    break;
+                int index = Convert.ToInt32(e.CommandArgument);
+
+                GridViewRow row = gvPermisosPerfiles.Rows[index];
+                int id_permisoPerfil = Convert.ToInt32(row.Cells[0].Text);
+
+                Session.Add("IDPermisoPerfil", id_permisoPerfil);
+
+                int id_usuarioPermiso = 0;
+
+                if (Request.QueryString["id"] != null)
+                {
+                    id_usuarioPermiso = Convert.ToInt32(Request.QueryString["id"].ToString());
+                }
+
+                switch (e.CommandName)
+                {
+                    case "modificar":
+                        MostrarDatos(id_permisoPerfil);
+                        lkBtn_viewPanel_ModalPopupExtender.Show();
+                        break;
+                    case "eliminar":
+                        EliminarPermiso(id_permisoPerfil);
+                        Llenar_gvPermisosPerfiles(id_usuarioPermiso);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -136,6 +140,20 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             LimpiarPanel();
             btnGuardar.Text = "Guardar";
             btnGuardar.CommandName = "Guardar";
+        }
+
+        protected void gvPermisosPerfiles_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvPermisosPerfiles.PageIndex = e.NewPageIndex;
+
+            int id_usuarioPermiso = 0;
+
+            if (Request.QueryString["id"] != null)
+            {
+                id_usuarioPermiso = Convert.ToInt32(Request.QueryString["id"].ToString());                
+                Llenar_gvPermisosPerfiles(id_usuarioPermiso);
+            }
+
         }
 
         #endregion

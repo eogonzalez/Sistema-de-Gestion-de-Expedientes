@@ -26,10 +26,22 @@
                     CssClass="table table-hover table-striped"
                     GridLines="None"
                     EmptyDataText="No existen registros."
-                    AutoGenerateColumns="false" OnRowCommand="gvDepartamento_RowCommand">
+                    AutoGenerateColumns="false" 
+                    AllowPaging="true"
+                    OnPageIndexChanging="gvDepartamento_PageIndexChanging"
+                    OnRowCommand="gvDepartamento_RowCommand">
+
+                    <PagerSettings Mode="Numeric"
+                        Position="Bottom"
+                        PageButtonCount="10" />
+
+                    <PagerStyle BackColor="LightBlue"
+                        Height="30px"
+                        VerticalAlign="Bottom"
+                        HorizontalAlign="Center" />
 
                     <Columns>
-                        <asp:BoundField DataField="idDepartamento" SortExpression="idDepartamento" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
+                        <asp:BoundField DataField="idDepartamento" SortExpression="idDepartamento" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
                         <asp:BoundField DataField="codigoDepto" HeaderText="Codigo" />
                         <asp:BoundField DataField="nombre" HeaderText="Departamento" />
                         <asp:BoundField DataField="descripcion" HeaderText="Descripcion" />
@@ -83,7 +95,7 @@
                 </div>
 
                 <div class="panel-footer">
-                    <asp:Button runat="server" ID="btnGuardar" CssClass="btn btn-primary" Text="Guardar" OnClick="btnGuardar_Click" CommandName="Guardar"/>
+                    <asp:Button runat="server" ID="btnGuardar" CssClass="btn btn-primary" Text="Guardar" OnClick="btnGuardar_Click" CommandName="Guardar" />
                     <asp:Button runat="server" ID="btnSalir" CssClass="btn btn-default" Text="Salir" CausesValidation="false" OnClick="btnSalir_Click" />
                 </div>
             </div>

@@ -31,36 +31,45 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
 
         protected void gvBorradores_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            int index = Convert.ToInt32(e.CommandArgument);
-            GridViewRow row = gvBorradores.Rows[index];
-            int id_solicitud = Convert.ToInt32(row.Cells[0].Text);
-            var cmd = row.Cells[1].Text;
-            string descripcion_estado = row.Cells[8].Text;
-            string estado = row.Cells[9].Text;
-
-            switch (e.CommandName)
+            if (e.CommandName != "Page")
             {
-                case "modificar":
-                    Response.Redirect("~/Solicitudes/VerificacionOrigen.aspx?cmd="+cmd+"&ids="+id_solicitud+"&st="+estado);
-                    break;
-                case "eliminar":
-                    if (descripcion_estado == "Borrador")
-                    {
-                        EliminarBorrador(id_solicitud);
-                        Llenar_gvBorradores(Convert.ToInt32(Session["UsuarioID"].ToString()));
-                        Llenar_CantidadBorradores(Convert.ToInt32(Session["UsuarioID"].ToString()));
-                    }
-                    else
-                    {
-                        ErrorMessagePrincipal.Text = "No es posible eliminar un expediente en estado de Aclaracion.";
-                        divAlertError.Visible = true;
-                    }
-                    
-                    break;
-                default:
-                    break;
+
+                int index = Convert.ToInt32(e.CommandArgument);
+                GridViewRow row = gvBorradores.Rows[index];
+                int id_solicitud = Convert.ToInt32(row.Cells[0].Text);
+                var cmd = row.Cells[1].Text;
+                string descripcion_estado = row.Cells[8].Text;
+                string estado = row.Cells[9].Text;
+
+                switch (e.CommandName)
+                {
+                    case "modificar":
+                        Response.Redirect("~/Solicitudes/VerificacionOrigen.aspx?cmd=" + cmd + "&ids=" + id_solicitud + "&st=" + estado);
+                        break;
+                    case "eliminar":
+                        if (descripcion_estado == "Borrador")
+                        {
+                            EliminarBorrador(id_solicitud);
+                            Llenar_gvBorradores(Convert.ToInt32(Session["UsuarioID"].ToString()));
+                            Llenar_CantidadBorradores(Convert.ToInt32(Session["UsuarioID"].ToString()));
+                        }
+                        else
+                        {
+                            ErrorMessagePrincipal.Text = "No es posible eliminar un expediente en estado de Aclaracion.";
+                            divAlertError.Visible = true;
+                        }
+
+                        break;
+                    default:
+                        break;
+                }
             }
-            
+        }
+
+        protected void gvBorradores_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvBorradores.PageIndex = e.NewPageIndex;
+            Llenar_gvBorradores((int)Session["UsuarioID"]);
         }
 
         #endregion

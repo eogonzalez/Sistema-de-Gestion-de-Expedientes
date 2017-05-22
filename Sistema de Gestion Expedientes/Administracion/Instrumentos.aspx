@@ -26,13 +26,25 @@
                     CssClass="table table-hover table-striped"
                     GridLines="None"
                     EmptyDataText="No existen registros."
-                    AutoGenerateColumns="false" OnRowCommand="gvInstrumentos_RowCommand">
+                    AutoGenerateColumns="false"
+                    AllowPaging="true"
+                    OnPageIndexChanging="gvInstrumentos_PageIndexChanging"
+                    OnRowCommand="gvInstrumentos_RowCommand">
+
+                    <PagerSettings Mode="Numeric"
+                        Position="Bottom"
+                        PageButtonCount="10" />
+
+                    <PagerStyle BackColor="LightBlue"
+                        Height="30px"
+                        VerticalAlign="Bottom"
+                        HorizontalAlign="Center" />
 
                     <Columns>
                         <asp:BoundField DataField="id_Instrumento" SortExpression="id_Instrumento" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
                         <asp:BoundField DataField="nombre_instrumento" HeaderText="Nombre" />
                         <asp:BoundField DataField="fecha_vigencia" HeaderText="Fecha Vigencia" />
-                        
+
 
                         <asp:ButtonField ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />
                         <asp:TemplateField HeaderText="Eliminar">
@@ -56,50 +68,50 @@
                 <asp:Literal runat="server" ID="ErrorMessage" />
             </p>
 
-                    <div class="panel-body form-horizontal">
+            <div class="panel-body form-horizontal">
 
-                        <div class="form-group">
-                            <asp:Label AssociatedControlID="txtNombre" CssClass="control-label col-xs-2" runat="server" Text="Nombre: "></asp:Label>
-                            <div class="col-xs-10">
-                                <asp:TextBox ID="txtNombre" type="text" CssClass="form-control" runat="server"></asp:TextBox>
-                                <asp:RequiredFieldValidator runat="server" ControlToValidate="txtNombre"
-                                    CssClass="text-danger" ErrorMessage="El campo no puede quedar vacio." />
-                            </div>
-                        </div>
+                <div class="form-group">
+                    <asp:Label AssociatedControlID="txtNombre" CssClass="control-label col-xs-2" runat="server" Text="Nombre: "></asp:Label>
+                    <div class="col-xs-10">
+                        <asp:TextBox ID="txtNombre" type="text" CssClass="form-control" runat="server"></asp:TextBox>
+                        <asp:RequiredFieldValidator runat="server" ControlToValidate="txtNombre"
+                            CssClass="text-danger" ErrorMessage="El campo no puede quedar vacio." />
+                    </div>
+                </div>
 
-                        <div class="form-group">
-                            <asp:Label AssociatedControlID="txtSigla" CssClass="control-label col-xs-2" runat="server" Text="Sigla: "></asp:Label>
-                            <div class="col-xs-10">
-                                <asp:TextBox ID="txtSigla" type="text" CssClass="form-control" runat="server"></asp:TextBox>
-                                <asp:RequiredFieldValidator runat="server" ControlToValidate="txtSigla"
-                                    CssClass="text-danger" ErrorMessage="El campo no puede quedar vacio." />
-                            </div>
-                        </div>
+                <div class="form-group">
+                    <asp:Label AssociatedControlID="txtSigla" CssClass="control-label col-xs-2" runat="server" Text="Sigla: "></asp:Label>
+                    <div class="col-xs-10">
+                        <asp:TextBox ID="txtSigla" type="text" CssClass="form-control" runat="server"></asp:TextBox>
+                        <asp:RequiredFieldValidator runat="server" ControlToValidate="txtSigla"
+                            CssClass="text-danger" ErrorMessage="El campo no puede quedar vacio." />
+                    </div>
+                </div>
 
-                        <div class="form-group">
-                            <asp:Label AssociatedControlID="txtObservaciones" CssClass="control-label col-xs-2" runat="server" Text="Observaciones:"></asp:Label>
-                            <div class="col-xs-10">
-                                <asp:TextBox ID="txtObservaciones" type="text" CssClass="form-control" runat="server" TextMode="MultiLine"></asp:TextBox>
-                            </div>
-                        </div>
-                        
+                <div class="form-group">
+                    <asp:Label AssociatedControlID="txtObservaciones" CssClass="control-label col-xs-2" runat="server" Text="Observaciones:"></asp:Label>
+                    <div class="col-xs-10">
+                        <asp:TextBox ID="txtObservaciones" type="text" CssClass="form-control" runat="server" TextMode="MultiLine"></asp:TextBox>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <asp:Label ID="Label11" AssociatedControlID="txtFechaVigencia" CssClass="control-label col-xs-2" runat="server" Text="Fecha Vigencia:"></asp:Label>
                     <div class="col-xs-10">
-                        <asp:TextBox ID="txtFechaVigencia" CssClass="form-control" runat="server"></asp:TextBox>                        
-                        
+                        <asp:TextBox ID="txtFechaVigencia" CssClass="form-control" runat="server"></asp:TextBox>
+
                         <cc1:CalendarExtender ID="txtFechaVigencia_CalendarExtender" runat="server" BehaviorID="txtFechaVigencia_CalendarExtender" TargetControlID="txtFechaVigencia" />
-                        
+
                     </div>
                 </div>
-                    </div>
+            </div>
 
-                    <div class="panel-footer">
-                        <asp:Button runat="server" ID="btnGuardar" CssClass="btn btn-primary" Text="Guardar" CommandName="Guardar" OnClick="btnGuardar_Click" />
-                        <asp:Button runat="server" ID="btnSalir" CssClass="btn btn-default" Text="Salir" CausesValidation="false" OnClick="btnSalir_Click" />
-                    </div>
+            <div class="panel-footer">
+                <asp:Button runat="server" ID="btnGuardar" CssClass="btn btn-primary" Text="Guardar" CommandName="Guardar" OnClick="btnGuardar_Click" />
+                <asp:Button runat="server" ID="btnSalir" CssClass="btn btn-default" Text="Salir" CausesValidation="false" OnClick="btnSalir_Click" />
+            </div>
 
-                
+
         </asp:Panel>
     </div>
 </asp:Content>

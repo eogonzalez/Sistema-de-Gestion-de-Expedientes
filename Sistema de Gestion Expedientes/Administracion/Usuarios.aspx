@@ -33,8 +33,19 @@
                     CssClass="table table-hover table-striped"
                     GridLines="None"
                     EmptyDataText="No existen usuarios."
+                    AllowPaging="true"
+                    OnPageIndexChanging="gvUsuarios_PageIndexChanging"
                     OnRowCommand="gvUsuarios_RowCommand"
                     AutoGenerateColumns="false">
+
+                    <PagerSettings Mode="Numeric"
+                        Position="Bottom"
+                        PageButtonCount="10" />
+
+                    <PagerStyle BackColor="LightBlue"
+                        Height="30px"
+                        VerticalAlign="Bottom"
+                        HorizontalAlign="Center" />
 
                     <Columns>
                         <asp:BoundField DataField="id_usuario" SortExpression="id_usuario" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />

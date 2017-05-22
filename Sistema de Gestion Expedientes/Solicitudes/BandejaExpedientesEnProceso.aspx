@@ -11,7 +11,19 @@
                     CssClass="table table-hover table-striped"
                     GridLines="None"
                     EmptyDataText="No existen registros."
-                    AutoGenerateColumns="false" OnRowCommand="gvBandeja_RowCommand">
+                    AutoGenerateColumns="false" 
+                    AllowPaging="true"
+                    OnPageIndexChanging="gvBandeja_PageIndexChanging"
+                    OnRowCommand="gvBandeja_RowCommand">
+
+                    <PagerSettings Mode="Numeric"
+                        Position="Bottom"
+                        PageButtonCount="10" />
+
+                    <PagerStyle BackColor="LightBlue"
+                        Height="30px"
+                        VerticalAlign="Bottom"
+                        HorizontalAlign="Center" />
 
                     <Columns>
                         <asp:BoundField DataField="id_expediente" HeaderText="#Expediente" SortExpression="id_expediente" />

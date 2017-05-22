@@ -13,5 +13,10 @@ namespace Sistema_de_Gestion_Expedientes.Solicitudes
         {
 
         }
+
+        protected void gvBandeja_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+
+        }
     }
 }

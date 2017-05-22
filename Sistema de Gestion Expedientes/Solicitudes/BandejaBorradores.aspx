@@ -30,7 +30,19 @@
                     CssClass="table table-hover table-striped"
                     GridLines="None"
                     EmptyDataText="No existen registros."
-                    AutoGenerateColumns="false" OnRowCommand="gvBorradores_RowCommand">
+                    AllowPaging="true"
+                    AutoGenerateColumns="false" 
+                    OnPageIndexChanging="gvBorradores_PageIndexChanging"
+                    OnRowCommand="gvBorradores_RowCommand">
+
+                    <PagerSettings Mode="Numeric"
+                        Position="Bottom"
+                        PageButtonCount="10" />
+
+                    <PagerStyle BackColor="LightBlue"
+                        Height="30px"
+                        VerticalAlign="Bottom"
+                        HorizontalAlign="Center" />
 
                     <Columns>
                         <asp:BoundField DataField="id_Solicitud" SortExpression="id_Solicitud" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
@@ -44,7 +56,7 @@
                         <asp:BoundField DataField="fecha_creacion" HeaderText="Fecha Creacion" />
                         <asp:BoundField DataField="fecha_modificacion" HeaderText="Fecha Modificacion" />
                         <asp:BoundField DataField="descripcion_estado" HeaderText="Estado" />
-                        <asp:BoundField DataField="estado"  ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
+                        <asp:BoundField DataField="estado" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
                         <asp:ButtonField ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />
 
                         <asp:TemplateField HeaderText="Eliminar">

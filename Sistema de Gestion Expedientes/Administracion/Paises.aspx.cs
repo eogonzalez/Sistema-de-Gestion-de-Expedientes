@@ -28,28 +28,32 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
      
         protected void gvPaises_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            int index = Convert.ToInt32(e.CommandArgument);
-
-            GridViewRow row = gvPaises.Rows[index];
-            int id_pais = Convert.ToInt32(row.Cells[0].Text);
-
-            Session.Add("IDPais", id_pais);
-
-            switch (e.CommandName)
+            if (e.CommandName != "Page")
             {
-                case "modificar":
-                    MostrarDatos(id_pais);
-                    lkBtn_viewPanel_ModalPopupExtender.Show();
-                    break;
+                int index = Convert.ToInt32(e.CommandArgument);
 
-                case "eliminar":
-                    EliminarPais(id_pais);
-                    Llenar_gvPaises();
-                    break;
+                GridViewRow row = gvPaises.Rows[index];
+                int id_pais = Convert.ToInt32(row.Cells[0].Text);
 
-                default:
-                    break;
+                Session.Add("IDPais", id_pais);
+
+                switch (e.CommandName)
+                {
+                    case "modificar":
+                        MostrarDatos(id_pais);
+                        lkBtn_viewPanel_ModalPopupExtender.Show();
+                        break;
+
+                    case "eliminar":
+                        EliminarPais(id_pais);
+                        Llenar_gvPaises();
+                        break;
+
+                    default:
+                        break;
+                }
             }
+
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)
@@ -98,6 +102,12 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             LimpiarPanel();
             btnGuardar.Text = "Guardar";
             btnGuardar.CommandName = "Guardar";
+        }
+
+        protected void gvPaises_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvPaises.PageIndex = e.NewPageIndex;
+            Llenar_gvPaises();
         }
 
         #endregion

@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="Permisos Perfiles" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PermisosPerfiles.aspx.cs" Inherits="Sistema_de_Gestion_Expedientes.Administracion.PermisosPerfiles" %>
+
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -7,7 +8,7 @@
 
         <br />
         <div class="panel-body form-vertical">
-            <div class="btn" >
+            <div class="btn">
                 <asp:LinkButton runat="server" ID="lkBtn_nuevo" CssClass="btn btn-primary"><i aria-hidden="true" class="glyphicon glyphicon-pencil"></i> Nuevo </asp:LinkButton>
                 <asp:LinkButton runat="server" ID="lkBtn_viewPanel"></asp:LinkButton>
 
@@ -15,20 +16,32 @@
                     BehaviorID="lkBtn_nuevo_ModalPopupExtender" PopupControlID="pnl_nuevo" TargetControlID="lkBtn_nuevo" CancelControlID="btnHide">
                 </cc1:ModalPopupExtender>
 
-                <cc1:modalpopupextender id="lkBtn_viewPanel_ModalPopupExtender" runat="server" backgroundcssclass="modalBackground"
-                    behaviorid="lkBtn_viewPanel_ModalPopupExtender" popupcontrolid="pnl_nuevo" targetcontrolid="lkBtn_viewPanel">
-                </cc1:modalpopupextender>
+                <cc1:ModalPopupExtender ID="lkBtn_viewPanel_ModalPopupExtender" runat="server" BackgroundCssClass="modalBackground"
+                    BehaviorID="lkBtn_viewPanel_ModalPopupExtender" PopupControlID="pnl_nuevo" TargetControlID="lkBtn_viewPanel">
+                </cc1:ModalPopupExtender>
             </div>
             <br />
             <div>
                 <asp:GridView runat="server" ID="gvPermisosPerfiles"
                     CssClass="table table-hover table-striped"
                     GridLines="None"
-                    EmptyDataText="No existen registros."                   
-                    AutoGenerateColumns="false" OnRowCommand="gvPermisosPerfiles_RowCommand">
+                    EmptyDataText="No existen registros."
+                    AutoGenerateColumns="false"
+                    AllowPaging="true"
+                    OnPageIndexChanging="gvPermisosPerfiles_PageIndexChanging"
+                    OnRowCommand="gvPermisosPerfiles_RowCommand">
+
+                    <PagerSettings Mode="Numeric"
+                        Position="Bottom"
+                        PageButtonCount="10" />
+
+                    <PagerStyle BackColor="LightBlue"
+                        Height="30px"
+                        VerticalAlign="Bottom"
+                        HorizontalAlign="Center" />
 
                     <Columns>
-                        <asp:BoundField DataField="corrPermisoTipoUsuario" SortExpression="corrPermisoTipoUsuario" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>
+                        <asp:BoundField DataField="corrPermisoTipoUsuario" SortExpression="corrPermisoTipoUsuario" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
                         <asp:BoundField DataField="nombrePerfil" HeaderText="Perfil" />
                         <asp:BoundField DataField="nombreMenu" HeaderText="Menu Opcion" />
                         <asp:BoundField DataField="acceder" HeaderText="Acceder" />
@@ -38,14 +51,14 @@
                         <asp:BoundField DataField="aprobar" HeaderText="Aprobar" />
                         <asp:BoundField DataField="rechazar" HeaderText="Rechazar" />
 
-                        <asp:ButtonField  ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />
+                        <asp:ButtonField ButtonType="Button" Text="Modificar" HeaderText="Modificar" CommandName="modificar" ControlStyle-CssClass="btn btn-success" />
                         <asp:TemplateField HeaderText="Eliminar">
                             <ItemTemplate>
                                 <asp:Button Text="Eliminar" runat="server" ID="btnEliminar" CausesValidation="false" CommandName="eliminar" CommandArgument="<%# Container.DataItemIndex %>" CssClass="btn btn-danger" OnClientClick="return confirm(&quot;¿Esta seguro de borrar opcion seleccionada?&quot;)" />
                             </ItemTemplate>
                         </asp:TemplateField>
-                        
-                        
+
+
 
                     </Columns>
 
@@ -67,15 +80,15 @@
                 <div class="form-group">
                     <asp:Label runat="server" AssociatedControlID="cboPerfil" CssClass="control-label col-xs-2" Text="Perfil: "></asp:Label>
                     <div class="col-xs-10">
-                        <asp:DropDownList runat="server" ID="cboPerfil" CssClass="form-control">                            
-                        </asp:DropDownList>                                                
+                        <asp:DropDownList runat="server" ID="cboPerfil" CssClass="form-control">
+                        </asp:DropDownList>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <asp:Label AssociatedControlID="cboMenu" CssClass="control-label col-xs-2" runat="server" Text="Menu Opcion:"></asp:Label>
                     <div class="col-xs-10">
-                        <asp:DropDownList runat="server" ID="cboMenu" CssClass="form-control">                            
+                        <asp:DropDownList runat="server" ID="cboMenu" CssClass="form-control">
                         </asp:DropDownList>
                     </div>
                 </div>
@@ -86,29 +99,29 @@
                     <%--<asp:Label Text="Insertar" runat="server"  CssClass="control-label col-xs-2"/>--%>
 
                     <div class="col-xs-2">
-                        <asp:CheckBox Text="Acceder" runat="server"  ID="cb_acceder"/>
+                        <asp:CheckBox Text="Acceder" runat="server" ID="cb_acceder" />
                     </div>
 
                     <div class="col-xs-2">
-                        <asp:CheckBox Text="Insertar" runat="server"  ID="cb_insertar"/>
+                        <asp:CheckBox Text="Insertar" runat="server" ID="cb_insertar" />
                     </div>
 
                     <div class="col-xs-2">
-                        <asp:CheckBox Text="Editar" runat="server" id="cb_editar"/>
+                        <asp:CheckBox Text="Editar" runat="server" ID="cb_editar" />
                     </div>
 
                     <div class="col-xs-2">
-                        <asp:CheckBox Text="Borrar" runat="server" id="cb_borrar"/>
+                        <asp:CheckBox Text="Borrar" runat="server" ID="cb_borrar" />
                     </div>
 
                     <div class="col-xs-2">
-                        <asp:CheckBox Text="Aprobar" runat="server" id="cb_aprobar"/>
+                        <asp:CheckBox Text="Aprobar" runat="server" ID="cb_aprobar" />
                     </div>
 
                     <div class="col-xs-2">
-                        <asp:CheckBox Text="Rechazar" runat="server" id="cb_rechazar"/>
+                        <asp:CheckBox Text="Rechazar" runat="server" ID="cb_rechazar" />
                     </div>
-                        
+
                 </div>
 
                 <div class="panel-footer">

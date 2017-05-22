@@ -26,7 +26,19 @@
                     CssClass="table table-hover table-striped"
                     GridLines="None"
                     EmptyDataText="No existen registros."
-                    AutoGenerateColumns="false" OnRowCommand="gvAduanas_RowCommand">
+                    AutoGenerateColumns="false" 
+                    AllowPaging="true"
+                    OnRowCommand="gvAduanas_RowCommand"
+                    OnPageIndexChanging="gvAduanas_PageIndexChanging">
+
+                    <PagerSettings  mode="Numeric"
+                        Position="Bottom"
+                        PageButtonCount="10" />
+
+                    <PagerStyle BackColor="LightBlue"
+                        Height="30px"
+                        VerticalAlign="Bottom"
+                        HorizontalAlign="Center" />
 
                     <Columns>
                         <asp:BoundField DataField="idAduana" SortExpression="idAduana" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol"/>

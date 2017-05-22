@@ -26,7 +26,19 @@
                     CssClass="table table-hover table-striped"
                     GridLines="None"
                     EmptyDataText="No existen registros."
-                    AutoGenerateColumns="false" OnRowCommand="gvTiempos_RowCommand">
+                    AutoGenerateColumns="false"
+                    AllowPaging="true"
+                    OnPageIndexChanging="gvTiempos_PageIndexChanging"
+                    OnRowCommand="gvTiempos_RowCommand">
+
+                    <PagerSettings Mode="Numeric"
+                        Position="Bottom"
+                        PageButtonCount="10" />
+
+                    <PagerStyle BackColor="LightBlue"
+                        Height="30px"
+                        VerticalAlign="Bottom"
+                        HorizontalAlign="Center" />
 
                     <Columns>
                         <asp:BoundField DataField="id_WF_Tiempos" SortExpression="id_WF_Tiempos" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
@@ -62,7 +74,7 @@
                 <div class="form-group">
                     <asp:Label runat="server" AssociatedControlID="cbo_tipoSolicitud" CssClass="control-label col-xs-2" Text="Tipo de Solicitud"></asp:Label>
                     <div class="col-xs-10">
-                        <asp:DropDownList id="cbo_tipoSolicitud" runat="server" CssClass="form-control">
+                        <asp:DropDownList ID="cbo_tipoSolicitud" runat="server" CssClass="form-control">
                             <asp:ListItem Value="VO">Verificacion de Origen</asp:ListItem>
                             <asp:ListItem Value="OT">Opinion Tecnica</asp:ListItem>
                         </asp:DropDownList>

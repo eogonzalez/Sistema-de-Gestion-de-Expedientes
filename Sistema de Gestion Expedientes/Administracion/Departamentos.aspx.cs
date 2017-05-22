@@ -70,26 +70,30 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
 
         protected void gvDepartamento_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            int index = Convert.ToInt32(e.CommandArgument);
-
-            GridViewRow row = gvDepartamento.Rows[index];
-            int id_departamento = Convert.ToInt32(row.Cells[0].Text);
-
-            Session.Add("IDDepartamento", id_departamento);
-
-            switch (e.CommandName)
+            if (e.CommandName != "Page")
             {
-                case "modificar":
-                    MostrarDatos(id_departamento);
-                    this.lkBtn_viewPanel_ModalPopupExtender.Show();
-                    break;
 
-                case "eliminar":
-                    EliminarDepartamento(id_departamento);
-                    Llenar_gvDepartamento();
-                    break;
-                default:
-                    break;
+                int index = Convert.ToInt32(e.CommandArgument);
+
+                GridViewRow row = gvDepartamento.Rows[index];
+                int id_departamento = Convert.ToInt32(row.Cells[0].Text);
+
+                Session.Add("IDDepartamento", id_departamento);
+
+                switch (e.CommandName)
+                {
+                    case "modificar":
+                        MostrarDatos(id_departamento);
+                        this.lkBtn_viewPanel_ModalPopupExtender.Show();
+                        break;
+
+                    case "eliminar":
+                        EliminarDepartamento(id_departamento);
+                        Llenar_gvDepartamento();
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -98,6 +102,12 @@ namespace Sistema_de_Gestion_Expedientes.Administracion
             LimpiarPanel();
             btnGuardar.Text = "Guardar";
             btnGuardar.CommandName = "Guardar";
+        }
+
+        protected void gvDepartamento_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvDepartamento.PageIndex = e.NewPageIndex;
+            Llenar_gvDepartamento();
         }
 
         #endregion
