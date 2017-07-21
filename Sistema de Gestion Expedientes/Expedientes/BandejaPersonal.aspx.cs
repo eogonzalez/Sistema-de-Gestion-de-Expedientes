@@ -7,6 +7,10 @@ using System.Web.UI.WebControls;
 using Capa_Negocio.Expedientes;
 using System.Data;
 using Capa_Entidad.Expedientes;
+using Capa_Negocio.Reportes.Expedientes;
+using CrystalDecisions.Shared;
+using CrystalDecisions.CrystalReports.Engine;
+using System.IO;
 
 namespace Sistema_de_Gestion_Expedientes.Expedientes
 {
@@ -14,6 +18,7 @@ namespace Sistema_de_Gestion_Expedientes.Expedientes
     {
         CNBandejaPersonal objCNBandeja = new CNBandejaPersonal();
         CEExpedientes objCEExpediente = new CEExpedientes();
+        CNR_Expedientes objExpe = new CNR_Expedientes();
         
         #region Eventos del formulario
 
@@ -73,7 +78,68 @@ namespace Sistema_de_Gestion_Expedientes.Expedientes
 
         protected void lkBtn_res_inicial_Click(object sender, EventArgs e)
         {
-            Response.Redirect("~/doctos/Inicia_Resol_1.pdf");  
+            getExpedienteGridView();
+
+            if (Session["IDExpediente"] != null)
+            {
+                //Response.Redirect("~/Reportes/RI/ReportesRI.aspx?ne=" + Session["IDExpediente"]);      
+
+
+                ReportDocument crRpt;
+
+                string reportPath = "";
+
+                CrystalDecisions.Shared.DiskFileDestinationOptions cr_OutputFile;
+
+                string s_FileSavePath = "";
+
+                string s_ReportName = "Resolucion_Inicial";
+
+                string s_DateTimeStamp = "";
+
+                try
+                {
+                    crRpt = new ReportDocument();
+
+                    cr_OutputFile = new CrystalDecisions.Shared.DiskFileDestinationOptions();
+
+                    reportPath = Server.MapPath("~/Reportes/RI/") + "CR_ResInicial.rpt";
+
+                    s_DateTimeStamp = Convert.ToString(DateTime.Today.Month) + Convert.ToString(DateTime.Today.Day) + Convert.ToString(DateTime.Today.Year);
+
+                    s_DateTimeStamp += Convert.ToString(DateTime.Today.Hour) + Convert.ToString(DateTime.Today.Minute) + Convert.ToString(DateTime.Today.Second);
+
+                    s_FileSavePath = Server.MapPath("Docs\\" + s_ReportName + s_DateTimeStamp + ".pdf");
+
+                    crRpt.Load(reportPath);
+
+                    var dsp = new DataSet();
+                    dsp = objExpe.SelectResolucionInicial((int)Session["IDExpediente"]);
+                    dsp.Tables[0].TableName = "SelectDatosResolucionInicial";
+
+                    crRpt.SetDataSource(dsp);
+
+                    string carpeta = Path.Combine(Request.PhysicalApplicationPath, "doctos");
+                    string carpeta_final = Path.Combine(carpeta,"report7.pdf");
+
+                    crRpt.ExportToDisk(ExportFormatType.PortableDocFormat, carpeta_final /*"C:\\report.pdf"*/);
+
+                   //Response.Redirect(carpeta_final);
+                    //crRpt.Export();
+
+                    //crRpt.Close();
+
+                }
+                catch (Exception  ex)
+                {
+                    ErrorMensaje.Text = ex.Message;
+                    
+                    throw;
+                }
+
+
+            }
+            
         }
 
         protected void lkBtn_notificar_Click(object sender, EventArgs e)

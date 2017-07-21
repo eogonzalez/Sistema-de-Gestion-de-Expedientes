@@ -180,6 +180,8 @@
     <Content Include="Expedientes\BandejaPersonal.aspx" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Imagenes\calendar.png" />
+    <Content Include="Imagenes\certified.jpg" />
+    <Content Include="Imagenes\incotec.jpg" />
     <Content Include="Imagenes\LogoM16.png" />
     <Content Include="packages.config" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -214,6 +216,7 @@
     <Content Include="Reportes\Administracion\R_Notifica.aspx" />
     <Content Include="Reportes\Administracion\R_SelectPaises.aspx" />
     <Content Include="Reportes\Expedientes\R_ResolucionInicial.aspx" />
+    <Content Include="Reportes\RI\ReportesRI.aspx" />
     <Content Include="Requisitos\OpinionTecnica.aspx" />
     <Content Include="Requisitos\Verificacion.aspx" />
     <Content Include="Scripts\bootstrap.js" />
@@ -456,12 +459,85 @@
     <Compile Include="Reportes\Administracion\R_SelectPaises.aspx.designer.cs">
       <DependentUpon>R_SelectPaises.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Reportes\RI\CR_RI_TN_COLOMBIA.cs">
+      <DependentUpon>CR_RI_TN_COLOMBIA.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reportes\RI\CR_RI_TN.cs">
+      <DependentUpon>CR_RI_TN.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reportes\RI\CR_RI_CA.cs">
+      <DependentUpon>CR_RI_CA.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reportes\RI\CR_RI_CHINA.cs">
+      <DependentUpon>CR_RI_CHINA.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reportes\RI\CR_RI_CA_PANAMA.cs">
+      <DependentUpon>CR_RI_CA_PANAMA.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reportes\RI\CR_RI_CA_CHILE.cs">
+      <DependentUpon>CR_RI_CA_CHILE.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reportes\RI\CR_RI_MEXICO.cs">
+      <DependentUpon>CR_RI_MEXICO.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reportes\RI\CR_RI_CAFTA.cs">
+      <DependentUpon>CR_RI_CAFTA.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reportes\RI\CR_ResInicial.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CR_ResInicial.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reportes\Expedientes\R_ResolucionInicial.aspx.cs">
       <DependentUpon>R_ResolucionInicial.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Reportes\Expedientes\R_ResolucionInicial.aspx.designer.cs">
       <DependentUpon>R_ResolucionInicial.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes\PruebasCristal\CrystalReport1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CrystalReport1.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reportes\PruebasCristal\CrystalReport2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CrystalReport2.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reportes\RI\ReportesRI.aspx.cs">
+      <DependentUpon>ReportesRI.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reportes\RI\ReportesRI.aspx.designer.cs">
+      <DependentUpon>ReportesRI.aspx</DependentUpon>
     </Compile>
     <Compile Include="Requisitos\OpinionTecnica.aspx.cs">
       <DependentUpon>OpinionTecnica.aspx</DependentUpon>
@@ -549,7 +625,51 @@
   <ItemGroup>
     <EmbeddedResource Include="Reportes\Administracion\Notifica.rdlc" />
     <EmbeddedResource Include="Reportes\Administracion\RPaises.rdlc" />
+    <EmbeddedResource Include="Reportes\RI\CR_RI_TN_COLOMBIA.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CR_RI_TN_COLOMBIA.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\RI\CR_RI_TN.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CR_RI_TN.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\RI\CR_RI_CA.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CR_RI_CA.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\RI\CR_RI_CHINA.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CR_RI_CHINA.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\RI\CR_RI_CA_PANAMA.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CR_RI_CA_PANAMA.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\RI\CR_RI_CA_CHILE.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CR_RI_CA_CHILE.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\RI\CR_RI_MEXICO.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CR_RI_MEXICO.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\RI\CR_RI_CAFTA.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CR_RI_CAFTA.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\RI\CR_ResInicial.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CR_ResInicial.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reportes\Expedientes\rpt_resolucion_inicial.rdlc" />
+    <EmbeddedResource Include="Reportes\PruebasCristal\CrystalReport1.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CrystalReport1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\PruebasCristal\CrystalReport2.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CrystalReport2.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
